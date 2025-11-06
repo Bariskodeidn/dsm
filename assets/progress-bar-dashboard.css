@@ -1,0 +1,161 @@
+
+:root {
+    --line-border-fill: #1b68ff;
+    --line-border-empty: #d1c9c9;
+  }
+
+  .container {
+    text-align: center;
+  }
+
+  .progress-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 30px;
+    max-width: 100%;
+    width: 580px;
+  }
+
+  .progress-container::before {
+    content: ""; /* Mandatory with ::before */
+    background-color: var(--line-border-empty);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    /* z-index: -1; */
+  }
+
+  .progress {
+    background-color: var(--line-border-fill);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0%;
+    /* z-index: -1; */
+    transition: 0.4s ease;
+  }
+
+  .circle {
+    background-color: #fff;
+    color: #999;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--line-border-empty);
+    transition: 0.4s ease;
+    position: relative; /* Added for label positioning */
+  }
+
+  .circle-success {
+    background-color: #fff;
+    color: #1b68ff;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--line-border-empty);
+    transition: 0.4s ease;
+    position: relative; /* Added for label positioning */
+  }
+
+  .circle-current {
+    background-color: #fff;
+    color: #999;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--line-border-empty);
+    transition: 0.4s ease;
+    position: relative; /* Added for label positioning */
+  }
+
+  .circle.active {
+    border-color: var(--line-border-fill);
+  }
+  .circle::after {
+    content: attr(data-label); /* Display the data-label attribute */
+    position: absolute;
+    top: 40px; /* Adjust as needed for spacing below the circle */
+    font-size: 12px;
+    color: #000000;
+    white-space: nowrap; /* Prevent text wrapping */
+    background-color: #999;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 2px 10px;
+    margin: 5px;
+  }
+  .circle-current::after {
+    content: attr(data-label); /* Display the data-label attribute */
+    position: absolute;
+    top: 40px; /* Adjust as needed for spacing below the circle */
+    font-size: 12px;
+    color: #000000;
+    white-space: nowrap; /* Prevent text wrapping */
+    background-color: #e81f63;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 2px 10px;
+    margin: 5px;
+  }
+  .circle-success::after {
+    content: attr(data-label); /* Display the data-label attribute */
+    position: absolute;
+    top: 40px; /* Adjust as needed for spacing below the circle */
+    font-size: 12px;
+    color: #000000;
+    white-space: nowrap; /* Prevent text wrapping */
+    background-color: #3f51b5;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 2px 10px;
+    margin: 5px;
+  }
+
+  /* .btn {
+    background-color: var(--line-border-fill);
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 8px 30px;
+    margin: 5px;
+    font-size: 14px;
+  } */
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn:focus {
+    outline: 0;
+  }
+
+  .btn:disabled {
+    background-color: var(--line-border-empty);
+    cursor: not-allowed;
+  }

@@ -1,0 +1,159 @@
+ /* ==================================================================
+          DESKTOP STYLES (Horizontal Chevrons) - For screens > 768px
+          ==================================================================
+        */
+        .progress-stepper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .step {
+            flex: 1; /* Each step takes equal width */
+            position: relative;
+            text-align: center;
+            color: #495057; /* Darker text for inactive steps for better readability */
+            background-color: #e9ecef; /* Default background for inactive steps */
+            padding: 1rem 1.5rem;
+            margin-right: 20px; /* Space between chevrons */
+            border-radius: 8px; /* Rounded corners for the steps */
+            transition: all 0.4s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: default;
+        }
+
+        /* Chevron effect using pseudo-elements */
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -15px; /* Overlap for chevron shape */
+            width: 0;
+            height: 100%;
+            border-style: solid;
+            border-width: 28px 0 28px 20px; /* Creates the chevron shape */
+            border-color: transparent transparent transparent #e9ecef; /* Color matches the step background */
+            z-index: 1;
+            transition: border-left-color 0.4s ease;
+        }
+
+        /* Remove margin for the last step */
+        .step:last-child {
+            margin-right: 0;
+        }
+
+        /* Styling for the active step */
+        .step.active {
+            color: #fff;
+            background-color: #007bff; /* Bootstrap primary blue */
+        }
+
+        .step.active:not(:last-child)::after {
+            border-left-color: #007bff;
+        }
+
+        /* Styling for completed steps */
+        .step.completed {
+            color: #fff;
+            background-color: #28a745; /* Green for completed steps */
+        }
+
+        .step.completed:not(:last-child)::after {
+            border-left-color: #28a745;
+        }
+        
+        .w-full {
+            width: 100%;
+        }
+
+        /* ==================================================================
+          MOBILE STYLES (Vertical Fishbone) - For screens <= 768px
+          ==================================================================
+        */
+        @media (max-width: 768px) {
+            .progress-stepper {
+                flex-direction: column; /* This is overridden, but good for fallback */
+                position: relative;
+                padding: 20px 0;
+            }
+
+            /* The central timeline */
+            .progress-stepper::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 4px;
+                height: 100%;
+                background-color: #dee2e6; /* A neutral color for the timeline */
+                z-index: 0;
+            }
+
+            .step {
+                width: calc(50% - 30px); /* Half width minus some spacing */
+                margin-right: 0;
+                margin-bottom: 20px; /* Space between stacked steps */
+                z-index: 2; /* Ensure steps are above the timeline */
+            }
+
+            /* Hide the horizontal chevron */
+            .step::after {
+                display: none;
+            }
+
+            /* Position odd steps (1, 3, 5...) to the left */
+            .step:nth-child(odd) {
+                align-self: flex-start;
+                text-align: right;
+                padding-right: 20px;
+            }
+
+            /* Position even steps (2, 4...) to the right */
+            .step:nth-child(even) {
+                align-self: flex-end;
+                text-align: left;
+                padding-left: 20px;
+            }
+            
+            /* Create the pointer towards the timeline for ODD steps */
+            .step:nth-child(odd)::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: -15px;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 10px 0 10px 15px;
+                border-color: transparent transparent transparent #e9ecef;
+                transition: border-left-color 0.4s ease;
+            }
+            
+            /* Create the pointer towards the timeline for EVEN steps */
+            .step:nth-child(even)::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: -15px;
+                transform: translateY(-50%);
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 10px 15px 10px 0;
+                border-color: transparent #e9ecef transparent transparent;
+                transition: border-right-color 0.4s ease;
+            }
+
+            /* Update pointer colors for active/completed states */
+            .step.active:nth-child(odd)::before { border-left-color: #007bff; }
+            .step.active:nth-child(even)::before { border-right-color: #007bff; }
+            .step.completed:nth-child(odd)::before { border-left-color: #28a745; }
+            .step.completed:nth-child(even)::before { border-right-color: #28a745; }
+        }
