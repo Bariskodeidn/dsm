@@ -52,7 +52,6 @@
   </style>
 
   <div class="row align-items-center h-100 w-100 m-0">
-    <!-- <form class="col-lg-3 col-md-4 col-10 mx-auto" action="<?= site_url('auth/login') ?>" method="post"> -->
     <form class="col-lg-3 col-md-4 col-10 mx-auto" method="POST" action="<?= site_url('auth/login') ?>">
       <div class="card shadow p-4">
         <a class="navbar-brand mx-auto mt-2 flex-fill text-center" href="<?= base_url('/') ?>">
@@ -80,7 +79,7 @@
         </div>
 
         <button class="btn btn-lg btn-primary btn-block btn-login" type="submit">Login</button>
-        <p class="mt-5 mb-3 text-muted text-center">IT BARIS KODE INDONESIA © <?= date('Y') ?></p>
+        <p class="mt-5 mb-3 text-muted text-center">Dharma Surya Maritim © <?= date('Y') ?></p>
       </div>
     </form>
   </div>
