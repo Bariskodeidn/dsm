@@ -53,7 +53,7 @@
                     echo $query;
                     if ($this->uri->segment(3) == true) {
                       echo "<br>";
-                      echo "No Memo : " . sprintf("%03d", $memo->nomor_memo) . '/E-MEMO/' . $memo->kode_nama . '/' . $bln . '/' . date('Y', strtotime($memo->tanggal));
+                      echo "No Memo : " . sprintf("%03d", $memo->nomor_memo) . '/E-MEMO/INT/' . $memo->bagian . '/' . $bln . '/' . date('Y', strtotime($memo->tanggal));
                     }
                     echo $memo->isi_memo;
                   }

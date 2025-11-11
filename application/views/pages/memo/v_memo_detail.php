@@ -20,7 +20,7 @@
                 $bln = $array_bln[date('n', strtotime($memo->tanggal))];
 
                 // echo sprintf("%03d", $memo->nomor_memo) . '/E-MEMO/' . $memo->kode_nama . '/' . $bln . '/' . date('Y', strtotime($memo->tanggal));
-                echo sprintf("%03d", $memo->nomor_memo) . '/E-MEMO/' . $memo->bagian . '/' . $bln . '/' . date('Y', strtotime($memo->tanggal));
+                echo sprintf("%03d", $memo->nomor_memo) . '/E-MEMO/INT/' . $memo->bagian . '/' . $bln . '/' . date('Y', strtotime($memo->tanggal));
                 ?>
                 <hr />
               </p>

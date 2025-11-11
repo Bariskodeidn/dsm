@@ -50,7 +50,7 @@
                   $user_read = $this->db->select('Id')
                     ->from('memo')
                     ->where('Id', $data->Id)
-                    ->like("CONCAT(';', `read`, ';')", ';' . $nip . ';', 'both')
+                    ->like("CONCAT(' ', `read`, ' ')", ' ' . $nip . ' ', 'both')
                     ->get()
                     ->num_rows();
                   if ($user_read) {
