@@ -47,11 +47,12 @@
                 <?php } else {
                 $nip = $this->session->userdata('nip');
                 foreach ($data_memo as $data) {
-                  $user_read = $this->db->select('Id')->from('memo')->where('Id', $data->Id)
-                    // ->like('read', $nip, 'both')
-
-                    ->like('CONCAT(";", read, ";")', ';' . $nip . ';', 'both')
-                    ->get()->num_rows();
+                  $user_read = $this->db->select('Id')
+                    ->from('memo')
+                    ->where('Id', $data->Id)
+                    ->like("CONCAT(';', `read`, ';')", ';' . $nip . ';', 'both')
+                    ->get()
+                    ->num_rows();
                   if ($user_read) {
                     $font_weight = 'normal';
                   } else {

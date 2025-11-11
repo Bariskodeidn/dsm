@@ -32,7 +32,6 @@
       <?php if ($this->session->flashdata('error')) : ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           <strong>Error!</strong> <?= $this->session->flashdata('error'); ?><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <!-- <strong><?= $this->session->flashdata('error'); ?>!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"> -->
             <span aria-hidden="true">x</span>
           </button>
         </div>
@@ -44,11 +43,9 @@
           </button>
         </div>
       <?php endif; ?>
-      <!-- <h1 class="page-title">User <?= ($this->uri->segment(2) == 'add_user') ? 'Add' : 'Edit' ?></h1> -->
       <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
           <p class="card-title mb-0"><strong><?= ($this->uri->segment(2) == 'add_user') ? 'Tambah' : 'Ubah' ?> Pasukan</strong></p>
-          <!-- <a href="<?= base_url('perusahaan/add_user') ?>" class="btn btn-primary">Add User</a> -->
         </div>
         <div class="card-body" id="user">
           <font style="font-size:14px;">
@@ -56,7 +53,6 @@
               <?= $this->session->flashdata('msg') ?>
               <form action="<?= base_url('perusahaan/proccess_add_user') ?>" method="POST">
                 <input type="hidden" value="add" name="add">
-                <!-- <input type="hidden" value="<?= $this->uri->segment('3') ?>" name="id"> -->
                 <input type="hidden" value="<?= $this->uri->segment('3') ?>" name="uri1">
                 <input type="hidden" value="<?= $this->uri->segment('4') ?>" name="uri2">
                 <table>
@@ -77,17 +73,7 @@
                     <td> <input type="text" name="nama" class="form-control" value="<?= set_value('nama', $form_data['nama'] ?? '') ?>">
                     </td>
                   </tr>
-                  <!-- <tr>
-                    <th width="200">Date of birth</th>
-                    <td>
-                      <div class='input-group date' id='myDatepicker2'>
-                        <input type='date' id='date_pic' name='tgl_lahir' class="form-control" placeholder="yyyy-mm-dd" data-validate-words="1" required="required" />
-                        <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                      </div>
-                    </td>
-                  </tr> -->
+
                   <?php
                   // Retrieve the form data from flashdata
                   $form_data = $this->session->flashdata('form_data');
@@ -111,16 +97,7 @@
                     <th>Phone (WhatsApp)</th>
                     <td><input type="tel" name="phone" class="form-control" value="<?= set_value('phone', $form_data['phone'] ?? '') ?>"></td>
                   </tr>
-                  <!-- <tr>
-                    <th>Code Agent</th>
-                    <td><input type="text" name="kd_agent" class="form-control"></td>
-                  </tr> -->
-                  <!-- <tr>
-                    <th>Nip</th>
-                    <td><input type="number" name="nip" class="form-control"></td>
-                  </tr> -->
                   <tr>
-                    <!-- <th>Level Jabatan</th> -->
                     <th>User Role</th>
                     <td>
                       <select name="level_jabatan" id="" class="form-control" <?= ($this->uri->segment(3)) ? 'readonly' : '' ?>>
@@ -138,9 +115,7 @@
                           ?>
                             <option disabled>Pilih Jabatan</option>
                             <option value="1" <?= set_select('level_jabatan', '1'); ?>>Staff</option>
-                            <!-- <option value="2" <?= set_select('level_jabatan', '2'); ?>>Manager</option> -->
                             <option value="2" <?= set_select('level_jabatan', '2'); ?>>Supervisi</option>
-                            <!-- <option value="3" <?= set_select('level_jabatan', '3'); ?>>Keuangan</option> -->
                             <option value="3" <?= set_select('level_jabatan', '3'); ?>>Manajer</option>
                             <option value="4" <?= set_select('level_jabatan', '4'); ?>>General Manajer</option>
                             <option value="5" <?= set_select('level_jabatan', '5'); ?>>Direktur</option>
@@ -154,9 +129,7 @@
                             $user_counts = isset($user_counts) ? $user_counts : [];
                             $roles = [
                               1 => 'Staff',
-                              // 2 => 'Manager',
                               2 => 'Supervisi',
-                              // 3 => 'Keuangan',
                               3 => 'Manajer',
                               4 => 'General Manajer', // This one is commented out in your example, so keep it commented
                               5 => 'Direktur',
@@ -227,12 +200,7 @@
                           ?>
                         </div>
                         <div class="col-md-2 col-5">
-                          <!-- <button type="button" id="addOptionBtn" class="btn btn-primary btn-block">Tambahkan Bagian <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16">
-                              <path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z" />
-                            </svg></button> -->
-                          <button type="button" id="addOptionBtn" class="btn btn-primary btn-block"><i class="fe fe-plus"></i> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16">
-                              <path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z" />
-                            </svg></button>
+                          <button type="button" id="addOptionBtn" class="btn btn-primary btn-block"><i class="fe fe-plus"></i></button>
                         </div>
                       </div>
                     </td>
@@ -284,58 +252,6 @@
                           <option value="<?= $data->nip ?>" <?= set_select('supervisi', $data->nip); ?>>
                             <?= $data->nama_jabatan ?>
                           </option>
-                        <?php } ?>
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <!-- <th>TMT</th> -->
-                    <th>Tanggal Masuk Kerja</th>
-                    <td>
-                      <div class='input-group date' id='myDatepicker2'>
-                        <input type='date' name='tmt' class="form-control" placeholder="yyyy-mm-dd" data-validate-words="1" required="required" value="<?= set_value('tmt', $form_data['tmt'] ?? '') ?>">
-                        <span class="input-group-addon">
-                          <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                  <?php
-                  if ($this->session->userdata('is_premium')) {
-                  ?>
-                    <tr>
-                      <th>Cuti Reguler</th>
-                      <td><input type="number" name="cuti" class="form-control" value="<?= set_value('cuti', $form_data['cuti'] ?? '') ?>"></td>
-                    </tr>
-                    <tr>
-                      <th>
-                        Lokasi Presensi
-                      </th>
-
-                      <td>
-                        <select name="lokasi_presensi" class="form-control js-example-basic-multiple">
-                          <option value=""> -- Pilih Lokasi Presensi --</option>
-                          <?php
-                          $lokasi = $this->db->where('id_perusahaan', $this->session->userdata('user_perusahaan_id'))->get('lokasi_presensi')->result();
-                          foreach ($lokasi as $data) {
-                          ?>
-                            <option value="<?= $data->id ?>"><?= $data->nama_lokasi ?></option>
-                          <?php } ?>
-                        </select>
-                      </td>
-                    </tr>
-                  <?php
-                  }
-                  ?>
-                  <tr>
-                    <th>Cabang</th>
-                    <td>
-                      <select name="cabang" id="" class="form-control js-example-basic-multiple">
-                        <!-- <option value="0">None</option> -->
-                        <?php
-
-                        foreach ($cabang as $data) { ?>
-                          <option value="<?= $data->uid ?>"><?= $data->nama_cabang . ' - ' . $data->alamat_cabang ?></option>
                         <?php } ?>
                       </select>
                     </td>
@@ -467,29 +383,6 @@
                     </div>
                   </div>
 
-                  <!-- <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Level</label>
-                      <select class="form-control js-example-basic-multiple" name="level[]" multiple="multiple">
-                        <?php
-                        $level_x = explode(',', $user->level);
-                        $x = $this->db->get('menu')->result();
-                        foreach ($x as $k) {
-                          // foreach($level_x as $o) {
-                          if (strpos($user->level, $k->level) !== false) {
-                        ?>
-                            <option selected="selected" value="<?= $k->level ?>"><?= $k->nama ?>
-                            </option>
-                          <?php } else { ?>
-                            <option value="<?= $k->level ?>"><?= $k->nama ?></option>
-
-                        <?php }
-                          //}
-                        } ?>
-                      </select>
-                    </div>
-                  </div> -->
-
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Status</label>
@@ -516,24 +409,15 @@
                       <input type="tel" name="phone" class="form-control" value="<?= $user->phone ?>">
                     </div>
                   </div>
-                  <!-- <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Code Agent</label>
-                      <input type="text" name="kd_agent" class="form-control" value="<?= $user->kd_agent ?>">
-                    </div>
-                  </div> -->
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Nip</label>
-                      <!-- <input readonly type="number" name="nip" class="form-control" value="<?= $user->nip ?>"> -->
                       <input readonly type="text" name="nip" class="form-control" value="<?= $user->nip ?>">
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <!-- <label>Level Jabatan <?= $user->level_jabatan ?></label> -->
                       <label>Role</label>
-                      <!-- <input type="text" name="level_jabatan" class="form-control" value="<?= $user->level_jabatan ?>"> -->
                       <select name="level_jabatan" id="" class="form-control" <?= ($user->level_jabatan == "99") ? "readonly" : '' ?>>
                         <option selected disabled>Pilih Jabatan</option>
                         <?php
@@ -544,25 +428,21 @@
                         } else if ($this->session->userdata('is_premium')) {
                         ?>
                           <option <?= ($user->level_jabatan == "1") ? 'selected' : '' ?> value="1">Staff</option>
-                          <!-- <option <?= ($user->level_jabatan == "2") ? 'selected' : '' ?> value="2">Manager</option> -->
-                          <!-- <option <?= ($user->level_jabatan == "2") ? 'selected' : '' ?> value="2">Supervisi</option> -->
-                          <!-- <option value="3">Keuangan</option> -->
+                          <option <?= ($user->level_jabatan == "2") ? 'selected' : '' ?> value="2">Supervisi</option>
                           <option <?= ($user->level_jabatan == "3") ? 'selected' : '' ?> value="3">Manajer</option>
-                          <!-- <option <?= ($user->level_jabatan == "4") ? 'selected' : '' ?> value="4">General Manajer</option> -->
+                          <option <?= ($user->level_jabatan == "4") ? 'selected' : '' ?> value="4">General Manajer</option>
                           <option <?= ($user->level_jabatan == "5") ? 'selected' : '' ?> value="5">Direktur</option>
-                          <!-- <option <?= ($user->level_jabatan == "6") ? 'selected' : '' ?> value="6">Direktur Utama</option> -->
+                          <option <?= ($user->level_jabatan == "6") ? 'selected' : '' ?> value="6">Direktur Utama</option>
                           <?php
                         } else {
                           $user_counts = isset($user_counts) ? $user_counts : [];
                           $roles = [
                             1 => 'Staff',
-                            2 => 'Manager',
-                            // 2 => 'Supervisi',
-                            // 3 => 'Keuangan',
+                            2 => 'Supervisi',
                             3 => 'Manajer',
-                            // 4 => 'General Manajer', // This one is commented out in your example, so keep it commented
+                            4 => 'General Manajer', // This one is commented out in your example, so keep it commented
                             5 => 'Direktur',
-                            // 6 => 'Direktur Utama',
+                            6 => 'Direktur Utama',
                           ];
                           foreach ($roles as $value => $label) {
                             if (isset($user_counts[$value]) && $user_counts[$value] >= 1) {
@@ -582,27 +462,11 @@
                       </select>
                     </div>
                   </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <!-- <label>TMT</label> -->
-                      <label>Tanggal Masuk Kerja</label>
-                      <input type="date" name="tmt" class="form-control" value="<?= $user->tmt ?>">
-                    </div>
-                  </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Bagian</label>
-                      <!-- <select name="bagian" class="form-control js-example-basic-multiple" id="">
-                        <option value=""> -- Pilih Bagian --</option>
-                        <?php $xx = $this->db->get('bagian')->result();
-                        foreach ($xx as $k) { ?>
-                          <option <?= $k->Id == $user->bagian ? 'selected' : '' ?> value="<?= $k->Id ?>"><?= $k->nama ?></option>
-                        <?php } ?>
-                      </select> -->
                       <div class="row">
                         <div class="col-md-10 col-lg-10 col-10">
-
                           <?php
                           if ($this->session->userdata('is_premium')) {
                           ?>
@@ -639,9 +503,6 @@
                           <button type="button" id="addOptionBtn" class="btn btn-primary d-flex align-items-center justify-content-center">
                             <i class="fe fe-plus"></i>
                             <span class="ms-1">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16">
-                                <path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z" />
-                              </svg>
                             </span>
                           </button>
                         </div>
@@ -649,20 +510,13 @@
                           <form id="form-add-bagian">
                             <div class="row">
                               <input type="hidden" class="form-control" id="input_id_prsh" name="input_id_prsh" value="<?= $this->session->userdata('user_perusahaan_id') ?>">
-                              <!-- <div class="col-3">
-                            <div class="form-group">
-                              <input type="text" class="form-control" id="input_kode" name="input_kode" placeholder="Enter Kode">
-                            </div>
-                          </div> -->
                               <div class="col-md-3 col-6">
                                 <div class="form-group">
-                                  <!-- <label for="input_kode_nama">Kode Nama</label> -->
                                   <input type="text" class="form-control" id="input_kode_nama" name="input_kode_nama" placeholder="Kode Nama">
                                 </div>
                               </div>
                               <div class="col-md-5 col-6">
                                 <div class="form-group">
-                                  <!-- <label for="input_nama">Nama</label> -->
                                   <input type="text" class="form-control" id="input_nama" name="input_nama" placeholder="Enter Nama">
                                 </div>
                               </div>
@@ -711,49 +565,6 @@
                           }
                         ?>
                           <option <?= $selected ?> value="<?= $data->nip ?>"><?= $data->nama_jabatan ?> - <?= $data->nama ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                  </div>
-                  <?php
-                  if ($this->session->userdata('is_premium')) {
-                  ?>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Cuti</label>
-                        <input type="number" name="cuti" class="form-control" value="<?= $user->cuti ?>">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label>Lokasi Presensi</label>
-                        <select name="lokasi_presensi" class="form-control js-example-basic-multiple">
-                          <option value=""> -- Pilih Lokasi Presensi --</option>
-                          <?php
-                          $lokasi = $this->db->where('id_perusahaan', $this->session->userdata('user_perusahaan_id'))->get('lokasi_presensi')->result();
-                          foreach ($lokasi as $data) {
-                            if ($user->id_lokasi_presensi != null || $user->id_lokasi_presensi != "") {
-                              $selected = $user->id_lokasi_presensi == $data->id ? "selected" : "";
-                            } else {
-                              $selected = "";
-                            }
-                          ?>
-                            <option <?= $selected ?> value="<?= $data->id ?>"><?= $data->nama_lokasi ?></option>
-                          <?php } ?>
-                        </select>
-                      </div>
-                    </div>
-                  <?php
-                  }
-                  ?>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Cabang</label>
-                      <select name="cabang" id="" class="form-control js-example-basic-multiple">
-                        <?php
-
-                        foreach ($cabang as $data) { ?>
-                          <option <?= $user->id_cabang == $data->uid ? 'selected' : '' ?> value="<?= $data->uid ?>"><?= $data->nama_cabang . ' - ' . $data->alamat_cabang ?></option>
                         <?php } ?>
                       </select>
                     </div>
