@@ -189,29 +189,6 @@ class Perusahaan extends CI_Controller
     $data['pages'] = 'pages/perusahaan/v_user_add';
     $data['form_data'] = $this->session->flashdata('form_data');
 
-
-    $this->db->from('users');
-    $this->db->join('t_cabang', 't_cabang.uid = users.id_cabang');
-    $this->db->where('t_cabang.id_perusahaan', $this->session->userdata('user_perusahaan_id'));
-    $total_user_perusahaan = $this->db->get()->num_rows(); // Get the number of rows
-
-    $this->db->from('utility');
-    $this->db->where('Id', $this->session->userdata('user_perusahaan_id'));
-    $perusahaan = $this->db->get()->row(); // Get the number of rows
-
-    $limit_user = $perusahaan->kuota_user;
-    if ($total_user_perusahaan >= $limit_user) {
-      $this->session->set_flashdata('swal_message', [
-        'icon' => 'info', // Tetap gunakan 'info' atau 'question' untuk kesan informatif
-        'title' => 'Singgasana Menunggu Anda!', // Judul yang menarik dan bertema
-        'text' => 'Batas jumlah pelayan (pengguna) dalam kerajaan Anda telah tercapai. Perluas kekuasaan Anda dan tambahkan lebih banyak rakyat dengan menaikan derajat kerajaan Anda!.',
-        'confirmButtonText' => 'Klaim Takhta Sekarang!', // Kalimat persuasif untuk tombol
-        'showCancelButton' => true,
-        'cancelButtonText' => 'Tunda Penobatan', // Opsi yang lucu dan sesuai tema
-        'redirectUrl' => base_url('subscription/upgrade')
-      ]);
-      redirect('perusahaan/user');
-    }
     $this->load->view('index', $data);
     // $this->load->view('pages/absensi/lokasi_presensi_form', $data);
   }
@@ -291,14 +268,13 @@ class Perusahaan extends CI_Controller
 
       $this->session->set_flashdata('form_data', $this->input->post());
 
-      $this->session->set_flashdata('error', 'Silakan lengkapi data perusahaan terlebih dahulu. <br><br>' . validation_errors());
-      redirect('perusahaan/add_user/' . $uri1 . '/' . $uri2);
+      $this->session->set_flashdata('error', 'Silakan lengkapi terlebih dahulu. <br><br>' . validation_errors());
+      redirect('perusahaan/add_user');
     }
 
     // $raw_slug = $this->input->post('nama_lokasi');
     // $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', trim($raw_slug)));
 
-    $radius = $this->input->post('radius_lokasi') / 1000;
     $add = [
       "nama" => $this->input->post('nama'),
       "username" => $this->input->post('username'),
@@ -317,8 +293,7 @@ class Perusahaan extends CI_Controller
       "supervisi" => $this->input->post('supervisi'),
       "tmt" => $this->input->post('tmt'),
       "cuti" => $this->input->post('cuti'),
-      "id_cabang" => $this->input->post('cabang'),
-      "ns_address" => 'ns1.bariskode.id',
+      "id_cabang" => 1,
     ];
     $this->db->insert('users', $add);
 
@@ -401,9 +376,7 @@ class Perusahaan extends CI_Controller
       "supervisi" => $this->input->post('supervisi'),
       "cuti" => $this->input->post('cuti'),
       "id_lokasi_presensi" => $this->input->post('lokasi_presensi'),
-      "id_cabang" => $this->input->post('cabang'),
-      "jam_masuk" => $this->input->post('jam_masuk'),
-      "jam_keluar" => $this->input->post('jam_keluar')
+      "id_cabang" => 1,
     ];
     $this->db->where('id', $id);
     $this->db->update('users', $edit_data);

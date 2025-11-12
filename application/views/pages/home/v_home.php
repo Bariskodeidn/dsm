@@ -1,7 +1,7 @@
 <style>
   /* 🔲 Ukuran Carousel lebih kecil */
   .carousel-img {
-    height: 400px;
+    height: 100vh;
     /* ubah sesuai selera: 280px–400px */
     object-fit: cover;
   }
@@ -47,13 +47,13 @@
   /* 🌐 Responsif untuk layar kecil (HP) */
   @media (max-width: 768px) {
     .carousel-img {
-      height: 220px;
+      height: 50vh;
     }
   }
 
   @media (max-width: 480px) {
     .carousel-img {
-      height: 180px;
+      height: 50vh;
     }
 
   }
