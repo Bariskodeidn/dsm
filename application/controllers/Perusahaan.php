@@ -748,4 +748,161 @@ class Perusahaan extends CI_Controller
 
     redirect('perusahaan/detail');
   }
+
+  public function banner()
+  {
+    $has_access = $this->M_menu->has_access();
+    if (!$has_access) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $keyword = htmlspecialchars($this->input->get('search') ?? '', ENT_QUOTES, 'UTF-8');
+    //pagination settings
+    $config['base_url'] = site_url('perusahaan/banner');
+    $config['total_rows'] = $this->M_perusahaans->banner_count($keyword);
+    $config['per_page'] = "20";
+    $config["uri_segment"] = 3;
+    $config["num_links"] = 10;
+    $config['enable_query_strings'] = TRUE;
+    $config['page_query_string'] = TRUE;
+    $config['use_page_numbers'] = TRUE;
+    $config['reuse_query_string'] = TRUE;
+    $config['query_string_segment'] = 'page';
+
+    // integrate bootstrap pagination
+    $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+    $config['full_tag_close'] = '</ul>';
+    $config['first_link'] = true;
+    $config['last_link'] = true;
+    $config['first_tag_open'] = '<li class="page-item">';
+    $config['first_tag_close'] = '</li>';
+    $config['prev_link'] = 'Previous';
+    $config['prev_tag_open'] = '<li class="page-item">';
+    $config['prev_tag_close'] = '</li>';
+    $config['next_link'] = 'Next';
+    $config['next_tag_open'] = '<li class="page-item">';
+    $config['next_tag_close'] = '</li>';
+    $config['last_tag_open'] = '<li class="page-item">';
+    $config['last_tag_close'] = '</li>';
+    $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+    $config['cur_tag_close'] = '</a></li>';
+    $config['num_tag_open'] = '<li class="page-item">';
+    $config['num_tag_close'] = '</li>';
+    $config['attributes'] = array('class' => 'page-link');
+
+    // initialize pagination
+    $this->pagination->initialize($config);
+    $data['page'] = ($this->input->get('page')) ? (($this->input->get('page') - 1) * $config['per_page']) : 0;
+    $data['data_banner'] = $this->M_perusahaans->banner_get($config["per_page"], $data['page'], $keyword);
+    $data['pagination'] = $this->pagination->create_links();
+
+    $data['title'] = 'Banner';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages_script'] = 'script/perusahaan/s_perusahaan';
+    $data['pages'] = 'pages/perusahaan/v_banner';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+
+    $this->load->view('index', $data);
+  }
+
+  public function store_banner()
+  {
+    $file = $_FILES['attach']['name'];
+
+    $config['upload_path']   = './assets/images/banner';
+    $config['allowed_types'] = 'jpeg|jpg|png';
+    $config['max_size']      = 2048;
+    $config['encrypt_name']  = TRUE;
+
+    if (!is_dir($config['upload_path'])) {
+      mkdir($config['upload_path'], 0777, true);
+    }
+
+    $this->upload->initialize($config);
+
+    if (!$this->upload->do_upload('attach')) {
+      $response = [
+        'success' => false,
+        'msg' => $this->upload->display_errors()
+      ];
+
+      echo json_encode($response);
+
+      return;
+    }
+
+    $upload = $this->upload->data();
+    $insert =
+      [
+        'file' => $upload['file_name'],
+        'file_name' => $file
+      ];
+
+    $this->db->insert('banner', $insert);
+
+    $response = [
+      'success' => true,
+      'msg' => 'Banner berhasil ditambahkan!',
+      'reload' => site_url('perusahaan/banner')
+    ];
+
+
+    echo json_encode($response);
+  }
+
+  public function update_banner($id)
+  {
+    $banner = $this->db->get_where('banner', ['Id' => $id])->row();
+
+    $file = $_FILES['attach']['name'];
+    $config['upload_path']   = './assets/images/banner';
+    $config['allowed_types'] = 'jpeg|jpg|png';
+    $config['max_size']      = 2048;
+    $config['encrypt_name']  = TRUE;
+
+    if (!is_dir($config['upload_path'])) {
+      mkdir($config['upload_path'], 0777, true);
+    }
+
+    $this->upload->initialize($config);
+
+    if (!$this->upload->do_upload('attach')) {
+      $response = [
+        'success' => false,
+        'msg' => $this->upload->display_errors()
+      ];
+
+      echo json_encode($response);
+
+      return;
+    }
+
+    if ($banner) {
+      if (file_exists('./assets/images/banner/' . $banner->file)) {
+        unlink('./assets/images/banner/' . $banner->file);
+      }
+    }
+
+    $upload = $this->upload->data();
+
+    // Jika file lama ada, hapus
+
+    $update =
+      [
+        'file' => $upload['file_name'],
+        'file_name' => $file
+      ];
+
+    $this->db->where('Id', $id);
+    $this->db->update('banner', $update);
+
+    $response = [
+      'success' => true,
+      'msg' => 'Banner berhasil diubah!',
+      'reload' => site_url('perusahaan/banner')
+    ];
+
+
+    echo json_encode($response);
+  }
 }

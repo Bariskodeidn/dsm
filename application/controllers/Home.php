@@ -45,7 +45,7 @@ class Home extends CI_Controller
     $data['pages'] = 'pages/home/v_home';
     $data['pages_script'] = 'script/home/s_home';
     $data['menus'] = $this->M_menu->get_accessible_menus($nip);
-
+    $data['banner'] = $this->db->get('banner')->result();
 
 
     $this->db->from('t_cabang');

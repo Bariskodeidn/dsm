@@ -214,4 +214,23 @@ class M_perusahaans extends CI_Model
             return FALSE; // Return FALSE on failure
         }
     }
+
+    public function banner_count($keyword)
+    {
+        $this->db->select('Id')->from('banner');
+        if ($keyword) {
+            $this->db->like('file_name', $keyword, 'both');
+        }
+        return $this->db->get()->num_rows();
+    }
+
+    public function banner_get($limit, $start, $keyword)
+    {
+        $this->db->select('a.Id, a.file_name, a.file')->from('banner a');
+        if ($keyword) {
+            $this->db->like('file_name', $keyword, 'both');
+        }
+        $this->db->order_by('a.Id', 'DESC');
+        return $this->db->limit($limit, $start)->get()->result();
+    }
 }

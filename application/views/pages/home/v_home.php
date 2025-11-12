@@ -1,8 +1,61 @@
 <style>
-  @media (max-width: 767px) {
-    .text-kuota {
-      /* display: none !important; */
+  /* 🔲 Ukuran Carousel lebih kecil */
+  .carousel-img {
+    height: 400px;
+    /* ubah sesuai selera: 280px–400px */
+    object-fit: cover;
+  }
+
+  /* Overlay hitam transparan di atas gambar */
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 0.5rem;
+  }
+
+  /* Indikator di bawah slider */
+  .carousel-indicators.custom-indicators {
+    position: static;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .carousel-indicators.custom-indicators button {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ccc;
+    margin: 0 6px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+  .carousel-indicators.custom-indicators button.active {
+    background-color: #ff4081;
+    transform: scale(1.2);
+  }
+
+  .carousel-indicators.custom-indicators button:hover {
+    background-color: #ff80ab;
+  }
+
+  /* 🌐 Responsif untuk layar kecil (HP) */
+  @media (max-width: 768px) {
+    .carousel-img {
+      height: 220px;
     }
+  }
+
+  @media (max-width: 480px) {
+    .carousel-img {
+      height: 180px;
+    }
+
   }
 
   .gauge-div {
@@ -39,61 +92,52 @@
         </div>
       </div>
     </div> <!-- .row -->
-  </div> <!-- .container-fluid -->
 
-  <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+
+    <div class="container-fluid">
+      <!-- Slider Image / Carousel Otomatis dengan Fade -->
+      <div id="imageCarousel" class="carousel slide carousel-fade mb-4" data-ride="carousel" data-interval="4000">
+
+        <!-- Gambar Slider -->
+        <div class="carousel-inner rounded-lg shadow">
+          <?php
+          $active = 'active';
+          foreach ($banner as $b) : ?>
+            <div class="carousel-item <?= $active ?>">
+              <img class="d-block w-100 carousel-img" src="<?= base_url('assets/images/banner/') . $b->file ?>" alt="Slide 1">
+              <div class="overlay"></div>
+              <div class="carousel-caption centered-caption">
+                <h5>PT. DHARMA SURYA MARITIM</h5>
+                <p>Shipping Solutions, Seamless and Reliable Shipping Company
+                  Ship Chartering and Marine Engineering</p>
+              </div>
+            </div>
+          <?php
+            $active = '';
+          endforeach ?>
         </div>
-        <div class="modal-body px-5">
-          <div class="row align-items-center">
-            <div class="col-6 text-center">
-              <div class="squircle bg-success justify-content-center">
-                <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
-              </div>
-              <p>Control area</p>
-            </div>
-            <div class="col-6 text-center">
-              <div class="squircle bg-primary justify-content-center">
-                <i class="fe fe-activity fe-32 align-self-center text-white"></i>
-              </div>
-              <p>Activity</p>
-            </div>
-          </div>
-          <div class="row align-items-center">
-            <div class="col-6 text-center">
-              <div class="squircle bg-primary justify-content-center">
-                <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
-              </div>
-              <p>Droplet</p>
-            </div>
-            <div class="col-6 text-center">
-              <div class="squircle bg-primary justify-content-center">
-                <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
-              </div>
-              <p>Upload</p>
-            </div>
-          </div>
-          <div class="row align-items-center">
-            <div class="col-6 text-center">
-              <div class="squircle bg-primary justify-content-center">
-                <i class="fe fe-users fe-32 align-self-center text-white"></i>
-              </div>
-              <p>Users</p>
-            </div>
-            <div class="col-6 text-center">
-              <div class="squircle bg-primary justify-content-center">
-                <i class="fe fe-settings fe-32 align-self-center text-white"></i>
-              </div>
-              <p>Settings</p>
-            </div>
-          </div>
+        <!-- Indikator (Tombol di Bawah) -->
+        <div class="carousel-indicators custom-indicators">
+          <?php
+          $i = 0;
+          foreach ($banner as $b) : ?>
+            <button type="button" data-target="#imageCarousel" data-slide-to="<?= $i ?>" class="<?= $i == 0 ? 'active' : '' ?>" aria-current="true" aria-label="Slide 1"></button>
+          <?php
+            $i++;
+          endforeach ?>
         </div>
+
       </div>
     </div>
+
+
+
+    <!-- Script Autoplay (Bootstrap 4) -->
+    <script>
+      $('#imageCarousel').carousel({
+        interval: 4000, // 4 detik antar slide
+        ride: 'carousel'
+      });
+    </script>
   </div>
+</div> <!-- .container-fluid -->

@@ -135,7 +135,7 @@ class App extends CI_Controller
           $totalSize += $_FILES['attach']['size'][$i];
         }
 
-        if ($totalSize > 15 * 1024 * 1024) { // 15MB
+        if ($totalSize > 30 * 1024 * 1024) { // 30MB
           $response = [
             'success' => FALSE,
             'msg' => 'total ukuran file tidak boleh lebih dari 15MB.'
@@ -152,7 +152,7 @@ class App extends CI_Controller
 
           $config['upload_path']   = './upload/att_memo';
           $config['allowed_types'] = '*';
-          $config['max_size']      = 2048;
+          $config['max_size']      = 10240;
           $config['encrypt_name']  = TRUE;
           // $config['file_name'] = $custom_file_name;
           // $config['encrypt_name']  = FALSE; // Set to FALSE to use your custom file_name
