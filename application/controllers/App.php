@@ -207,28 +207,26 @@ class App extends CI_Controller
             'id_perusahaan'  => $this->session->userdata('user_perusahaan_id')
           ];
 
-          $this->db->insert('memo', $insert);
+          // $this->db->insert('memo', $insert);
 
           //Send notif wa
           $nama_session = $this->session->userdata('nama');
-          $msg = "There's a new Memo\nBOC From : *$nama_session*\nSubject :  *$judul*";
+          $msg = "There's a new Memo\nDOC From : *$nama_session*\nSubject :  *$judul*";
 
-          if (!empty($this->input->post('cc_memo[]'))) {
+          if (!empty($this->input->post('cc[]'))) {
             $phone_user = array_merge($phone, $phone_cc);
           } else {
             $phone_user = $phone;
           }
 
           foreach ($phone_user as $p) {
-            if ($this->session->userdata('is_premium')) {
-              $this->api_whatsapp->wa_notif($msg, $p);
-            }
+            $this->api_whatsapp->wa_notif($msg, $p);
           }
 
           $response = [
             'success' => true,
             'msg' => 'Sukses kirim memo',
-            'reload' => base_url('app/create_memo')
+            'reload' => base_url('app/create_memo'),
           ];
         }
       } else {
@@ -257,26 +255,27 @@ class App extends CI_Controller
 
         ];
 
-        $this->db->insert('memo', $insert);
+        // $this->db->insert('memo', $insert);
 
         //Send notif wa
         $nama_session = $this->session->userdata('nama');
-        $msg = "There's a new Memo\nBOC From : *$nama_session*\nSubject :  *$judul*";
+        $msg = "There's a new Memo\nDOC From : *$nama_session*\nSubject :  *$judul*";
 
-        if (!empty($this->input->post('cc_memo[]'))) {
+        if (!empty($this->input->post('cc[]'))) {
           $phone_user = array_merge($phone, $phone_cc);
         } else {
           $phone_user = $phone;
         }
 
-        $send_wa = implode(',', $phone_user);
-        // $this->api_whatsapp->wa_notif($msg, $send_wa);
+        foreach ($phone_user as $p) {
+          $this->api_whatsapp->wa_notif($msg, $p);
+        }
 
 
         $response = [
           'success' => true,
           'msg' => 'Sukses kirim memo',
-          'reload' => base_url('app/create_memo')
+          'reload' => base_url('app/create_memo'),
         ];
       }
     }
