@@ -46,7 +46,7 @@
 
     // Count unread memos
     // $sql = "SELECT COUNT(Id) FROM memo WHERE (nip_kpd LIKE '%$nip%' OR nip_cc LIKE '%$nip%') AND (`read` NOT LIKE '%$nip%');";
-    $sql = "SELECT COUNT(Id) FROM memo WHERE (CONCAT(';', nip_kpd, ';') LIKE '%;$nip;%' OR CONCAT(';', nip_cc, ';') LIKE '%;$nip;%') AND (CONCAT(';', `read`, ';') NOT LIKE '%;$nip;%');";
+    $sql = "SELECT COUNT(Id) FROM memo WHERE (CONCAT(';', nip_kpd, ';') LIKE '%;$nip;%' OR CONCAT(';', nip_cc, ';') LIKE '%;$nip;%') AND (CONCAT(' ', `read`, ' ') NOT LIKE '% $nip %');";
     $query = $this->db->query($sql);
     $res2 = $query->result_array();
     $jumlah_notifikasi_memo = $res2[0]['COUNT(Id)'];

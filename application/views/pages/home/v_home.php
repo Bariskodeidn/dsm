@@ -1,7 +1,7 @@
 <style>
   /* 🔲 Ukuran Carousel lebih kecil */
   .carousel-img {
-    height: 100vh;
+    height: 70vh;
     /* ubah sesuai selera: 280px–400px */
     object-fit: cover;
   }
