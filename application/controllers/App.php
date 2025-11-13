@@ -207,7 +207,7 @@ class App extends CI_Controller
             'id_perusahaan'  => $this->session->userdata('user_perusahaan_id')
           ];
 
-          // $this->db->insert('memo', $insert);
+          $this->db->insert('memo', $insert);
 
           //Send notif wa
           $nama_session = $this->session->userdata('nama');
@@ -255,7 +255,7 @@ class App extends CI_Controller
 
         ];
 
-        // $this->db->insert('memo', $insert);
+        $this->db->insert('memo', $insert);
 
         //Send notif wa
         $nama_session = $this->session->userdata('nama');
