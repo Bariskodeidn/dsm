@@ -632,9 +632,11 @@ class Agency extends CI_Controller
       }
 
       // Monitoring harga jual
-      $a = $this->session->userdata('level');
+      // $a = $this->session->userdata('level');
+      $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
       $monitoringHrgJual = $this->db->get_where('monitoring_hrgjual', ['pda_id' => $pda['Id']])->row_array();
-      if ($monitoringHpp['status'] == 2 and (strpos($a, '808') !== false)) {
+      if ($monitoringHpp['status'] == 2 and (in_array('pda/harga_jual', $access_menu_all))) {
         $openHrgJual = '<a href=' . base_url('pda/harga_jual/') . $pda['Id'] . ' target="blank_" class="btn btn-success btn-xs">Open</a>';
       } else {
         $openHrgJual = '';
@@ -661,7 +663,7 @@ class Agency extends CI_Controller
       }
 
       if ($monitoringHrgJual['status'] == 2 and $penunjukan['status'] == 0) {
-        $btnClose = '<a href="#" class="btn btn-danger" onclick="closePenunjukan(' . $id . ')">Close Penunjukan</a>';
+        $btnClose = '<a href="#" class="btn btn-danger mb-4" onclick="closePenunjukan(' . $id . ')">Close Penunjukan</a>';
       } else {
         $btnClose = '';
       }

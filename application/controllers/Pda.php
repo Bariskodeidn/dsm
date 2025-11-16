@@ -14,6 +14,7 @@ class Pda extends CI_Controller
 
     parent::__construct();
     $this->load->model(['M_pda']);
+    $this->load->library(['pdfgenerator']);
     if ($this->session->userdata('isLogin') == FALSE) {
       redirect('home');
     }
@@ -2042,7 +2043,6 @@ class Pda extends CI_Controller
     $writer->save('php://output');
   }
 
-
   public function view_prapda_excel($id)
   {
 
@@ -2555,5 +2555,156 @@ class Pda extends CI_Controller
     header('Cache-Control: max-age=0');
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output');
+  }
+
+  public function harga_jual($id)
+  {
+    $has_access = $this->M_menu->has_access();
+
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('pda/harga_jual', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $cabang = $this->session->userdata('kode_cabang');
+    $data['pda'] = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+
+    if ($cabang != $data['pda']['id_cabang'] and $cabang != 0) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $dataHrgJual = $this->db->get_where('monitoring_hrgjual', ['pda_id' => $id])->row_array();
+    if ($dataHrgJual) {
+      if ($dataHrgJual['status'] == 0) {
+        $update_monitoring = [
+          'start' => date('Y-m-d H:i:s'),
+          'user_start' => $this->session->userdata('nip'),
+          'status' => 1,
+        ];
+
+        $this->db->where('pda_id', $id);
+        $this->db->update('monitoring_hrgjual', $update_monitoring);
+      }
+    }
+
+    $data['title'] = 'Harga Jual';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/pda/v_harga_jual';
+    $data['pages_script'] = 'script/agency/s_hpp_rill';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $this->load->view('index', $data);
+  }
+
+  public function insert_hargajual($id)
+  {
+    $data_hrgjual = $this->db->get_where('monitoring_hrgjual', ['pda_id' => $id])->row_array();
+    if ($data_hrgjual) {
+      if ($data_hrgjual['status'] == 1) {
+        $update_monitoring = [
+          'user_end' => $this->session->userdata('nip'),
+          'end' => date('Y-m-d H:i:s'),
+          'status' => 2,
+        ];
+
+        $this->db->where('pda_id', $id);
+        $this->db->update('monitoring_hrgjual', $update_monitoring);
+      }
+    }
+
+    $pda = $this->db->select('a.*, b.customer')->from('t_pda a')->join('t_penunjukan b', 'b.Id = a.penunjukan', 'left')->where('a.Id', $id)->get()->row_array();
+
+    $id_desc = $this->input->post('id_desc[]');
+    $remarks = $this->input->post('remarks[]');
+    $grt = $this->input->post('grt[]');
+    $tarif = $this->input->post('tarif[]');
+    $activity = $this->input->post('activity[]');
+    $amount_desc = $this->input->post('amount-desc[]');
+    $remark_desc = $this->input->post('remark-desc[]');
+
+    $desc = $this->input->post('desc[]');
+    $amount = $this->input->post('amount[]');
+    $remark = $this->input->post('remark[]');
+    $qty = $this->input->post('qty[]');
+    $mulai = $this->input->post('mulai[]');
+    $selesai = $this->input->post('selesai[]');
+
+    $desc_other = $this->input->post('desc-other[]');
+    $amount_other = $this->input->post('amount-other[]');
+    $remark_other = $this->input->post('remark-other[]');
+    $qty_other = $this->input->post('qty-other[]');
+    $mulai_other = $this->input->post('mulai-other[]');
+    $selesai_other = $this->input->post('selesai-other[]');
+
+    foreach ($desc as $key => $value) {
+      $hrgjual = $this->db->select('*')->from('t_harga_jual')->where('customer', $pda['customer'])->where('item_pda', $value)->get()->num_rows();
+
+      if ($hrgjual == 0 and $amount[$key] != 0) {
+        $this->db->insert('t_harga_jual', [
+          'customer' => $pda['customer'],
+          'item_pda' => $value,
+          'harga' => preg_replace('/[^a-zA-Z0-9\']/', '', $amount[$key])
+        ]);
+      }
+    }
+
+    $data = [
+      'desc' => [
+        'id_desc' => $id_desc,
+        'remarks' => $remarks,
+        'grt' => $grt,
+        'tarif' => $tarif,
+        'activity' => $activity,
+        'amount_desc' => $amount_desc,
+        'remark_desc' => $remark_desc
+      ],
+      'agency_remuneration' => [
+        'desc' => $desc,
+        'amount' => $amount,
+        'remark' => $remark,
+        'qty' => $qty,
+        'tanggal_mulai' => $mulai,
+        'tanggal_selesai' => $selesai
+      ],
+      'other' => [
+        'desc' => $desc_other,
+        'amount' => $amount_other,
+        'qty' => $qty_other,
+        'tanggal_mulai' => $mulai_other,
+        'tanggal_selesai' => $selesai_other,
+        'remark' => $remark_other
+      ]
+    ];
+
+    $this->db->where('Id', $id);
+    $this->db->update('t_pda', ['harga_jual' => json_encode($data)]);
+
+    $response = [
+      'success' => true,
+      'reload' => base_url('agency/penunjukan'),
+      'msg' => 'Data berhasil diubah!'
+    ];
+
+    echo json_encode($response);
+  }
+
+  public function kwitansi($id)
+  {
+    $data['pda'] = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+    // $this->load->view('djs/pda/v_kwitansi', $data);
+
+    // filename dari pdf ketika didownload
+    $file_pdf = 'Kwitansi';
+
+    // setting paper
+    $paper = 'A4';
+
+    //orientasi paper potrait / landscape
+    $orientation = "landscape";
+
+    $html = $this->load->view('pages/agency/pda/v_kwitansi', $data, true);
+
+    // run dompdf
+    $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
   }
 }
