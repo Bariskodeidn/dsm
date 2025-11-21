@@ -2707,4 +2707,186 @@ class Pda extends CI_Controller
     // run dompdf
     $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
   }
+
+  public function invoice($id)
+  {
+    $has_access = $this->M_menu->has_access();
+
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('invoice', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $cabang = $this->session->userdata('kode_cabang');
+    $sqlPda = "SELECT a.*, b.Id as id_cust FROM t_pda a LEFT JOIN t_penunjukan c ON c.Id = a.penunjukan LEFT JOIN t_customer b ON b.Id = c.customer WHERE a.Id = $id";
+    $data['pda'] = $this->db->query($sqlPda)->row_array();
+
+    if ($cabang != $data['pda']['id_cabang'] and $cabang != 0) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $data['customer'] = $this->db->get('t_customer')->result_array();
+    $data['title'] = 'Create Invoice';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/pda/v_invoice_create';
+    $data['pages_script'] = 'script/agency/s_agency';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $this->load->view('index', $data);
+  }
+
+  public function insert_invoice($id)
+  {
+    $pda = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+    $penunjukan = $this->db->get_where('t_penunjukan', ['Id' => $pda['penunjukan']])->row_array();
+    $agency = $this->db->get_where('agent', ['Id' => $penunjukan['agency']])->row_array();
+    $cabang = $this->db->get_where('agency_cabang', ['Id' => $pda['id_cabang']])->row_array();
+
+    $tanggal = $this->input->post('date');
+    $kapal = $this->input->post('kapal');
+    $jml_muatan_bs = $this->input->post('jml_muatan_bs');
+    $customer = $this->input->post('customer');
+    $pel_muat_bs = $this->input->post('pel_muat_bs');
+    $pel_bongkar_bs = $this->input->post('pel_bongkar_bs');
+    $jml_muatan_bb = $this->input->post('jml_muatan_bb');
+    $pel_muat_bb = $this->input->post('pel_muat_bb');
+    $pel_bongkar_bb = $this->input->post('pel_bongkar_bb');
+    $cargo = $this->input->post('cargo');
+    $ta_nor = $this->input->post('ta_nor');
+    $td = $this->input->post('td');
+    $materai = $this->input->post('materai');
+    $ppn = $this->input->post('ppn');
+    $note = $this->input->post('note');
+    $pph = $this->input->post('pph');
+    $dp = $this->input->post('dp');
+
+    $uraian = $this->input->post('uraian[]');
+    $satuan = $this->input->post('satuan[]');
+    $harga = $this->input->post('harga[]');
+    $mulai = $this->input->post('mulai[]');
+    $selesai = $this->input->post('selesai[]');
+    $kategori = $this->input->post('kategori[]');
+
+    $sql = "SELECT t_customer.kode, t_customer.Id FROM t_customer WHERE t_customer.Id = '$customer'";
+    $data_customer = $this->db->query($sql)->row_array();
+
+    $array_bln = array(1 => "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII");
+    $bln = $array_bln[date('n', strtotime($tanggal))];
+    $year = date('Y', strtotime($tanggal));
+
+    $count = $this->db->select('max(no_invoice) as maximal')->from('t_invoice')->where('customer', $data_customer['Id'])->get()->row_array();
+    if ($count) {
+      $count = $count['maximal'] + 1;
+    } else {
+      $count = 1;
+    }
+    $referensi = 'AGN/' . (sprintf("%03d", $count)) . '/INV/' . $cabang['kode'] . '-' . $agency['kode'] . '/' . $data_customer['kode'] . '/' . $bln . '/' . $year;
+    // $count = sprintf("%03d", $count + 1);
+
+    $this->form_validation->set_rules('date', 'Tanggal', 'required', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('customer', 'Customer', 'required', array('required' => '%s wajib dipilih!'));
+    $this->form_validation->set_rules('kapal', 'Nama kapal', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('jml_muatan_bb', 'Jumlah muatan batu bara', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('pel_muat_bb', 'Pelabuhan muat batu bara', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('pel_bongkar_bb', 'Pelabuhan bongkar bara', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('cargo', 'Cargo', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('ta_nor', 'TA/NOR', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('td', 'TD', 'required|trim', array('required' => '%s wajib diisi!'));
+    // $this->form_validation->set_rules('note', 'Note', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('uraian[]', 'Uraian pekerjaan', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('satuan[]', 'Satuan', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('harga[]', 'Harga', 'required|trim', array('required' => '%s wajib diisi!'));
+    $this->form_validation->set_rules('kategori[]', 'Kategori', 'required', array('required' => '%s wajib dipilih!'));
+
+    if ($this->form_validation->run() == FALSE) {
+      $response = [
+        'success' => false,
+        'msg' => array_values($this->form_validation->error_array())[0]
+      ];
+    } else {
+      $invoice = [
+        'no_invoice' => sprintf("%03d", $count),
+        'referensi' => $referensi,
+        'penunjukan' => $pda['penunjukan'],
+        'customer' => $customer,
+        'tanggal' => $tanggal,
+        'nama_kapal' => $kapal,
+        'jml_muatan' => $jml_muatan_bb,
+        'pel_muat' => $pel_muat_bb,
+        'pel_bongkar' => $pel_bongkar_bb,
+        'jml_muatan_bs' => $jml_muatan_bs,
+        'pel_muat_bs' => $pel_muat_bs,
+        'pel_bongkar_bs' => $pel_bongkar_bs,
+        'cargo' => $cargo,
+        'ta_nor' => $ta_nor,
+        'td' => $td,
+        'notes' => $note,
+        'created_by' => $this->session->userdata('nip'),
+        'status' => 0,
+        'materai' => $materai,
+        'ppn' => $ppn,
+        'jenis' => 2,
+        'nominal_pph' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
+        'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+        'id_cabang' => $pda['id_cabang']
+      ];
+
+      $this->db->insert('t_invoice', $invoice);
+
+      $id_invoice = $this->db->insert_id();
+
+      $sub_total = 0;
+      for ($i = 0; $i < count($uraian); $i++) {
+        $total = preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]) * preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]);
+        $sub_total += $total;
+        $detail = [
+          'id_invoice' => $id_invoice,
+          'uraian' => $uraian[$i],
+          'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
+          'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
+          'mulai' => $mulai[$i] ? $mulai[$i] : null,
+          'selesai' => $selesai[$i] ? $selesai[$i] : null,
+          'total' => $total,
+          'kategori' => $kategori[$i]
+        ];
+
+        $this->db->insert('t_detail_invoice', $detail);
+      }
+
+      if ($materai == 1) {
+        $nom_materai = 10000;
+      } else {
+        $nom_materai = 0;
+      }
+
+      if ($ppn == 1) {
+        $dpp_lainnya = $sub_total * 11 / 12;
+        $nom_ppn = 0.12 * $dpp_lainnya;
+      } else {
+        $nom_ppn = 0;
+        $dpp_lainnya = 0;
+      }
+
+      $gt = $sub_total + $nom_ppn + $nom_materai - preg_replace('/[^a-zA-Z0-9\']/', '', $pph) - (preg_replace('/[^a-zA-Z0-9\']/', '', $dp));
+
+      $update_invoice = [
+        'sub_total' => $sub_total,
+        'total' => $gt,
+        'nominal_ppn' => $nom_ppn,
+        'nominal_materai' => $nom_materai,
+        'dpp' => $dpp_lainnya,
+      ];
+
+      $this->db->where('Id', $id_invoice);
+      $this->db->update('t_invoice', $update_invoice);
+
+      $response = [
+        'success' => true,
+        'reload' => base_url('invoice'),
+        'msg' => 'Invoice berhasil dibuat!'
+      ];
+    }
+
+    echo json_encode($response);
+  }
 }

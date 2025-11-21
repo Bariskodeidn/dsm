@@ -1,5 +1,108 @@
 <script>
+  $(document).on('click', '.hapusRow', function() {
+    $(this).closest('.tr_clone').remove();
+  });
+
+  $("#uraian-invoice").on('click', '.add-row', function() {
+    var row = $(this).parents().closest('tr');
+    var newId = Date.now();
+
+    // Membuat baris baru
+    var newRow = row.clone();
+
+    newRow.find('input[name="uraian[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('');
+    })
+    newRow.find('input[name="satuan[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('1');
+    })
+    newRow.find('input[name="harga[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('0');
+    })
+
+    newRow.insertAfter(row);
+  });
+
+  $("#uraian-invoice-2").on('click', '.add-row', function() {
+    var row = $(this).parents().closest('tr');
+    var newId = Date.now();
+
+    // Membuat baris baru
+    var newRow = row.clone();
+
+    newRow.find('textarea[name="uraian[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('');
+    })
+    newRow.find('input[name="mulai[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('');
+    })
+    newRow.find('input[name="selesai[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('');
+    })
+    newRow.find('input[name="satuan[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('1');
+    })
+    newRow.find('input[name="harga[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('0');
+    })
+    newRow.find('select[name="kategori[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('1');
+    })
+
+    newRow.insertAfter(row);
+  });
+
+  $("#uraian-invoice-1").on('click', '.add-row', function() {
+    var row = $(this).parents().closest('tr');
+    var newId = Date.now();
+
+    // Membuat baris baru
+    var newRow = row.clone();
+
+    newRow.find('input[name="uraian[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('');
+    })
+    newRow.find('input[name="satuan[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('1');
+    })
+    newRow.find('input[name="harga[]"]').each(function(index, value) {
+      $(this).attr('id', newId)
+      $(this).val('0');
+    })
+
+    newRow.insertAfter(row);
+  });
+
   $(document).ready(function() {
+
+    $('#tableInvoiceAgency').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": '<?= site_url('invoice/invoice_ajax_list') ?>',
+        "type": "POST",
+        // "success": function(res) {
+        //   console.log(res)
+        // }
+      },
+      "columnDefs": [{
+        "targets": [0, 1, 9],
+        "orderable": false
+      }],
+    })
+
     $('#tablePenunjukan').DataTable({
       "processing": true,
       "serverSide": true,
@@ -176,6 +279,59 @@
         $('#monitoring-table').html(res.data);
         $('span[class="no-penunjukan"]').html(res.no_penunjukan)
         Swal.close()
+      }
+    })
+  }
+</script>
+
+<script>
+  function modalBayar(id) {
+    $('#myModalBayar').modal('show');
+    $('input[name="invoice-id"]').val(id);
+    $.ajax({
+      url: "invoice/getInvoiceById",
+      method: "GET",
+      dataType: "JSON",
+      data: {
+        invoiceId: id
+      },
+      success: function(res) {
+        console.log(res);
+        $('input[name="referensi"]').val(res.data.referensi);
+      }
+    })
+  }
+
+  function modalKirim(id) {
+    $('#myModalKirim').modal('show');
+    $('input[name="invoice-id"]').val(id);
+    $.ajax({
+      url: "invoice/getInvoiceById",
+      method: "GET",
+      dataType: "JSON",
+      data: {
+        invoiceId: id
+      },
+      success: function(res) {
+        console.log(res);
+        $('input[name="referensi"]').val(res.data.referensi);
+      }
+    })
+  }
+
+  function modalUpload(id) {
+    $('#myModalUpload').modal('show');
+    $('input[name="invoice-id"]').val(id);
+    $.ajax({
+      url: "invoice/getInvoiceById",
+      method: "GET",
+      dataType: "JSON",
+      data: {
+        invoiceId: id
+      },
+      success: function(res) {
+        console.log(res);
+        $('input[name="referensi"]').val(res.data.referensi);
       }
     })
   }
