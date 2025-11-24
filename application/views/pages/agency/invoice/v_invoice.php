@@ -10,6 +10,8 @@
           <a href="<?= site_url('invoice/create') ?>" class="btn btn-primary">
             <i class="fe fe-plus"></i> Buat Invoice
           </a>
+
+          <a href="#" data-toggle="modal" data-target="#myModalExportCsv" class="btn btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export CSV</a>
           <div class="table-responsive">
             <table id="tableInvoiceAgency" class="table table-bordered table-sm" style="width:100%">
               <thead class="thead-dark">
@@ -131,6 +133,44 @@
           </div>
           <div>
             <button type="submit" class="btn btn-primary btn-sm btn-submit"><i class="fa fa-floppy-o" aria-hidden="true"></i> Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" id="myModalExportCsv">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">
+          Export CSV Invoice
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body" id="monitoring-table">
+        <form action="<?= base_url('invoice/exportcsv') ?>" enctype="multipart/form-data" method="post" id="export-invoice">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="form-label">Dari</label>
+                <input type="date" class="form-control" name="dari" id="dari" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="form-label">Sampai</label>
+                <input type="date" class="form-control" name="sampai" id="sampai" value="<?= date('Y-m-d') ?>" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <di class="col-md-6">
+              <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-floppy-o" aria-hidden="true"></i> Submit</button>
+            </di>
           </div>
         </form>
       </div>
