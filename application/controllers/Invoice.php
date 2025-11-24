@@ -656,4 +656,72 @@ class Invoice extends CI_Controller
 
     echo json_encode($response);
   }
+
+  public function exportcsv()
+  {
+    $dari = $this->input->post('dari');
+    $sampai = $this->input->post('sampai');
+
+
+    // $sql = "SELECT a.*, b.no_surat, c.nama_customer FROM t_invoice a LEFT JOIN t_penunjukan b ON a.penunjukan = b.Id LEFT JOIN t_customer c ON b.customer = c.Id WHERE a.tanggal >='$dari' AND a.tanggal <= '$sampai'";
+    $sql = "SELECT a.uraian, a.total, a.kategori, b.tanggal, b.referensi, b.nama_kapal, b.jml_muatan, b.pel_muat, b.pel_bongkar, b.cargo, b.ta_nor, b.td, c.no_surat, d.nama_customer FROM t_detail_invoice a JOIN t_invoice b ON b.Id = a.id_invoice LEFT JOIN t_penunjukan c ON c.Id = b.penunjukan LEFT JOIN t_customer d ON d.Id = c.customer WHERE b.tanggal >='$dari' AND b.tanggal <= '$sampai'";
+    $result = $this->db->query($sql)->result_array();
+
+    // Set the filename for the CSV
+    $filename = 'export_' . date('Ymd_His') . '.csv';
+
+    // Set the headers to force download
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+
+    // Open the output stream to write the CSV content
+    $output = fopen('php://output', 'w');
+
+    // If you want to add headers to the CSV (optional)
+    $header = array('*Customer', 'Email', 'BillingAddres', 'ShippingAddress', '*InvoiceDate', '*DueDate', 'ShippingDate', 'ShipVia', 'TrackingNo', 'CustomerRefNo', '*InvoiceNumber', 'Message', 'Memo', '*ProductName', 'Description', '*Quantity', 'Unit', '*UnitPrice', 'Tags (use)');
+    fputcsv($output, $header, ';');
+
+    // Loop through the data and write it to the CSV
+    foreach ($result as $rowa) {
+      // Jika ada kolom yang kosong (null), akan tetap ditulis sebagai kosong
+      if ($rowa['kategori'] == 1) {
+        $kat = 'PORT CHARGES';
+      } else if ($rowa['kategori'] == 2) {
+        $kat = 'PORT CLEARANCE IN/ OUT EXPENSES';
+      } else if ($rowa['kategori'] == 3) {
+        $kat = 'MISCLEANNEOUS';
+      } else {
+        $kat = '';
+      }
+
+      $message = 'FINAL PORT DISB. ACCOUNT NAMA KAPAL : ' . $rowa['nama_kapal'] . ' JUMLAH MUATAN : ' . $rowa['jml_muatan'] . ' PELABUHAN MUAT : ' . $rowa['pel_muat'] . ' PELABUHAN BONGKAR : ' . $rowa['pel_bongkar'] . ' CARGO : ' . $rowa['cargo'] . ' TA/NOR : ' . date('d/m/Y', strtotime($rowa['ta_nor'])) . ' TD : ' . date('d/m/Y', strtotime($rowa['td']));
+      $row = array(
+        $rowa['nama_customer'],
+        '',
+        '',
+        '',
+        date('d/m/Y', strtotime($rowa['tanggal'])),
+        date('d/m/Y', strtotime('+30 days', strtotime($rowa['tanggal']))),
+        '',
+        '',
+        '',
+        $rowa['no_surat'],
+        $rowa['referensi'],
+        $message,
+        '',
+        rtrim($rowa['uraian']),
+        $kat,
+        '1',
+        '',
+        $rowa['total'],
+        'KEAGENAN; ' . $rowa['no_surat']
+      );
+      fputcsv($output, $row, ';');
+    }
+
+    // Close the output stream
+    fclose($output);
+  }
 }
