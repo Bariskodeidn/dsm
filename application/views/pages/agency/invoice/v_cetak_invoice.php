@@ -427,7 +427,7 @@
     <br>
     <br>
     <br>
-    <b><u>Nofran Dwinata</u></b><br>
+    <b><u>User</u></b><br>
     <b>Direktur</b>
   </div>
 </body>

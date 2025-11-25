@@ -107,7 +107,7 @@
               <img class="d-block w-100 carousel-img" src="<?= base_url('assets/images/banner/') . $b->file ?>" alt="Slide 1">
               <div class="overlay"></div>
               <div class="carousel-caption centered-caption">
-                <h5>PT. DHARMA SURYA MARITIM</h5>
+                <h5 style="color: white;">PT. DHARMA SURYA MARITIM</h5>
                 <p>Shipping Solutions, Seamless and Reliable Shipping Company
                   Ship Chartering and Marine Engineering</p>
               </div>

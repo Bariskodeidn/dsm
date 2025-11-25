@@ -2700,7 +2700,7 @@ class Pda extends CI_Controller
     $paper = 'A4';
 
     //orientasi paper potrait / landscape
-    $orientation = "landscape";
+    $orientation = "potrait";
 
     $html = $this->load->view('pages/agency/pda/v_kwitansi', $data, true);
 

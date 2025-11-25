@@ -138,7 +138,7 @@ class App extends CI_Controller
         if ($totalSize > 30 * 1024 * 1024) { // 30MB
           $response = [
             'success' => FALSE,
-            'msg' => 'total ukuran file tidak boleh lebih dari 15MB.'
+            'msg' => 'total ukuran file tidak boleh lebih dari 30MB.'
           ];
           return;
         }

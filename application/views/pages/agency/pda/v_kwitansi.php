@@ -114,13 +114,13 @@
     </tr>
     <tr>
       <td class="border-left border-right text-center">
-        <img src="<?= base_url('img/ttd/hana-ttd.png') ?>" alt="" width="100px">
+        <!-- <img src="<?= base_url('img/ttd/hana-ttd.png') ?>" alt="" width="100px"> -->
       </td>
       <td class="border-right text-center">
-        <img src="<?= base_url('img/ttd/andre.png') ?>" alt="" width="100px">
+        <!-- <img src="<?= base_url('img/ttd/andre.png') ?>" alt="" width="100px"> -->
       </td>
       <td class="border-right text-center">
-        <img src="<?= base_url('img/ttd/imron.png') ?>" alt="" width="100px">
+        <!-- <img src="<?= base_url('img/ttd/imron.png') ?>" alt="" width="100px"> -->
       </td>
     </tr>
     <tr>
