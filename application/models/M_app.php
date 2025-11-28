@@ -48,37 +48,47 @@ class M_app extends CI_Model
     return $query->result();
   }
 
-  public function memo_count($nip, $keyword)
+  public function memo_count($nip, $keyword, $date)
   {
     $this->db->select('Id')->from('memo')
-      // ->where('id_perusahaan', $this->session->userdata('user_perusahaan_id'))
       ->group_start()
-      // ->like('nip_kpd', $nip, 'both')
-      // ->or_like('nip_cc', $nip, 'both')
-
       ->like('CONCAT(";", nip_kpd, ";")', ';' . $nip . ';', 'both')
       ->or_like('CONCAT(";", nip_cc, ";")', ';' . $nip . ';', 'both')
       ->group_end();
     if ($keyword) {
+      $this->db->group_start();
       $this->db->like('judul', $keyword, 'both');
+      $this->db->group_end();
     }
+
+    if ($date) {
+      $this->db->group_start();
+      $this->db->where('DATE(tanggal)', date('Y-m-d', strtotime($date)));
+      $this->db->group_end();
+    }
+
     return $this->db->get()->num_rows();
   }
 
-  public function memo_get($limit, $start, $nip, $keyword)
+  public function memo_get($limit, $start, $nip, $keyword, $date)
   {
     $this->db->select('a.Id, a.nomor_memo, a.nip_kpd, a.judul, a.tanggal, a.read, a.nip_dari, b.nama')->from('memo a')->join('users b', 'a.nip_dari = b.username', 'left')
-      // ->where('id_perusahaan', $this->session->userdata('user_perusahaan_id'))
       ->group_start()
-      // ->like('nip_kpd', $nip, 'both')
-      // ->or_like('nip_cc', $nip, 'both')
-
       ->like('CONCAT(";", nip_kpd, ";")', ';' . $nip . ';', 'both')
       ->or_like('CONCAT(";", nip_cc, ";")', ';' . $nip . ';', 'both')
       ->group_end();
     if ($keyword) {
+      $this->db->group_start();
       $this->db->like('judul', $keyword, 'both');
+      $this->db->group_end();
     }
+
+    if ($date) {
+      $this->db->group_start();
+      $this->db->where('DATE(tanggal)', date('Y-m-d', strtotime($date)));
+      $this->db->group_end();
+    }
+
     $this->db->order_by('a.tanggal', 'DESC');
     return $this->db->limit($limit, $start)->get()->result();
   }
@@ -112,26 +122,44 @@ class M_app extends CI_Model
     return $query->row();
   }
 
-  public function memo_count_outbox($nip, $keyword)
+  public function memo_count_outbox($nip, $keyword, $date)
   {
     $this->db->select('Id')->from('memo')
       ->group_start()
       ->like('CONCAT(";", nip_dari, ";")', ';' . $nip . ';', 'both')
       ->group_end();
+
     if ($keyword) {
+      $this->db->group_start();
       $this->db->like('judul', $keyword, 'both');
+      $this->db->group_end();
+    }
+
+    if ($date) {
+      $this->db->group_start();
+      $this->db->where('DATE(tanggal)', date('Y-m-d', strtotime($date)));
+      $this->db->group_end();
     }
     return $this->db->get()->num_rows();
   }
 
-  public function memo_get_outbox($limit, $start, $nip, $keyword)
+  public function memo_get_outbox($limit, $start, $nip, $keyword, $date)
   {
     $this->db->select('a.Id, a.nomor_memo, a.nip_kpd, a.judul, a.tanggal, a.read, a.nip_dari, b.nama, a.id_perusahaan')->from('memo a')->join('users b', 'a.nip_dari = b.username', 'left')
       ->group_start()
       ->like('CONCAT(";", nip_dari, ";")', ';' . $nip . ';', 'both')
       ->group_end();
+
     if ($keyword) {
+      $this->db->group_start();
       $this->db->like('judul', $keyword, 'both');
+      $this->db->group_end();
+    }
+
+    if ($date) {
+      $this->db->group_start();
+      $this->db->where('DATE(tanggal)', date('Y-m-d', strtotime($date)));
+      $this->db->group_end();
     }
     $this->db->order_by('a.tanggal', 'DESC');
     return $this->db->limit($limit, $start)->get()->result();

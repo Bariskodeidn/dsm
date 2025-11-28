@@ -17,13 +17,22 @@
           <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
               <form action="<?= site_url('app/outbox') ?>" method="get">
-                <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Cari judul memo" name="search" id="search" value="<?= $this->input->get('search') ?>">
-                  <div class="input-group-append">
-                    <button class="btn btn-secondary" type="submit">
-                      Cari
-                    </button>
-                    <a href="<?= site_url('app/outbox') ?>" class="btn btn-warning">Tampilkan Semua</a>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-group mb-2">
+                      <input type="text" class="form-control" placeholder="Cari judul memo" name="search" id="search" value="<?= $this->input->get('search') ?>">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="date" name="date" id="date" class="form-control mb-2" value="<?= $this->input->get('date') ?>">
+                  </div>
+                  <div class="col-md-2">
+                    <div class="input-group-append mb-2">
+                      <button class="btn btn-secondary" type="submit">
+                        Cari
+                      </button>
+                      <a href="<?= site_url('app/outbox') ?>" class="btn btn-warning">Reset</a>
+                    </div>
                   </div>
                 </div>
               </form>

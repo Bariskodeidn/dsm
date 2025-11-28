@@ -321,9 +321,10 @@ class App extends CI_Controller
     }
 
     $keyword = htmlspecialchars($this->input->get('search') ?? '', ENT_QUOTES, 'UTF-8');
+    $date = $this->input->get('date');
     //pagination settings
     $config['base_url'] = site_url('app/inbox');
-    $config['total_rows'] = $this->M_app->memo_count($this->session->userdata('username'), $keyword);
+    $config['total_rows'] = $this->M_app->memo_count($this->session->userdata('username'), $keyword, $date);
     $config['per_page'] = "20";
     $config["uri_segment"] = 3;
     $config["num_links"] = 10;
@@ -357,7 +358,7 @@ class App extends CI_Controller
     // initialize pagination
     $this->pagination->initialize($config);
     $data['page'] = ($this->input->get('page')) ? (($this->input->get('page') - 1) * $config['per_page']) : 0;
-    $data['data_memo'] = $this->M_app->memo_get($config["per_page"], $data['page'], $this->session->userdata('username'), $keyword);
+    $data['data_memo'] = $this->M_app->memo_get($config["per_page"], $data['page'], $this->session->userdata('username'), $keyword, $date);
     $data['pagination'] = $this->pagination->create_links();
 
     $data['title'] = 'Inbox';
@@ -491,9 +492,10 @@ class App extends CI_Controller
     }
 
     $keyword = htmlspecialchars($this->input->get('search') ?? '', ENT_QUOTES, 'UTF-8');
+    $date = $this->input->get('date');
     //pagination settings
     $config['base_url'] = site_url('app/outbox');
-    $config['total_rows'] = $this->M_app->memo_count_outbox($this->session->userdata('username'), $keyword);
+    $config['total_rows'] = $this->M_app->memo_count_outbox($this->session->userdata('username'), $keyword, $date);
     $config['per_page'] = "20";
     $config["uri_segment"] = 3;
     $config["num_links"] = 10;
@@ -527,7 +529,7 @@ class App extends CI_Controller
     // initialize pagination
     $this->pagination->initialize($config);
     $data['page'] = ($this->input->get('page')) ? (($this->input->get('page') - 1) * $config['per_page']) : 0;
-    $data['data_memo'] = $this->M_app->memo_get_outbox($config["per_page"], $data['page'], $this->session->userdata('username'), $keyword);
+    $data['data_memo'] = $this->M_app->memo_get_outbox($config["per_page"], $data['page'], $this->session->userdata('username'), $keyword, $date);
     $data['pagination'] = $this->pagination->create_links();
 
     $data['title'] = 'Outbox';
