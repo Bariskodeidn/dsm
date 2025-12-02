@@ -662,9 +662,7 @@ class Invoice extends CI_Controller
     $dari = $this->input->post('dari');
     $sampai = $this->input->post('sampai');
 
-
-    // $sql = "SELECT a.*, b.no_surat, c.nama_customer FROM t_invoice a LEFT JOIN t_penunjukan b ON a.penunjukan = b.Id LEFT JOIN t_customer c ON b.customer = c.Id WHERE a.tanggal >='$dari' AND a.tanggal <= '$sampai'";
-    $sql = "SELECT a.uraian, a.total, a.kategori, b.tanggal, b.referensi, b.nama_kapal, b.jml_muatan, b.pel_muat, b.pel_bongkar, b.cargo, b.ta_nor, b.td, c.no_surat, d.nama_customer FROM t_detail_invoice a JOIN t_invoice b ON b.Id = a.id_invoice LEFT JOIN t_penunjukan c ON c.Id = b.penunjukan LEFT JOIN t_customer d ON d.Id = c.customer WHERE b.tanggal >='$dari' AND b.tanggal <= '$sampai'";
+    $sql = "SELECT a.uraian, a.total, a.kategori, b.tanggal, b.referensi, b.nama_kapal, b.jml_muatan, b.pel_muat, b.pel_bongkar, b.cargo, b.ta_nor, b.td, c.no_surat, d.nama_customer FROM t_detail_invoice a JOIN t_invoice b ON b.Id = a.id_invoice LEFT JOIN t_penunjukan c ON c.Id = b.penunjukan LEFT JOIN agency_customer d ON d.Id = c.customer WHERE b.tanggal >='$dari' AND b.tanggal <= '$sampai'";
     $result = $this->db->query($sql)->result_array();
 
     // Set the filename for the CSV

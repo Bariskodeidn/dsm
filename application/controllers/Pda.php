@@ -593,7 +593,6 @@ class Pda extends CI_Controller
 
   public function view_hpprill_excel($id)
   {
-
     $pda = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
     $hpp = json_decode($pda['hpp_rill']);
     $agency_remuneration = $hpp->agency_remuneration;
@@ -3584,5 +3583,12 @@ class Pda extends CI_Controller
     }
 
     echo json_encode($response);
+  }
+
+  public function view_hargajual($id)
+  {
+
+    $data['pda'] = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+    $this->load->view('pages/agency/pda/v_view_hargajual', $data);
   }
 }

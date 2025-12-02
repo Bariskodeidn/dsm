@@ -24,8 +24,6 @@
           $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
           $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,a.nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
           ?>
-
-
           <table class="table">
             <tr>
               <th width="250px">No. Penunjukan</th>

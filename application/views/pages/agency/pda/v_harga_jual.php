@@ -9,16 +9,16 @@
 
           <?php
           $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
-          $penunjukan = $this->db->select('a.jenis, a.customer,a.Id')->from('t_penunjukan a')->where('Id', $pda['penunjukan'])->get()->row_array();
+          $penunjukan = $this->db->select('a.jenis, a.customer,a.Id,a.no_surat,a.nama_kapal,b.nama_customer')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
           $item_pda = $this->db->select('*')->from('t_item_pda')->where('jenis', $penunjukan['jenis'])->where('port', $port['kode'])->where('title', 'AGENCY REMUNERATION')->get()->result_array();
           $item_pda_desc = $this->db->select('*')->from('t_item_pda')->where('jenis', $penunjukan['jenis'])->where('port', $port['kode'])->where('title', 'DESC')->get()->result_array();
           $data_invoice = $this->db->get_where('t_invoice', ['penunjukan' => $penunjukan['Id'], 'jenis' => 2])->row_array();
           ?>
           <div class="mb-4">
             <a href="<?= base_url('agency/penunjukan') ?>" class="btn btn-warning btn-sm">Kembali</a>
-            <!-- <?php if ($pda['harga_jual'] != null) { ?>
-              <a href="<?= base_url('pda/view_hargajual/') . $pda['Id'] ?>" class="btn btn-success btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> HARGA JUAL</a>
-            <?php } ?> -->
+            <?php if ($pda['harga_jual'] != null) { ?>
+              <a href="<?= base_url('pda/view_hargajual/') . $pda['Id'] ?>" class="btn btn-success btn-sm"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Harga Jual</a>
+            <?php } ?>
 
             <?php
             if ($data_invoice) {
@@ -31,6 +31,34 @@
             <?php } ?>
           </div>
 
+
+          <table class="table">
+            <tr>
+              <th width="250px">No. Penunjukan</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['no_surat'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Principal</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['nama_customer'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Nama Kapal</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['nama_kapal'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">ETA</th>
+              <td width="5px">:</td>
+              <td><?= date('d-m-Y', strtotime($pda['eta'])) ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Port</th>
+              <td width="5px">:</td>
+              <td><?= $port['nama'] . ' (' . $port['kode'] . ')' ?></td>
+            </tr>
+          </table>
 
 
           <?php
