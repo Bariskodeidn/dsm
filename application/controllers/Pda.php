@@ -619,25 +619,16 @@ class Pda extends CI_Controller
       ],
     ];
 
-    $sheet->mergeCells('A1:B1');
-    $sheet->setCellValue('A1', "To");
-    $sheet->setCellValue('C1', ":");
-    $sheet->setCellValue('D1', $pda['to']);
-    $sheet->mergeCells('D1:M1');
-
-    $sheet->getStyle('A1:M1')->applyFromArray(
-      [
-        'borders' => [
-          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
-          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
-          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
-        ]
-      ]
-    );
+    $sheet->mergeCells('A2:B2');
+    $sheet->setCellValue('A2', "To");
+    $sheet->setCellValue('C2', ":");
+    $sheet->setCellValue('D2', $pda['to']);
+    $sheet->mergeCells('D2:M2');
 
     $sheet->getStyle('A2:M2')->applyFromArray(
       [
         'borders' => [
+          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
         ]
@@ -649,7 +640,6 @@ class Pda extends CI_Controller
         'borders' => [
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
         ]
       ]
     );
@@ -659,6 +649,7 @@ class Pda extends CI_Controller
         'borders' => [
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
         ]
       ]
     );
@@ -671,6 +662,7 @@ class Pda extends CI_Controller
         ]
       ]
     );
+
     $sheet->getStyle('A6:M6')->applyFromArray(
       [
         'borders' => [
@@ -711,24 +703,32 @@ class Pda extends CI_Controller
         ]
       ]
     );
-
-    $sheet->mergeCells('A2:B2');
-    $sheet->setCellValue('A2', "From");
-    $sheet->setCellValue('C2', ":");
-    $sheet->setCellValue('D2', $pda['from']);
-    $sheet->mergeCells('D2:M2');
+    $sheet->getStyle('A11:M11')->applyFromArray(
+      [
+        'borders' => [
+          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+        ]
+      ]
+    );
 
     $sheet->mergeCells('A3:B3');
-    $sheet->setCellValue('A3', "Date");
+    $sheet->setCellValue('A3', "From");
     $sheet->setCellValue('C3', ":");
-    $sheet->setCellValue('D3', date('d/m/Y', strtotime($pda['tanggal'])));
+    $sheet->setCellValue('D3', $pda['from']);
     $sheet->mergeCells('D3:M3');
 
-    $sheet->mergeCells('A4:M4');
-    $sheet->setCellValue('A4', 'FINAL PORT DISBURSEMENT ACCOUNT');
-    $sheet->getStyle('A4:M4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0070C0');
+    $sheet->mergeCells('A4:B4');
+    $sheet->setCellValue('A4', "Date");
+    $sheet->setCellValue('C4', ":");
+    $sheet->setCellValue('D4', date('d/m/Y', strtotime($pda['tanggal'])));
+    $sheet->mergeCells('D4:M4');
+
+    $sheet->mergeCells('A5:M5');
+    $sheet->setCellValue('A5', 'ESTIMATE PORT DISBURSEMENT ACCOUNT');
+    $sheet->getStyle('A5:M5')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0070C0');
     // style header 1
-    $sheet->getStyle('A4')->applyFromArray(
+    $sheet->getStyle('A5')->applyFromArray(
       [
         'alignment' => [
           'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
@@ -742,36 +742,86 @@ class Pda extends CI_Controller
       ]
     );
 
-    $sheet->mergeCells('A5:B5');
-    $sheet->setCellValue('A5', "PORT");
-    $sheet->setCellValue('C5', ":");
-    $sheet->setCellValue('D5', $port['nama']);
-    $sheet->mergeCells('D5:H5');
+    $sheet->getStyle('A5:M5')->applyFromArray(
+      [
+        'borders' => [
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+        ]
+      ]
+    );
 
     $sheet->mergeCells('A6:B6');
-    $sheet->setCellValue('A6', "VESSEL NAME");
+    $sheet->setCellValue('A6', "PORT");
     $sheet->setCellValue('C6', ":");
-    $sheet->setCellValue('D6', $pda['vessel_name']);
+    $sheet->setCellValue('D6', $port['nama']);
     $sheet->mergeCells('D6:H6');
 
     $sheet->mergeCells('A7:B7');
-    $sheet->setCellValue('A7', "GRT");
+    $sheet->setCellValue('A7', "VESSEL NAME");
     $sheet->setCellValue('C7', ":");
-    $sheet->setCellValue('D7',   $pda['grt']);
+    $sheet->setCellValue('D7', $pda['vessel_name']);
     $sheet->mergeCells('D7:H7');
 
-    $sheet->setCellValue('A8', 'NO.');
-    $sheet->setCellValue('B8', 'DESCRIPTION');
-    $sheet->setCellValue('G8', 'REMARKS');
-    $sheet->setCellValue('H8', 'GRT');
-    $sheet->setCellValue('I8', 'TARIF');
-    $sheet->setCellValue('K8', 'ACTIVITY');
-    $sheet->setCellValue('L8', 'AMOUNT (IDR)');
-    $sheet->setCellValue('M8', 'REMARK');
-    $sheet->mergeCells('B8:F8');
-    $sheet->mergeCells('I8:J8');
+    $sheet->mergeCells('A8:B8');
+    $sheet->setCellValue('A8', "EST GRT");
+    $sheet->setCellValue('C8', ":");
+    $sheet->setCellValue('D8',  $pda['grt']);
+    $sheet->mergeCells('D8:H8');
 
-    $sheet->getStyle('A8:M8')->applyFromArray(
+    $sheet->mergeCells('A9:M9');
+    $sheet->setCellValue('A9', '');
+
+
+    $sheet->setCellValue('A10', 'A.');
+    $sheet->setCellValue('B10', 'PORT ADMINISTRATION COST');
+    $sheet->mergeCells('B10:M10');
+
+    $sheet->getStyle('A10:M10')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
+    // style header 1
+    $sheet->getStyle('A10')->applyFromArray(
+      [
+        'font' => [
+          'bold' => true,
+          'size' => 12,
+        ]
+      ]
+    );
+
+    $sheet->getStyle('B10')->applyFromArray(
+      [
+        'font' => [
+          'bold' => true,
+          'size' => 12,
+        ]
+      ]
+    );
+
+    $sheet->getStyle('A10:M10')->applyFromArray(
+      [
+        'borders' => [
+          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          'TOP' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+        ]
+      ]
+    );
+
+
+
+    $sheet->setCellValue('A11', 'NO.');
+    $sheet->setCellValue('B11', 'DESCRIPTION');
+    $sheet->setCellValue('G11', 'REMARKS');
+    $sheet->setCellValue('H11', 'GRT');
+    $sheet->setCellValue('I11', 'TARIF');
+    $sheet->setCellValue('K11', 'ACTIVITY');
+    $sheet->setCellValue('L11', 'AMOUNT (IDR)');
+    $sheet->setCellValue('M11', 'REMARK');
+    $sheet->mergeCells('B11:F11');
+    $sheet->mergeCells('I11:J11');
+
+    $sheet->getStyle('A11:M11')->applyFromArray(
       [
         'borders' => [
           'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
@@ -783,18 +833,18 @@ class Pda extends CI_Controller
       ]
     );
 
-    $sheet->getStyle('A8')->applyFromArray($style_col);
-    $sheet->getStyle('B8')->applyFromArray($style_col);
-    $sheet->getStyle('G8')->applyFromArray($style_col);
-    $sheet->getStyle('H8')->applyFromArray($style_col);
-    $sheet->getStyle('I8')->applyFromArray($style_col);
-    $sheet->getStyle('K8')->applyFromArray($style_col);
-    $sheet->getStyle('L8')->applyFromArray($style_col);
-    $sheet->getStyle('M8')->applyFromArray($style_col);
+    $sheet->getStyle('A11')->applyFromArray($style_col);
+    $sheet->getStyle('B11')->applyFromArray($style_col);
+    $sheet->getStyle('G11')->applyFromArray($style_col);
+    $sheet->getStyle('H11')->applyFromArray($style_col);
+    $sheet->getStyle('I11')->applyFromArray($style_col);
+    $sheet->getStyle('K11')->applyFromArray($style_col);
+    $sheet->getStyle('L11')->applyFromArray($style_col);
+    $sheet->getStyle('M11')->applyFromArray($style_col);
 
 
     $no = 1;
-    $num_row = 9;
+    $num_row = 12;
     $gf = 0;
     foreach ($desc->id_desc as $key => $val) {
       $this->db->select('desc');
@@ -804,10 +854,10 @@ class Pda extends CI_Controller
       $sheet->setCellValue('A' . $num_row, $no++);
       $sheet->setCellValue('B' . $num_row, $item_desc['desc']);
       $sheet->setCellValue('G' . $num_row, $desc->remarks[$key]);
-      $sheet->setCellValue('H' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $desc->grt[$key]));
-      $sheet->setCellValue('I' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $desc->tarif[$key]));
+      $sheet->setCellValue('H' . $num_row, $desc->grt[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc->grt[$key]) : "");
+      $sheet->setCellValue('I' . $num_row, $desc->tarif[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc->tarif[$key]) : "");
       $sheet->setCellValue('K' . $num_row, $desc->activity[$key]);
-      $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $desc->amount_desc[$key]));
+      $sheet->setCellValue('L' . $num_row, $desc->amount_desc[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc->amount_desc[$key]) : "");
       $sheet->setCellValue('M' . $num_row, $desc->remark_desc[$key]);
 
       // Merge cell
@@ -831,20 +881,37 @@ class Pda extends CI_Controller
         ]
       );
 
+      $sheet->getStyle('H' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+      $sheet->getStyle('I' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+      $sheet->getStyle('K' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+      $sheet->getStyle('L' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+
       $num_row++;
     }
 
-    $sheet->setCellValue('A' . $num_row, 'GF');
+    $sheet->setCellValue('A' . $num_row, 'SUBTOTAL');
     $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
+    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFC000');
     $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf));
     $sheet->getStyle('A' . $num_row)->applyFromArray(
       [
         'alignment' => [
-          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, // Set text jadi ditengah secara horizontal (right)
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT, // Set text jadi ditengah secara horizontal (right)
           'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+        ],
+        'font' => [
+          'bold' => true
         ],
       ]
     );
+
+    $sheet->getStyle('L' . $num_row)->applyFromArray(
+      [
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    )->getNumberFormat()->setFormatCode('#,##0');
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -903,7 +970,7 @@ class Pda extends CI_Controller
       $this->db->select('desc');
       $item_pda = $this->db->get_where('t_item_pda', ['Id' => $value])->row_array();
       if ($agency_remuneration->qty[$k] != "") {
-        $amount[] = floatval($agency_remuneration->qty[$k]) * floatval(preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]));
+        $amount[] = $agency_remuneration->qty[$k] * preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]);
       } else {
         $amount[] = preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]);
       }
@@ -927,15 +994,14 @@ class Pda extends CI_Controller
         ]
       );
 
+      $sheet->getStyle('L' . $num_row)->getNumberFormat()->setFormatCode('#,##0');
+
       $num_row++;
     }
 
     // Jika ada item tambahan
     $total_other = 0;
     if ($other_desc[0] != "") {
-      // AGENCY REMUNERATION
-      // $num_row = $num_row + 1;
-
       $sheet->setCellValue('A' . $num_row, 'C.');
       $sheet->setCellValue('B' . $num_row, 'OTHER / OWNER EXPENSE');
       $sheet->mergeCells('B' . $num_row . ':' . 'M' . $num_row);
@@ -992,39 +1058,92 @@ class Pda extends CI_Controller
           ]
         );
 
+        $sheet->getStyle('L' . $num_row)->getNumberFormat()->setFormatCode('#,##0');
+
         $num_row++;
       }
-      // $num_row = $num_row + 1;
     }
-    $sheet->setCellValue('A' . $num_row, "GRAND TOTAL DISBURSEMENT");
+
+    $sheet->setCellValue('A' . $num_row, "SUBTOTAL");
+    $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
+    $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $grand_total + $total_other));
+    $sheet->getStyle('A' . $num_row)->applyFromArray(
+      [
+        'alignment' => [
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT, // Set text jadi ditengah secara horizontal (right)
+          'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+        ],
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    );
+
+    $sheet->getStyle('L' . $num_row)->applyFromArray(
+      [
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    )->getNumberFormat()->setFormatCode('#,##0');
+
+    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFC000');
+    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+      [
+        'borders' => [
+          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+        ]
+      ]
+    );
+
+    $num_row = $num_row + 1;
+    $sheet->setCellValue('A' . $num_row, "GRAND TOTAL");
     $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf + $grand_total + $total_other));
     $sheet->getStyle('A' . $num_row)->applyFromArray(
       [
         'alignment' => [
-          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT, // Set text jadi ditengah secara horizontal (left)
           'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+        ],
+        'font' => [
+          'bold' => true
         ],
       ]
     );
 
+    $sheet->getStyle('L' . $num_row)->applyFromArray(
+      [
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    )->getNumberFormat()->setFormatCode('#,##0');
+
+    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00');
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
         'borders' => [
-          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
         ]
       ]
     );
 
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, 'Request');
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Sincerely,');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, 'Acknowledge,');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, 'Acknowledge,');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, 'Approved by,');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
 
@@ -1047,12 +1166,21 @@ class Pda extends CI_Controller
     );
 
     $num_row = $num_row + 1;
+    // $sheet->setCellValue('A' . $num_row, '');
+    // $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+    // $sheet->setCellValue('F' . $num_row, '');
+    // $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    // $sheet->setCellValue('L' . $num_row, '');
+    // $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
     $sheet->setCellValue('A' . $num_row, '');
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, '');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, '');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, '');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, '');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -1068,11 +1196,20 @@ class Pda extends CI_Controller
     $num_row = $num_row + 1;
     $this->db->select('nama, nama_jabatan');
     $user = $this->db->get_where('users', ['nip' => $pda['user_request']])->row_array();
+    // $sheet->setCellValue('A' . $num_row, $user['nama']);
+    // $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+    // $sheet->setCellValue('F' . $num_row, 'Jumari');
+    // $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    // $sheet->setCellValue('L' . $num_row, 'Rahma Irianto');
+    // $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
     $sheet->setCellValue('A' . $num_row, $user['nama']);
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Jumari');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'Rahma Irianto');
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, 'Panca N.A.F');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, 'Riyant D.P');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
+    $sheet->setCellValue('L' . $num_row, 'Rudianto');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
@@ -1094,12 +1231,21 @@ class Pda extends CI_Controller
     );
 
     $num_row = $num_row + 1;
-    $sheet->setCellValue('A' . $num_row, $user['nama_jabatan']);
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Manager Ops');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'General Manager');
+    // $sheet->setCellValue('A' . $num_row, $user['nama_jabatan']);
+    // $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+    // $sheet->setCellValue('F' . $num_row, 'Manager Ops');
+    // $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    // $sheet->setCellValue('L' . $num_row, 'General Manager');
+    // $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+    $sheet->setCellValue('A' . $num_row, 'Admin Cabang Palembang');
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, 'Operational Agency');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, 'Finance');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
+    $sheet->setCellValue('L' . $num_row, 'Direktur');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
         'alignment' => [
@@ -1127,6 +1273,540 @@ class Pda extends CI_Controller
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output');
   }
+
+  // public function view_hpprill_excel($id)
+  // {
+
+  //   $pda = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+  //   $hpp = json_decode($pda['hpp_rill']);
+  //   $agency_remuneration = $hpp->agency_remuneration;
+  //   $desc = $hpp->desc;
+  //   $other = $hpp->other;
+
+  //   if ($other->desc != "") {
+  //     $other_desc = $other->desc;
+  //   } else {
+  //     $other_desc = [""];
+  //   }
+
+  //   $this->db->select('nama');
+  //   $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
+
+  //   $spreadsheet = new Spreadsheet();
+  //   $sheet = $spreadsheet->getActiveSheet();
+
+  //   $style_col = [
+  //     'alignment' => [
+  //       'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+  //       'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //     ],
+  //   ];
+
+  //   $sheet->mergeCells('A1:B1');
+  //   $sheet->setCellValue('A1', "To");
+  //   $sheet->setCellValue('C1', ":");
+  //   $sheet->setCellValue('D1', $pda['to']);
+  //   $sheet->mergeCells('D1:M1');
+
+  //   $sheet->getStyle('A1:M1')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A2:M2')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A3:M3')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A4:M4')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A5:M5')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+  //   $sheet->getStyle('A6:M6')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+  //   $sheet->getStyle('A7:M7')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+  //   $sheet->getStyle('A8:M8')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+  //   $sheet->getStyle('A9:M9')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+  //   $sheet->getStyle('A10:M10')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->mergeCells('A2:B2');
+  //   $sheet->setCellValue('A2', "From");
+  //   $sheet->setCellValue('C2', ":");
+  //   $sheet->setCellValue('D2', $pda['from']);
+  //   $sheet->mergeCells('D2:M2');
+
+  //   $sheet->mergeCells('A3:B3');
+  //   $sheet->setCellValue('A3', "Date");
+  //   $sheet->setCellValue('C3', ":");
+  //   $sheet->setCellValue('D3', date('d/m/Y', strtotime($pda['tanggal'])));
+  //   $sheet->mergeCells('D3:M3');
+
+  //   $sheet->mergeCells('A4:M4');
+  //   $sheet->setCellValue('A4', 'FINAL PORT DISBURSEMENT ACCOUNT');
+  //   $sheet->getStyle('A4:M4')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0070C0');
+  //   // style header 1
+  //   $sheet->getStyle('A4')->applyFromArray(
+  //     [
+  //       'alignment' => [
+  //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+  //         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //       ],
+  //       'font' => [
+  //         'bold' => true,
+  //         'color' => array('rgb' => 'FFFFFF'),
+  //         'size' => 12,
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->mergeCells('A5:B5');
+  //   $sheet->setCellValue('A5', "PORT");
+  //   $sheet->setCellValue('C5', ":");
+  //   $sheet->setCellValue('D5', $port['nama']);
+  //   $sheet->mergeCells('D5:H5');
+
+  //   $sheet->mergeCells('A6:B6');
+  //   $sheet->setCellValue('A6', "VESSEL NAME");
+  //   $sheet->setCellValue('C6', ":");
+  //   $sheet->setCellValue('D6', $pda['vessel_name']);
+  //   $sheet->mergeCells('D6:H6');
+
+  //   $sheet->mergeCells('A7:B7');
+  //   $sheet->setCellValue('A7', "GRT");
+  //   $sheet->setCellValue('C7', ":");
+  //   $sheet->setCellValue('D7',   $pda['grt']);
+  //   $sheet->mergeCells('D7:H7');
+
+  //   $sheet->setCellValue('A8', 'NO.');
+  //   $sheet->setCellValue('B8', 'DESCRIPTION');
+  //   $sheet->setCellValue('G8', 'REMARKS');
+  //   $sheet->setCellValue('H8', 'GRT');
+  //   $sheet->setCellValue('I8', 'TARIF');
+  //   $sheet->setCellValue('K8', 'ACTIVITY');
+  //   $sheet->setCellValue('L8', 'AMOUNT (IDR)');
+  //   $sheet->setCellValue('M8', 'REMARK');
+  //   $sheet->mergeCells('B8:F8');
+  //   $sheet->mergeCells('I8:J8');
+
+  //   $sheet->getStyle('A8:M8')->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A8')->applyFromArray($style_col);
+  //   $sheet->getStyle('B8')->applyFromArray($style_col);
+  //   $sheet->getStyle('G8')->applyFromArray($style_col);
+  //   $sheet->getStyle('H8')->applyFromArray($style_col);
+  //   $sheet->getStyle('I8')->applyFromArray($style_col);
+  //   $sheet->getStyle('K8')->applyFromArray($style_col);
+  //   $sheet->getStyle('L8')->applyFromArray($style_col);
+  //   $sheet->getStyle('M8')->applyFromArray($style_col);
+
+
+  //   $no = 1;
+  //   $num_row = 9;
+  //   $gf = 0;
+  //   foreach ($desc->id_desc as $key => $val) {
+  //     $this->db->select('desc');
+  //     $item_desc = $this->db->get_where('t_item_pda', ['Id' => $val])->row_array();
+  //     $gf += intval(preg_replace('/[^a-zA-Z0-9\']/', '', $desc->amount_desc[$key]));
+
+  //     $sheet->setCellValue('A' . $num_row, $no++);
+  //     $sheet->setCellValue('B' . $num_row, $item_desc['desc']);
+  //     $sheet->setCellValue('G' . $num_row, $desc->remarks[$key]);
+  //     $sheet->setCellValue('H' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $desc->grt[$key]));
+  //     $sheet->setCellValue('I' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $desc->tarif[$key]));
+  //     $sheet->setCellValue('K' . $num_row, $desc->activity[$key]);
+  //     $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $desc->amount_desc[$key]));
+  //     $sheet->setCellValue('M' . $num_row, $desc->remark_desc[$key]);
+
+  //     // Merge cell
+  //     $sheet->mergeCells('B' . $num_row . ':' . 'F' . $num_row);
+  //     $sheet->mergeCells('I' . $num_row . ':' . 'J' . $num_row);
+
+  //     $sheet->getStyle('A' . $num_row)->applyFromArray($style_col);
+  //     $sheet->getStyle('G' . $num_row)->applyFromArray($style_col);
+  //     $sheet->getStyle('H' . $num_row)->applyFromArray($style_col);
+  //     $sheet->getStyle('I' . $num_row)->applyFromArray($style_col);
+  //     $sheet->getStyle('K' . $num_row)->applyFromArray($style_col);
+  //     $sheet->getStyle('M' . $num_row)->applyFromArray($style_col);
+
+  //     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //       [
+  //         'borders' => [
+  //           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         ]
+  //       ]
+  //     );
+
+  //     $num_row++;
+  //   }
+
+  //   $sheet->setCellValue('A' . $num_row, 'GF');
+  //   $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
+  //   $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf));
+  //   $sheet->getStyle('A' . $num_row)->applyFromArray(
+  //     [
+  //       'alignment' => [
+  //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, // Set text jadi ditengah secara horizontal (right)
+  //         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //       ],
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //       ]
+  //     ]
+  //   );
+
+  //   // AGENCY REMUNERATION
+  //   $num_row = $num_row + 1;
+
+  //   $sheet->setCellValue('A' . $num_row, 'B.');
+  //   $sheet->setCellValue('B' . $num_row, 'AGENCY REMUNERATION');
+  //   $sheet->mergeCells('B' . $num_row . ':' . 'M' . $num_row);
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
+  //   // style header 1
+  //   $sheet->getStyle('A' . $num_row)->applyFromArray(
+  //     [
+  //       'font' => [
+  //         'bold' => true,
+  //         'size' => 12,
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('B' . $num_row)->applyFromArray(
+  //     [
+  //       'font' => [
+  //         'bold' => true,
+  //         'size' => 12,
+  //       ]
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //       ]
+  //     ]
+  //   );
+
+  //   $i = 1;
+  //   $grand_total = 0;
+  //   $num_row = $num_row + 1;
+  //   foreach ($agency_remuneration->desc as $k => $value) {
+  //     $this->db->select('desc');
+  //     $item_pda = $this->db->get_where('t_item_pda', ['Id' => $value])->row_array();
+  //     if ($agency_remuneration->qty[$k] != "") {
+  //       $amount[] = floatval($agency_remuneration->qty[$k]) * floatval(preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]));
+  //     } else {
+  //       $amount[] = preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]);
+  //     }
+  //     $grand_total += preg_replace('/[^a-zA-Z0-9\']/', '', $amount[$k]);
+
+  //     $sheet->setCellValue('A' . $num_row, $i++);
+  //     $sheet->setCellValue('B' . $num_row, $item_pda['desc']);
+  //     $sheet->mergeCells('B' . $num_row . ':' . 'K' . $num_row);
+  //     $sheet->setCellValue('L' . $num_row, $amount[$k]);
+  //     $sheet->setCellValue('M' . $num_row, $agency_remuneration->remark[$k]);
+
+  //     $sheet->getStyle('A' . $num_row)->applyFromArray($style_col);
+
+  //     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //       [
+  //         'borders' => [
+  //           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         ]
+  //       ]
+  //     );
+
+  //     $num_row++;
+  //   }
+
+  //   // Jika ada item tambahan
+  //   $total_other = 0;
+  //   if ($other_desc[0] != "") {
+  //     $sheet->setCellValue('A' . $num_row, 'C.');
+  //     $sheet->setCellValue('B' . $num_row, 'OTHER / OWNER EXPENSE');
+  //     $sheet->mergeCells('B' . $num_row . ':' . 'M' . $num_row);
+  //     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
+  //     // style header 1
+  //     $sheet->getStyle('A' . $num_row)->applyFromArray(
+  //       [
+  //         'font' => [
+  //           'bold' => true,
+  //           'size' => 12,
+  //         ]
+  //       ]
+  //     );
+
+  //     $sheet->getStyle('B' . $num_row)->applyFromArray(
+  //       [
+  //         'font' => [
+  //           'bold' => true,
+  //           'size' => 12,
+  //         ]
+  //       ]
+  //     );
+
+  //     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //       [
+  //         'borders' => [
+  //           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //           'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         ]
+  //       ]
+  //     );
+
+  //     $j = 1;
+  //     $num_row =  $num_row + 1;
+  //     foreach ($other_desc as $index => $o) {
+  //       $total_other += intval(preg_replace('/[^a-zA-Z0-9\']/', '', $other->amount[$index]));
+
+  //       $sheet->setCellValue('A' . $num_row, $j++);
+  //       $sheet->setCellValue('B' . $num_row, $o);
+  //       $sheet->mergeCells('B' . $num_row . ':' . 'K' . $num_row);
+  //       $sheet->setCellValue('L' . $num_row, str_replace('.', '', $other->amount[$index]));
+  //       $sheet->setCellValue('M' . $num_row, str_replace('.', '', $other->remark[$index]));
+
+  //       $sheet->getStyle('A' . $num_row)->applyFromArray($style_col);
+  //       $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //         [
+  //           'borders' => [
+  //             'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //             'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //             'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //           ]
+  //         ]
+  //       );
+
+  //       $num_row++;
+  //     }
+  //     // $num_row = $num_row + 1;
+  //   }
+  //   $sheet->setCellValue('A' . $num_row, "GRAND TOTAL DISBURSEMENT");
+  //   $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
+  //   $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf + $grand_total + $total_other));
+  //   $sheet->getStyle('A' . $num_row)->applyFromArray(
+  //     [
+  //       'alignment' => [
+  //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+  //         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //       ],
+  //     ]
+  //   );
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //       ]
+  //     ]
+  //   );
+
+  //   $num_row = $num_row + 1;
+  //   $sheet->setCellValue('A' . $num_row, 'Request');
+  //   $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+  //   $sheet->setCellValue('F' . $num_row, 'Sincerely,');
+  //   $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+  //   $sheet->setCellValue('L' . $num_row, 'Approved by,');
+  //   $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'alignment' => [
+  //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+  //         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //       ],
+  //       'font' => [
+  //         'bold' => true
+  //       ],
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //       ]
+  //     ]
+  //   );
+
+  //   $num_row = $num_row + 1;
+  //   $sheet->setCellValue('A' . $num_row, '');
+  //   $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+  //   $sheet->setCellValue('F' . $num_row, '');
+  //   $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+  //   $sheet->setCellValue('L' . $num_row, '');
+  //   $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //       ]
+  //     ]
+  //   );
+
+  //   $num_row = $num_row + 1;
+  //   $this->db->select('nama, nama_jabatan');
+  //   $user = $this->db->get_where('users', ['nip' => $pda['user_request']])->row_array();
+  //   $sheet->setCellValue('A' . $num_row, $user['nama']);
+  //   $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+  //   $sheet->setCellValue('F' . $num_row, 'Jumari');
+  //   $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+  //   $sheet->setCellValue('L' . $num_row, 'Rahma Irianto');
+  //   $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'alignment' => [
+  //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+  //         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //       ],
+  //       'font' => [
+  //         'bold' => true
+  //       ],
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //       ]
+  //     ]
+  //   );
+
+  //   $num_row = $num_row + 1;
+  //   $sheet->setCellValue('A' . $num_row, $user['nama_jabatan']);
+  //   $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+  //   $sheet->setCellValue('F' . $num_row, 'Manager Ops');
+  //   $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+  //   $sheet->setCellValue('L' . $num_row, 'General Manager');
+  //   $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+  //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+  //     [
+  //       'alignment' => [
+  //         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
+  //         'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+  //       ],
+  //       'borders' => [
+  //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+  //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+  //       ]
+  //     ]
+  //   );
+
+
+  //   foreach ($sheet->getColumnIterator() as $column) {
+  //     $sheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+  //   }
+
+
+  //   header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+  //   header('Content-Disposition: attachment; filename="HPP_RILL.xlsx"'); // Set nama file excel nya
+  //   header('Cache-Control: max-age=0');
+  //   $writer = new Xlsx($spreadsheet);
+  //   $writer->save('php://output');
+  // }
 
   public function create_er($id)
   {
@@ -1846,94 +2526,6 @@ class Pda extends CI_Controller
       ]
     );
 
-    // Jika ada item tambahan
-    $total_other = 0;
-    // if ($other_desc[0] != "") {
-    //   // AGENCY REMUNERATION
-    //   $num_row = $num_row + 1;
-
-    //   $sheet->setCellValue('A' . $num_row, 'C.');
-    //   $sheet->setCellValue('B' . $num_row, 'OTHER / OWNER EXPENSE');
-    //   $sheet->mergeCells('B' . $num_row . ':' . 'M' . $num_row);
-    //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
-    //   // style header 1
-    //   $sheet->getStyle('A' . $num_row)->applyFromArray(
-    //     [
-    //       'font' => [
-    //         'bold' => true,
-    //         'size' => 12,
-    //       ]
-    //     ]
-    //   );
-
-    //   $sheet->getStyle('B' . $num_row)->applyFromArray(
-    //     [
-    //       'font' => [
-    //         'bold' => true,
-    //         'size' => 12,
-    //       ]
-    //     ]
-    //   );
-
-    //   $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
-    //     [
-    //       'borders' => [
-    //         'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //         'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //         'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-    //         'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-    //       ]
-    //     ]
-    //   );
-
-    //   $j = 1;
-    //   foreach ($other_desc as $index => $o) {
-    //     $total_other += intval(preg_replace('/[^a-zA-Z0-9\']/', '', $other->amount[$index]));
-
-    //     $sheet->setCellValue('A' . $num_row, $j++);
-    //     $sheet->setCellValue('B' . $num_row, $o);
-    //     $sheet->mergeCells('B' . $num_row . ':' . 'K' . $num_row);
-    //     $sheet->setCellValue('L' . $num_row, $other->amount[$index]);
-    //     $sheet->setCellValue('M' . $num_row, $other->remark[$index]);
-
-    //     $sheet->getStyle('A' . $num_row)->applyFromArray($style_col);
-    //     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
-    //       [
-    //         'borders' => [
-    //           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-    //         ]
-    //       ]
-    //     );
-
-    //     $num_row++;
-    //   }
-    //   $num_row = $num_row + 1;
-    // }
-    // $sheet->setCellValue('A' . $num_row, "GRAND TOTAL DISBURSEMENT");
-    // $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
-    // $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf + $grand_total + $total_other));
-    // $sheet->getStyle('A' . $num_row)->applyFromArray(
-    //   [
-    //     'alignment' => [
-    //       'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-    //       'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-    //     ],
-    //   ]
-    // );
-
-    // $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
-    //   [
-    //     'borders' => [
-    //       'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //       'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //       'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //       'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-    //       'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-    //     ]
-    //   ]
-    // );
 
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, 'Request');
@@ -2071,23 +2663,6 @@ class Pda extends CI_Controller
       ],
     ];
 
-    $sheet->mergeCells('A1:M1');
-    $sheet->setCellValue('A1', 'PRA PDA');
-    $sheet->getStyle('A1:M1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00');
-    // style header 1
-    $sheet->getStyle('A1')->applyFromArray(
-      [
-        'alignment' => [
-          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER, // Set text jadi ditengah secara horizontal (center)
-          'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-        ],
-        'font' => [
-          'bold' => true,
-          'size' => 12,
-        ]
-      ]
-    );
-
     $sheet->mergeCells('A2:B2');
     $sheet->setCellValue('A2', "To");
     $sheet->setCellValue('C2', ":");
@@ -2118,7 +2693,7 @@ class Pda extends CI_Controller
         'borders' => [
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK], // Set border top dengan garis tipis
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN], // Set border top dengan garis tipis
         ]
       ]
     );
@@ -2194,7 +2769,7 @@ class Pda extends CI_Controller
     $sheet->mergeCells('D4:M4');
 
     $sheet->mergeCells('A5:M5');
-    $sheet->setCellValue('A5', 'FINAL PORT DISBURSEMENT ACCOUNT');
+    $sheet->setCellValue('A5', 'ESTIMATE PORT DISBURSEMENT ACCOUNT');
     $sheet->getStyle('A5:M5')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('0070C0');
     // style header 1
     $sheet->getStyle('A5')->applyFromArray(
@@ -2207,6 +2782,14 @@ class Pda extends CI_Controller
           'bold' => true,
           'color' => array('rgb' => 'FFFFFF'),
           'size' => 12,
+        ]
+      ]
+    );
+
+    $sheet->getStyle('A5:M5')->applyFromArray(
+      [
+        'borders' => [
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
         ]
       ]
     );
@@ -2224,23 +2807,65 @@ class Pda extends CI_Controller
     $sheet->mergeCells('D7:H7');
 
     $sheet->mergeCells('A8:B8');
-    $sheet->setCellValue('A8', "GRT");
+    $sheet->setCellValue('A8', "EST GRT");
     $sheet->setCellValue('C8', ":");
     $sheet->setCellValue('D8',  $pda['grt']);
     $sheet->mergeCells('D8:H8');
 
-    $sheet->setCellValue('A9', 'NO.');
-    $sheet->setCellValue('B9', 'DESCRIPTION');
-    $sheet->setCellValue('G9', 'REMARKS');
-    $sheet->setCellValue('H9', 'GRT');
-    $sheet->setCellValue('I9', 'TARIF');
-    $sheet->setCellValue('K9', 'ACTIVITY');
-    $sheet->setCellValue('L9', 'AMOUNT (IDR)');
-    $sheet->setCellValue('M9', 'REMARK');
-    $sheet->mergeCells('B9:F9');
-    $sheet->mergeCells('I9:J9');
+    $sheet->mergeCells('A9:M9');
+    $sheet->setCellValue('A9', '');
 
-    $sheet->getStyle('A9:M9')->applyFromArray(
+
+    $sheet->setCellValue('A10', 'A.');
+    $sheet->setCellValue('B10', 'PORT ADMINISTRATION COST');
+    $sheet->mergeCells('B10:M10');
+
+    $sheet->getStyle('A10:M10')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
+    // style header 1
+    $sheet->getStyle('A10')->applyFromArray(
+      [
+        'font' => [
+          'bold' => true,
+          'size' => 12,
+        ]
+      ]
+    );
+
+    $sheet->getStyle('B10')->applyFromArray(
+      [
+        'font' => [
+          'bold' => true,
+          'size' => 12,
+        ]
+      ]
+    );
+
+    $sheet->getStyle('A10:M10')->applyFromArray(
+      [
+        'borders' => [
+          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          'TOP' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+        ]
+      ]
+    );
+
+
+
+    $sheet->setCellValue('A11', 'NO.');
+    $sheet->setCellValue('B11', 'DESCRIPTION');
+    $sheet->setCellValue('G11', 'REMARKS');
+    $sheet->setCellValue('H11', 'GRT');
+    $sheet->setCellValue('I11', 'TARIF');
+    $sheet->setCellValue('K11', 'ACTIVITY');
+    $sheet->setCellValue('L11', 'AMOUNT (IDR)');
+    $sheet->setCellValue('M11', 'REMARK');
+    $sheet->mergeCells('B11:F11');
+    $sheet->mergeCells('I11:J11');
+
+    $sheet->getStyle('A11:M11')->applyFromArray(
       [
         'borders' => [
           'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
@@ -2252,18 +2877,18 @@ class Pda extends CI_Controller
       ]
     );
 
-    $sheet->getStyle('A9')->applyFromArray($style_col);
-    $sheet->getStyle('B9')->applyFromArray($style_col);
-    $sheet->getStyle('G9')->applyFromArray($style_col);
-    $sheet->getStyle('H9')->applyFromArray($style_col);
-    $sheet->getStyle('I9')->applyFromArray($style_col);
-    $sheet->getStyle('K9')->applyFromArray($style_col);
-    $sheet->getStyle('L9')->applyFromArray($style_col);
-    $sheet->getStyle('M9')->applyFromArray($style_col);
+    $sheet->getStyle('A11')->applyFromArray($style_col);
+    $sheet->getStyle('B11')->applyFromArray($style_col);
+    $sheet->getStyle('G11')->applyFromArray($style_col);
+    $sheet->getStyle('H11')->applyFromArray($style_col);
+    $sheet->getStyle('I11')->applyFromArray($style_col);
+    $sheet->getStyle('K11')->applyFromArray($style_col);
+    $sheet->getStyle('L11')->applyFromArray($style_col);
+    $sheet->getStyle('M11')->applyFromArray($style_col);
 
 
     $no = 1;
-    $num_row = 10;
+    $num_row = 12;
     $gf = 0;
     foreach ($desc->id_desc as $key => $val) {
       $this->db->select('desc');
@@ -2300,20 +2925,37 @@ class Pda extends CI_Controller
         ]
       );
 
+      $sheet->getStyle('H' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+      $sheet->getStyle('I' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+      $sheet->getStyle('K' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+      $sheet->getStyle('L' . $num_row)->getNumberFormat()->setFormatCode('#,##0');;
+
       $num_row++;
     }
 
-    $sheet->setCellValue('A' . $num_row, 'GF');
+    $sheet->setCellValue('A' . $num_row, 'SUBTOTAL');
     $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
+    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFC000');
     $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf));
     $sheet->getStyle('A' . $num_row)->applyFromArray(
       [
         'alignment' => [
-          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, // Set text jadi ditengah secara horizontal (right)
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT, // Set text jadi ditengah secara horizontal (right)
           'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+        ],
+        'font' => [
+          'bold' => true
         ],
       ]
     );
+
+    $sheet->getStyle('L' . $num_row)->applyFromArray(
+      [
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    )->getNumberFormat()->setFormatCode('#,##0');
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -2396,21 +3038,35 @@ class Pda extends CI_Controller
         ]
       );
 
+      $sheet->getStyle('L' . $num_row)->getNumberFormat()->setFormatCode('#,##0');
+
       $num_row++;
     }
 
-    $sheet->setCellValue('A' . $num_row, "GF");
+    $sheet->setCellValue('A' . $num_row, "SUBTOTAL");
     $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $grand_total));
     $sheet->getStyle('A' . $num_row)->applyFromArray(
       [
         'alignment' => [
-          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, // Set text jadi ditengah secara horizontal (right)
+          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT, // Set text jadi ditengah secara horizontal (right)
           'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+        ],
+        'font' => [
+          'bold' => true
         ],
       ]
     );
 
+    $sheet->getStyle('L' . $num_row)->applyFromArray(
+      [
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    )->getNumberFormat()->setFormatCode('#,##0');
+
+    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFC000');
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
         'borders' => [
@@ -2418,13 +3074,13 @@ class Pda extends CI_Controller
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
         ]
       ]
     );
 
     $num_row = $num_row + 1;
-    $sheet->setCellValue('A' . $num_row, "GRAND TOTAL DISBURSEMENT");
+    $sheet->setCellValue('A' . $num_row, "GRAND TOTAL");
     $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $gf + $grand_total));
     $sheet->getStyle('A' . $num_row)->applyFromArray(
@@ -2433,27 +3089,40 @@ class Pda extends CI_Controller
           'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT, // Set text jadi ditengah secara horizontal (left)
           'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
         ],
+        'font' => [
+          'bold' => true
+        ],
       ]
     );
+
+    $sheet->getStyle('L' . $num_row)->applyFromArray(
+      [
+        'font' => [
+          'bold' => true
+        ],
+      ]
+    )->getNumberFormat()->setFormatCode('#,##0');
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00');
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
         'borders' => [
-          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
           'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
           'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
           'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
         ]
       ]
     );
 
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, 'Request');
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Sincerely,');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, 'Acknowledge,');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, 'Acknowledge,');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, 'Approved by,');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
 
@@ -2476,12 +3145,21 @@ class Pda extends CI_Controller
     );
 
     $num_row = $num_row + 1;
+    // $sheet->setCellValue('A' . $num_row, '');
+    // $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+    // $sheet->setCellValue('F' . $num_row, '');
+    // $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    // $sheet->setCellValue('L' . $num_row, '');
+    // $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
     $sheet->setCellValue('A' . $num_row, '');
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, '');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, '');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, '');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
     $sheet->setCellValue('L' . $num_row, '');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -2497,11 +3175,20 @@ class Pda extends CI_Controller
     $num_row = $num_row + 1;
     $this->db->select('nama, nama_jabatan');
     $user = $this->db->get_where('users', ['nip' => $pda['user_request']])->row_array();
+    // $sheet->setCellValue('A' . $num_row, $user['nama']);
+    // $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+    // $sheet->setCellValue('F' . $num_row, 'Jumari');
+    // $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    // $sheet->setCellValue('L' . $num_row, 'Rahma Irianto');
+    // $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
     $sheet->setCellValue('A' . $num_row, $user['nama']);
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Jumari');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'Rahma Irianto');
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, 'Panca N.A.F');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, 'Riyant D.P');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
+    $sheet->setCellValue('L' . $num_row, 'Rudianto');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
@@ -2523,12 +3210,21 @@ class Pda extends CI_Controller
     );
 
     $num_row = $num_row + 1;
-    $sheet->setCellValue('A' . $num_row, $user['nama_jabatan']);
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Manager Ops');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'General Manager');
+    // $sheet->setCellValue('A' . $num_row, $user['nama_jabatan']);
+    // $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
+    // $sheet->setCellValue('F' . $num_row, 'Manager Ops');
+    // $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
+    // $sheet->setCellValue('L' . $num_row, 'General Manager');
+    // $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+    $sheet->setCellValue('A' . $num_row, 'Admin Cabang Palembang');
+    $sheet->mergeCells('A' . $num_row . ':' . 'F' . $num_row);
+    $sheet->setCellValue('G' . $num_row, 'Operational Agency');
+    $sheet->mergeCells('G' . $num_row . ':' . 'H' . $num_row);
+    $sheet->setCellValue('I' . $num_row, 'Finance');
+    $sheet->mergeCells('I' . $num_row . ':' . 'K' . $num_row);
+    $sheet->setCellValue('L' . $num_row, 'Direktur');
     $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
         'alignment' => [
@@ -2551,7 +3247,7 @@ class Pda extends CI_Controller
 
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment; filename="PRA_PDA.xlsx"'); // Set nama file excel nya
+    header('Content-Disposition: attachment; filename="PRA_PDA_' . $pda['vessel_name'] . '.xlsx"'); // Set nama file excel nya
     header('Cache-Control: max-age=0');
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output');

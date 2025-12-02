@@ -4,6 +4,9 @@
   $penunjukan = $this->db->select('a.jenis')->from('t_penunjukan a')->where('Id', $pda['penunjukan'])->get()->row_array();
   ?>
   $(document).ready(function() {
+    $(".uang").mask("000.000.000.000.000", {
+      reverse: true,
+    });
     setSelect2();
     ambilDataItem();
     $("#table-item-pda").on('click', '.add-row', function() {
@@ -77,6 +80,32 @@
         });
       }
     });
+
+    $("#table-other").on('click', '.add-row-other', function() {
+      var row = $(this).parents().closest('tr');
+      var newId = Date.now();
+
+      // Membuat baris baru
+      var newRow = row.clone();
+
+      newRow.find('textarea[name="desc-other[]"]').each(function(index, value) {
+        $(this).val('');
+        $(this).attr('id', newId)
+      })
+
+      newRow.find('input[name="amount-other[]"]').each(function(index, value) {
+        $(this).val(0);
+        $(this).attr('id', newId)
+      })
+
+      newRow.find('input[name="remark-other[]"]').each(function(index, value) {
+        $(this).val('');
+        $(this).attr('id', newId)
+      })
+
+      newRow.insertAfter(row);
+    });
+
 
     $(".btn-simpan").click(function(e) {
       e.preventDefault();
@@ -196,7 +225,7 @@
           },
           dataType: "JSON",
           success: function(res) {
-            $('input[id="' + amount[index].id + '"]').val((res.data.est));
+            $('input[id="' + amount[index].id + '"]').val(formatNumber(res.data.est));
           }
         })
       });
@@ -211,5 +240,16 @@
   function countBaris() {
     var jmlBaris = $('.tr_clone').length;
     return jmlBaris;
+  }
+
+  function formatNumber(number) {
+    // Pisahkan bagian integer dan desimal
+    let parts = number.toString().split(".");
+
+    // Format bagian integer dengan pemisah ribuan
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    // Gabungkan bagian integer dan desimal dengan koma sebagai pemisah desimal
+    return parts.join(",");
   }
 </script>

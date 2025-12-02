@@ -1,0 +1,22 @@
+{
+    "montserrat": {
+        "100_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_100_italic_2594abe70e4e16f091ad7926abd01597",
+        "200_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_200_italic_b6e4309707e44dcf244af634c6ca353d",
+        "300_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_300_italic_0555e86fe250647ea4bd4c825f27bf2e",
+        "italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_italic_5c93faf6b5ed72c0500358d3bc244413",
+        "500_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_500_italic_c02f27d7f581d9ee5e567efb78c166b9",
+        "600_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_600_italic_a37bd68e9fd3cfaf554879c868745701",
+        "bold_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_bold_italic_99ff9c44c1d3f6f26e4012494421889d",
+        "800_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_800_italic_afce6310560282a48d37544473fe258d",
+        "900_italic": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_900_italic_c8005239c828b6677e41e0ce6734ddf3",
+        "100": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_100_22a3f128b73ad075367b69939517633a",
+        "200": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_200_cdb1de9cad21d9b3cf8d2fb5ad54cec7",
+        "300": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_300_02d531d0f5215bf7732e2a46e1236eae",
+        "normal": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_normal_95c77d2830d640f06faa8261ded6db33",
+        "500": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_500_2da570d656c67ef7297f2b0b288ce8bc",
+        "600": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_600_da2f80af0e6d548904b08d3547b44b1c",
+        "bold": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_bold_251805f22f376c685d401bff71e8e1d4",
+        "800": "C:\\laragon\\www\\dsm\\application\\libraries\\dompdf-master\\vendor\\dompdf\\dompdf\/lib\/fonts\/montserrat_800_31c76b37778ac09639512894e95dee8a",
+        "900": "montserrat_900_5aa72c700a9156b5f6ef5ef0d10a5fbb"
+    }
+}

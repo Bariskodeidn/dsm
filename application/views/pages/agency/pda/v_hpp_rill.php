@@ -19,6 +19,40 @@
             <?php }
             } ?>
           </div>
+
+          <?php
+          $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
+          $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,a.nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
+          ?>
+
+
+          <table class="table">
+            <tr>
+              <th width="250px">No. Penunjukan</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['no_surat'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Principal</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['nama_customer'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Nama Kapal</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['nama_kapal'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">ETA</th>
+              <td width="5px">:</td>
+              <td><?= date('d-m-Y', strtotime($pda['eta'])) ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Port</th>
+              <td width="5px">:</td>
+              <td><?= $port['nama'] . ' (' . $port['kode'] . ')' ?></td>
+            </tr>
+          </table>
           <?php
           if ($pda['hpp_rill'] == null) {
           ?>
@@ -130,7 +164,7 @@
               </div>
               <div class="table-responsive">
                 <table class="table" id="table-other" style="min-width: 1200px;">
-                  <thead>
+                  <thead class="thead-dark">
                     <tr>
                       <th>OTHER/OWNER EXPENSE</th>
                       <th width="130px">AMOUNT (IDR)</th>
@@ -150,14 +184,14 @@
                       <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other"></td>
                       <td><input type="text" class="form-control" name="remark-other[]" id="remark-other"></td>
                       <td>
-                        <button type="button" class="btn btn-danger btn-xs hapusRowOther"><i class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-xs add-row-other"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-danger btn-sm hapusRowOther"><i class="fe fe-trash"></i></button>
+                        <button type="button" class="btn btn-success btn-sm add-row-other"><i class="fe fe-plus" aria-hidden="true"></i></button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="row" style="margin-top: 25px;">
+              <div class="" style="margin-top: 25px;">
                 <a href="<?= base_url('agency/penunjukan') ?>" class="btn btn-warning btn-sm">Kembali</a>
                 <button type="submit" class="btn btn-primary btn-sm btn-simpan">Simpan</button>
               </div>
@@ -280,7 +314,7 @@
               if ($other_desc[0] != "") {
               ?>
                 <table class="table" id="table-other">
-                  <thead>
+                  <thead class="thead-dark">
                     <tr>
                       <th>OTHER/OWNER EXPENSE</th>
                       <th width="130px">AMOUNT (IDR)</th>
@@ -303,8 +337,8 @@
                         <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>"></td>
                         <td><input type="text" class="form-control" name="remark-other[]" id="remark-other-<?= $index ?>" value="<?= $other->remark[$index] ?>"></td>
                         <td>
-                          <button type="button" class="btn btn-danger btn-xs hapusRowOther"><i class="fa fa-trash"></i></button>
-                          <button type="button" class="btn btn-success btn-xs add-row-other"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                          <button type="button" class="btn btn-danger btn-sm hapusRowOther"><i class="fe fe-trash"></i></button>
+                          <button type="button" class="btn btn-success btn-sm add-row-other"><i class="fe fe-plus" aria-hidden="true"></i></button>
                         </td>
                       </tr>
                     <?php } ?>
@@ -313,7 +347,7 @@
               <?php } else { ?>
                 <div class="table-responsive">
                   <table class="table" id="table-other" style="min-width: 1200px;">
-                    <thead>
+                    <thead class="thead-dark">
                       <tr>
                         <th>OTHER/OWNER EXPENSE</th>
                         <th width="130px">AMOUNT (IDR)</th>
@@ -333,15 +367,15 @@
                         <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other"></td>
                         <td><input type="text" class="form-control" name="remark-other[]" id="remark-other"></td>
                         <td>
-                          <button type="button" class="btn btn-danger btn-xs hapusRowOther"><i class="fa fa-trash"></i></button>
-                          <button type="button" class="btn btn-success btn-xs add-row-other"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                          <button type="button" class="btn btn-danger btn-sm hapusRowOther"><i class="fe fe-trash"></i></button>
+                          <button type="button" class="btn btn-success btn-sm add-row-other"><i class="fe fe-plus" aria-hidden="true"></i></button>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
               <?php } ?>
-              <div class="row" style="margin-top: 25px;">
+              <div class="" style="margin-top: 25px;">
                 <a href="<?= base_url('agency/penunjukan') ?>" class="btn btn-warning btn-sm">Kembali</a>
                 <button type="submit" class="btn btn-primary btn-sm btn-simpan">Simpan</button>
               </div>

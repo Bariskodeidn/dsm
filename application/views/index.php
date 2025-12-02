@@ -99,6 +99,8 @@
   <script src="<?= base_url('assets') ?>/js/cleave.min.js"></script>
   <!-- DataTables -->
   <script src="<?= base_url('assets') ?>/dataTables/js/datatables.min.js"></script>
+  <!-- Jquery Mask -->
+  <script src="<?= base_url('assets') ?>/jquery/jquey.mask.js"></script>
 
   <!-- My Script -->
   <?php if (isset($pages_script)) $this->load->view($pages_script); ?>

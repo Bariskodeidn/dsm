@@ -1,23 +1,17 @@
 <?php
 
 if (!defined('BASEPATH')) exit('No direct script access allowed');
-// require_once('PHPExcel.php');
 
 class Api_Whatsapp
 {
   function wa_notif($msgg, $phone)
   {
-    // $sender = 'buskipm';
-    // $phone = $phonee;
-    // $msg = $msgg;
 
-    $token = "api_key";
-    // $phone= "62812xxxxxx"; //untuk group pakai groupid contoh: 62812xxxxxx-xxxxx
-    // $message = "Testing by API ruangwa";
+    $token = "FB02586BE9E8449E84C9AA49021B99E3";
 
     $curl = curl_init();
     curl_setopt_array($curl, array(
-      CURLOPT_URL => 'https://app.fastwa.com/api/v1/device_session/send_text',
+      CURLOPT_URL => 'https://app.fastwa.com/api/v1/954F277620EF33D443167C2E131D320C/send_text',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
@@ -25,7 +19,6 @@ class Api_Whatsapp
       CURLOPT_FOLLOWLOCATION => true,
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => 'POST',
-      // CURLOPT_POSTFIELDS => 'token=' . $token . '&number=' . $phone . '&message=' . $msgg,
       CURLOPT_POSTFIELDS => array('api_key' => $token, 'phone' => $phone, 'message' => $msgg),
 
     ));

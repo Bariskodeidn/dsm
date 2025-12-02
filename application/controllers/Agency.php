@@ -918,7 +918,7 @@ class Agency extends CI_Controller
           'grt' => $grt,
           'vessel_name' => $kapal,
           'est' => json_encode($data),
-          'user_request' => $cabang == 1 ? '50090220010' : '50097240035',
+          'user_request' => $cabang == 1 ? '202501116' : '',
           'id_cabang' => $cabang
         ];
 
@@ -1122,7 +1122,7 @@ class Agency extends CI_Controller
       'grt' => $grt,
       'vessel_name' => $kapal,
       'est' => json_encode($data),
-      'user_request' => $cabang == 1 ? '50090220010' : '50097240035',
+      'user_request' => $cabang == 1 ? '202501116' : '',
       'id_cabang' => $cabang
     ];
 

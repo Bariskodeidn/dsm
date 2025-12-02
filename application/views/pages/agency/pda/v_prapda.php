@@ -15,17 +15,46 @@
 
           <?php
           $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
-          $penunjukan = $this->db->select('a.jenis')->from('t_penunjukan a')->where('Id', $pda['penunjukan'])->get()->row_array();
+          $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,a.nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
           $item_pda = $this->db->select('*')->from('t_item_pda')->where('jenis', $penunjukan['jenis'])->where('port', $port['kode'])->where('title', 'AGENCY REMUNERATION')->get()->result_array();
           $item_pda_desc = $this->db->select('*')->from('t_item_pda')->where('jenis', $penunjukan['jenis'])->where('port', $port['kode'])->where('title', 'DESC')->get()->result_array();
           ?>
+
+          <table class="table">
+            <tr>
+              <th width="250px">No. Penunjukan</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['no_surat'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Principal</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['nama_customer'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Nama Kapal</th>
+              <td width="5px">:</td>
+              <td><?= $penunjukan['nama_kapal'] ?></td>
+            </tr>
+            <tr>
+              <th width="250px">ETA</th>
+              <td width="5px">:</td>
+              <td><?= date('d-m-Y', strtotime($pda['eta'])) ?></td>
+            </tr>
+            <tr>
+              <th width="250px">Port</th>
+              <td width="5px">:</td>
+              <td><?= $port['nama'] . ' (' . $port['kode'] . ')' ?></td>
+            </tr>
+          </table>
+
 
           <?php
           if ($pda['est'] == null) {
           ?>
             <form action="<?= base_url('pda/insert_est/') . $this->uri->segment(3) ?>" method="post" enctype="multipart/form-data">
               <table class="table table-bordered">
-                <thead>
+                <thead class="thead-dark">
                   <tr>
                     <th width="400px">DESCRIPTION</th>
                     <th>REMARKS</th>
@@ -112,7 +141,7 @@
           <?php } else { ?>
             <form action="<?= base_url('pda/insert_est/') . $this->uri->segment(3) ?>" method="post" enctype="multipart/form-data">
               <table class="table table-bordered">
-                <thead>
+                <thead class="thead-dark">
                   <tr>
                     <th>DESCRIPTION</th>
                     <th>REMARKS</th>

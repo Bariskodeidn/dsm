@@ -21,6 +21,43 @@
               <?php } ?>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <?php
+              $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
+              $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,a.nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
+              ?>
+              <table class="table">
+                <tr>
+                  <th width="250px">No. Penunjukan</th>
+                  <td width="5px">:</td>
+                  <td><?= $penunjukan['no_surat'] ?></td>
+                </tr>
+                <tr>
+                  <th width="250px">Principal</th>
+                  <td width="5px">:</td>
+                  <td><?= $penunjukan['nama_customer'] ?></td>
+                </tr>
+                <tr>
+                  <th width="250px">Nama Kapal</th>
+                  <td width="5px">:</td>
+                  <td><?= $penunjukan['nama_kapal'] ?></td>
+                </tr>
+                <tr>
+                  <th width="250px">ETA</th>
+                  <td width="5px">:</td>
+                  <td><?= date('d-m-Y', strtotime($pda['eta'])) ?></td>
+                </tr>
+                <tr>
+                  <th width="250px">Port</th>
+                  <td width="5px">:</td>
+                  <td><?= $port['nama'] . ' (' . $port['kode'] . ')' ?></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-md-12 col-xs-12 form-group pull-right top_search">
               <form class="form-horizontal form-label-left" method="get" action="<?= site_url('pda/dokumen/') . $pda['Id'] ?>">
