@@ -414,7 +414,7 @@
   </table>
   <div style="margin-top: 10px;">
     <b>Note:</b><br>
-    Bukti transfer mohon dikirim via e-mail ke: marketing@djsshipping.co.id<br>
+    Bukti transfer mohon dikirim via e-mail ke: marketing@dsagency.co.id<br>
     <?= $invoice['notes'] ?>
   </div>
   <div style="margin-top: 10px;">
@@ -427,7 +427,7 @@
     <br>
     <br>
     <br>
-    <b><u>User</u></b><br>
+    <b><u>Rudianto</u></b><br>
     <b>Direktur</b>
   </div>
 </body>
