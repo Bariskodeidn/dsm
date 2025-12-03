@@ -3414,14 +3414,14 @@ class Pda extends CI_Controller
     }
 
     $cabang = $this->session->userdata('kode_cabang');
-    $sqlPda = "SELECT a.*, b.Id as id_cust FROM t_pda a LEFT JOIN t_penunjukan c ON c.Id = a.penunjukan LEFT JOIN t_customer b ON b.Id = c.customer WHERE a.Id = $id";
+    $sqlPda = "SELECT a.*, b.Id as id_cust FROM t_pda a LEFT JOIN t_penunjukan c ON c.Id = a.penunjukan LEFT JOIN agency_customer b ON b.Id = c.customer WHERE a.Id = $id";
     $data['pda'] = $this->db->query($sqlPda)->row_array();
 
     if ($cabang != $data['pda']['id_cabang'] and $cabang != 0) {
       show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
     }
 
-    $data['customer'] = $this->db->get('t_customer')->result_array();
+    $data['customer'] = $this->db->get('agency_customer')->result_array();
     $data['title'] = 'Create Invoice';
     $data['utility'] = $this->db->get('utility')->row_array();
     $data['pages'] = 'pages/agency/pda/v_invoice_create';
@@ -3462,7 +3462,7 @@ class Pda extends CI_Controller
     $selesai = $this->input->post('selesai[]');
     $kategori = $this->input->post('kategori[]');
 
-    $sql = "SELECT t_customer.kode, t_customer.Id FROM t_customer WHERE t_customer.Id = '$customer'";
+    $sql = "SELECT agency_customer.kode, agency_customer.Id FROM agency_customer WHERE agency_customer.Id = '$customer'";
     $data_customer = $this->db->query($sql)->row_array();
 
     $array_bln = array(1 => "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII");

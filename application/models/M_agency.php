@@ -145,4 +145,53 @@ class M_agency extends CI_Model
 
     return $result;
   }
+
+  public function get_item_penawaran($limit, $start, $keyword)
+  {
+    $this->db->select('*')->from('t_item_penawaran');
+    if ($keyword) {
+      $this->db->like('nama_penawaran', $keyword, 'both');
+    }
+    $result = $this->db->order_by('Id', 'DESC')->limit($limit, $start)->get();
+    return $result;
+  }
+
+  public function count_item_penawaran($keyword)
+  {
+    $this->db->select('*')->from('t_item_penawaran');
+    if ($keyword) {
+      $this->db->like('nama_penawaran', $keyword, 'both');
+    }
+    return $this->db->get()->num_rows();
+  }
+
+  public function get_penawaran($limit, $start, $keyword)
+  {
+    $this->db->select('a.Id, a.user, a.no_surat, a.file, a.file_name, a.perihal, a.tanggal, b.nama_customer, c.nama')->from('t_penawaran a')->join('agency_customer b', 'a.tujuan = b.Id', 'left')->join('users c', 'a.user = c.nip', 'left');
+    if ($keyword) {
+      $this->db->like('a.no_surat', $keyword, 'both');
+      $this->db->or_like('b.nama_customer', $keyword, 'both');
+    }
+    $result = $this->db->order_by('Id', 'DESC')->limit($limit, $start)->get();
+    return $result;
+  }
+
+  public function count_penawaran($keyword)
+  {
+    $this->db->select('a.Id, a.user, a.no_surat, a.file, a.file_name, a.perihal, a.tanggal, b.nama_customer, c.nama')->from('t_penawaran a')->join('agency_customer b', 'a.tujuan = b.Id', 'left')->join('users c', 'a.user = c.nip', 'left');
+    if ($keyword) {
+      $this->db->like('a.no_surat', $keyword, 'both');
+      $this->db->or_like('b.nama_customer', $keyword, 'both');
+    }
+    $result = $this->db->get()->num_rows();
+    return $result;
+  }
+
+  public function getByIdPenawaran($id)
+  {
+    $sql = "SELECT a.Id, a.user, a.no_surat, a.perihal, a.tanggal, a.attn, a.isi, a.item_tetap, a.item_tambahan, a.catatan, b.nama_customer, c.nama FROM t_penawaran a LEFT JOIN agency_customer b ON a.tujuan = b.Id LEFT JOIN users c ON a.user = c.nip WHERE a.Id = '$id'";
+    $result = $this->db->query($sql);
+
+    return $result;
+  }
 }

@@ -1,6 +1,8 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpWord\PhpWord;
+
+defined('BASEPATH') or exit('No direct script access allowed');
 class Agency extends CI_Controller
 {
 
@@ -38,8 +40,8 @@ class Agency extends CI_Controller
     // Bootstrap style pagination
     $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
     $config['full_tag_close'] = '</ul>';
-    $config['first_link'] = true;
-    $config['last_link'] = true;
+    $config['first_link'] = "First";
+    $config['last_link'] = "Last";
     $config['first_tag_open'] = '<li class="page-item">';
     $config['first_tag_close'] = '</li>';
     $config['prev_link'] = 'Previous';
@@ -161,8 +163,8 @@ class Agency extends CI_Controller
     // Bootstrap style pagination
     $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
     $config['full_tag_close'] = '</ul>';
-    $config['first_link'] = true;
-    $config['last_link'] = true;
+    $config['first_link'] = "First";
+    $config['last_link'] = "Last";
     $config['first_tag_open'] = '<li class="page-item">';
     $config['first_tag_close'] = '</li>';
     $config['prev_link'] = 'Previous';
@@ -1211,5 +1213,615 @@ class Agency extends CI_Controller
     }
 
     echo json_encode($response);
+  }
+
+  public function item_penawaran()
+  {
+    $has_access = $this->M_menu->has_access();
+    if (!$has_access) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $keyword = htmlspecialchars($this->input->get('keyword') ?? '', ENT_QUOTES, 'UTF-8');
+    $config['base_url'] = base_url('agency/item_penawaran');
+    $config['total_rows'] = $this->M_agency->count_item_penawaran($keyword);
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+    $config['num_links'] = 3;
+    $config['enable_query_strings'] = TRUE;
+    $config['page_query_string'] = TRUE;
+    $config['use_page_numbers'] = TRUE;
+    $config['reuse_query_string'] = TRUE;
+    $config['query_string_segment'] = 'page';
+
+    // Bootstrap style pagination
+    $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+    $config['full_tag_close'] = '</ul>';
+    $config['first_link'] = "First";
+    $config['last_link'] = "Last";
+    $config['first_tag_open'] = '<li class="page-item">';
+    $config['first_tag_close'] = '</li>';
+    $config['prev_link'] = 'Previous';
+    $config['prev_tag_open'] = '<li class="page-item">';
+    $config['prev_tag_close'] = '</li>';
+    $config['next_link'] = 'Next';
+    $config['next_tag_open'] = '<li class="page-item">';
+    $config['next_tag_close'] = '</li>';
+    $config['last_tag_open'] = '<li class="page-item">';
+    $config['last_tag_close'] = '</li>';
+    $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+    $config['cur_tag_close'] = '</a></li>';
+    $config['num_tag_open'] = '<li class="page-item">';
+    $config['num_tag_close'] = '</li>';
+    $config['attributes'] = array('class' => 'page-link');
+
+    // Initialize paginaton
+    $this->pagination->initialize($config);
+    $page = ($this->input->get('page')) ? (($this->input->get('page') - 1) * $config['per_page']) : 0;
+    $data['pagination'] = $this->pagination->create_links();
+
+    $data['page'] = $page;
+    $data['penawaran'] = $this->M_agency->get_item_penawaran($config['per_page'], $page, $keyword);
+
+    $data['title'] = 'Item Penawaran';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/penawaran/v_item_penawaran';
+    $data['pages_script'] = 'script/agency/s_penawaran';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $this->load->view('index', $data);
+  }
+
+  public function tambah_item_penawaran()
+  {
+    $nama = $this->input->post('nama_penawaran');
+    $harga = $this->input->post('harga_penawaran');
+    $jenis = $this->input->post('jenis_item');
+
+    $this->form_validation->set_rules('nama_penawaran', 'Nama Penawaran', 'required', array('required' => '%s wajib diisi'));
+    $this->form_validation->set_rules('harga_penawaran', 'Harga Penawaran', 'required', array('required' => '%s wajib diisi'));
+    $this->form_validation->set_rules('jenis_item', 'Jenis', 'required', array('required' => '%s wajib diisi'));
+
+    if ($this->form_validation->run() == FALSE) {
+      $response = [
+        'success' => false,
+        'msg' => array_values($this->form_validation->error_array())[0],
+      ];
+    } else {
+      $insert = [
+        'nama_penawaran' => $nama,
+        'cost' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga),
+        'jenis' => $jenis
+      ];
+
+      $this->db->insert('t_item_penawaran', $insert);
+
+      $response = [
+        'success' => true,
+        'msg' => 'Data berhasil ditambahkan!',
+      ];
+    }
+
+    echo json_encode($response);
+  }
+
+  public function ubah_item_penawaran($id)
+  {
+    $nama = $this->input->post('nama_penawaran_ubah');
+    $harga = $this->input->post('harga_penawaran_ubah');
+    $jenis = $this->input->post('jenis_item_ubah');
+
+    $this->form_validation->set_rules('nama_penawaran_ubah', 'Nama Penawaran', 'required', array('required' => '%s wajib diisi'));
+    $this->form_validation->set_rules('harga_penawaran_ubah', 'Harga Penawaran', 'required', array('required' => '%s wajib diisi'));
+    $this->form_validation->set_rules('jenis_item_ubah', 'Jenis', 'required', array('required' => '%s wajib diisi'));
+
+    if ($this->form_validation->run() == FALSE) {
+      $response = [
+        'success' => false,
+        'msg' => array_values($this->form_validation->error_array())[0],
+      ];
+    } else {
+      $update = [
+        'nama_penawaran' => $nama,
+        'cost' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga),
+        'jenis' => $jenis
+      ];
+
+      $this->db->where('Id', $id);
+      $this->db->update('t_item_penawaran', $update);
+
+      $response = [
+        'success' => true,
+        'msg' => 'Data berhasil diubah!',
+      ];
+    }
+
+    echo json_encode($response);
+  }
+
+  public function hapus_item_penawaran($id)
+  {
+    $this->db->where('Id', $id);
+    $this->db->delete('t_item_penawaran');
+
+    $response = [
+      'success' => true,
+      'msg' => 'Data berhasil dihapus!'
+    ];
+
+    echo json_encode($response);
+  }
+
+  public function penawaran()
+  {
+    $has_access = $this->M_menu->has_access();
+    if (!$has_access) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $keyword = htmlspecialchars($this->input->get('keyword') ?? '', ENT_QUOTES, 'UTF-8');
+    $config['base_url'] = base_url('agency/penawaran');
+    $config['total_rows'] = $this->M_agency->count_penawaran($keyword);
+    $config['per_page'] = 10;
+    $config['uri_segment'] = 3;
+    $config['num_links'] = 3;
+    $config['enable_query_strings'] = TRUE;
+    $config['page_query_string'] = TRUE;
+    $config['use_page_numbers'] = TRUE;
+    $config['reuse_query_string'] = TRUE;
+    $config['query_string_segment'] = 'page';
+
+    // Bootstrap style pagination
+    $config['full_tag_open'] = '<ul class="pagination justify-content-end">';
+    $config['full_tag_close'] = '</ul>';
+    $config['first_link'] = "First";
+    $config['last_link'] = "Last";
+    $config['first_tag_open'] = '<li class="page-item">';
+    $config['first_tag_close'] = '</li>';
+    $config['prev_link'] = 'Previous';
+    $config['prev_tag_open'] = '<li class="page-item">';
+    $config['prev_tag_close'] = '</li>';
+    $config['next_link'] = 'Next';
+    $config['next_tag_open'] = '<li class="page-item">';
+    $config['next_tag_close'] = '</li>';
+    $config['last_tag_open'] = '<li class="page-item">';
+    $config['last_tag_close'] = '</li>';
+    $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
+    $config['cur_tag_close'] = '</a></li>';
+    $config['num_tag_open'] = '<li class="page-item">';
+    $config['num_tag_close'] = '</li>';
+    $config['attributes'] = array('class' => 'page-link');
+
+    // Initialize paginaton
+    $this->pagination->initialize($config);
+    $page = ($this->input->get('page')) ? (($this->input->get('page') - 1) * $config['per_page']) : 0;
+    $data['pagination'] = $this->pagination->create_links();
+
+    $data['page'] = $page;
+    $data['penawaran'] = $this->M_agency->get_penawaran($config['per_page'], $page, $keyword);
+
+    $data['title'] = 'Daftar Penawaran';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/penawaran/v_penawaran';
+    $data['pages_script'] = 'script/agency/s_penawaran';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $this->load->view('index', $data);
+  }
+
+  public function create_penawaran()
+  {
+    $has_access = $this->M_menu->has_access();
+
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('agency/penawaran', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $data['customer'] = $this->db->get('agency_customer')->result_array();
+    $data['penawaran_tetap'] = $this->db->get_where('t_item_penawaran', ['jenis' => 1])->result_array();
+    $this->db->where('jenis', 1);
+    $this->db->or_where('jenis', 2);
+    $data['penawaran_tetap_all'] = $this->db->get('t_item_penawaran')->result_array();
+    $data['penawaran_tetap_add'] = $this->db->get_where('t_item_penawaran', ['jenis' => 2])->result_array();
+    $data['penawaran_tambahan'] = $this->db->get_where('t_item_penawaran', ['jenis' => 3])->result_array();
+
+    $data['title'] = 'Buat Penawaran';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/penawaran/v_form_penawaran';
+    $data['pages_script'] = 'script/agency/s_penawaran';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $this->load->view('index', $data);
+  }
+
+  public function getCostByIdPenawaran()
+  {
+    $id = $this->input->post('id');
+    $penawaran = $this->db->get_where('t_item_penawaran', ['Id' => $id])->row_array();
+
+    $response = [
+      'cost' => $penawaran['cost'],
+    ];
+
+    echo json_encode($response);
+  }
+
+  public function insert_penawaran()
+  {
+    $tgl = $this->input->post('tgl');
+    $cust = $this->input->post('cust');
+    $isi = $this->input->post('isi');
+    $attn = $this->input->post('attn');
+    $notes = $this->input->post('notes');
+    $perihal = $this->input->post('perihal');
+    $agency = $this->input->post('agency');
+
+    // item tetap
+    $id_item_tetap = $this->input->post('item_tetap[]');
+    $cost = $this->input->post('cost[]');
+    $remarks = $this->input->post('remarks');
+
+    // Item tambahan
+    $desc = $this->input->post('desc');
+    $cost_tambahan = $this->input->post('cost-tambahan[]');
+    $remarks_tambahan = $this->input->post('remarks-tambahan[]');
+
+    $this->form_validation->set_rules('tgl', 'Tanggal', 'required', ['required' => '%s wajib diisi!']);
+    $this->form_validation->set_rules('cust', 'Customer', 'required', ['required' => '%s wajib diisi!']);
+    $this->form_validation->set_rules('agency', 'Agency', 'required', ['required' => '%s wajib diisi!']);
+    $this->form_validation->set_rules('isi', 'Isi', 'required', ['required' => '%s wajib diisi!']);
+    $this->form_validation->set_rules('cost[]', 'Harga penawaran tetap', 'required|trim', ['required' => '%s wajib diisi!']);
+    $this->form_validation->set_rules('perihal', 'Perihal', 'required|trim', ['required' => '%s wajib diisi!']);
+
+    if ($this->form_validation->run() == FALSE) {
+      $response = [
+        'success' => false,
+        'msg' => array_values($this->form_validation->error_array())[0],
+      ];
+    } else {
+      $sql = "SELECT count(Id) as jumlah FROM t_penawaran WHERE YEAR(tanggal) = YEAR(curdate()) AND agency = '$agency';";
+      $count = $this->db->query($sql)->row_array();
+
+      $array_bln = array(1 => "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII");
+      $bln = $array_bln[date('n', strtotime($tgl))];
+      $tahun = date('Y', strtotime($tgl));
+
+
+      $agent = $this->db->get_where('agent', ['Id' => $agency])->row_array();
+      $nomor_surat = $count['jumlah'] + 1 . "/" . $agent['kode'] . "-JKT/SP/" . $bln . "/" . $tahun;
+
+      $item_tetap = [
+        'id' => $id_item_tetap,
+        'cost' => preg_replace('/[^a-zA-Z0-9\']/', '', $cost),
+        'remarks' => $remarks
+      ];
+
+      $item_tambahan = [
+        'id' => $desc,
+        'cost' => preg_replace('/[^a-zA-Z0-9\']/', '', $cost_tambahan),
+        'remarks' => $remarks_tambahan
+      ];
+
+      $insert = [
+        'user' => $this->session->userdata('nip'),
+        'isi' => $isi,
+        'no_surat' => $nomor_surat,
+        'perihal' => $perihal,
+        'tujuan' => $cust,
+        'attn' => $attn,
+        'tanggal' => $tgl,
+        'agency' => $agency,
+        'item_tetap' => json_encode($item_tetap),
+        'item_tambahan' => json_encode($item_tambahan),
+        'catatan' => $notes
+      ];
+
+      $this->db->insert('t_penawaran', $insert);
+
+      $response = [
+        'success' => true,
+        'msg' => 'Surat Penawaran Sukses Dibuat!'
+      ];
+    }
+
+    echo json_encode($response);
+  }
+
+  public function view_penawaran($id)
+  {
+    // $has_access = $this->M_menu->has_access();
+
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!in_array('agency/penawaran', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $data['penawaran'] = $this->M_agency->getByIdPenawaran($id)->row_array();
+    $data['title'] = 'Detail Penawaran';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/penawaran/v_penawaran_detail';
+    $data['pages_script'] = 'script/agency/s_penawaran';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $this->load->view('index', $data);
+  }
+
+  public function upload_penawaran($id)
+  {
+    $file_name = $_FILES['file-penawaran']['name'];
+
+    $config['upload_path'] = './upload/penawaran';
+    $config['allowed_types'] = 'docx|pdf';
+    $config['max_size'] = 5120;
+    $config['encrypt_name'] = TRUE;
+    $this->upload->initialize($config);
+
+    if (!is_dir('upload/penawaran')) {
+      mkdir('./upload/penawaran', 0777, TRUE);
+    }
+
+    if (!$this->upload->do_upload('file-penawaran')) {
+      $response = [
+        'success' => false,
+        'msg' => $this->upload->display_errors()
+      ];
+    } else {
+
+      $upload = $this->upload->data();
+      $data = [
+        'file' => $file_name,
+        'file_name' => $upload['file_name']
+      ];
+
+      $this->db->where('Id', $id);
+      $this->db->update('t_penawaran', $data);
+
+      $response = [
+        'success' => true,
+        'msg' => 'File berhasil diupload!'
+      ];
+    }
+
+    echo json_encode($response);
+  }
+
+  public function word_penawaran($id)
+  {
+    $sql = "SELECT a.Id, a.user, a.no_surat, a.perihal, a.tanggal, a.attn, a.isi, a.item_tetap, a.item_tambahan, a.catatan, b.nama_customer, c.nama, d.nama as nama_agen, d.desc, d.kode, d.logo FROM t_penawaran a LEFT JOIN agency_customer b ON a.tujuan = b.Id LEFT JOIN users c ON a.user = c.nip LEFT JOIN agent d ON d.Id = a.agency WHERE a.Id = '$id'";
+    $result = $this->db->query($sql)->row_array();
+
+    // Creating the new document...
+    $phpWord = new PhpWord();
+
+    /* Note: any element you append to a document must reside inside of a Section. */
+
+    // Adding an empty Section to the document...
+    $section = $phpWord->addSection();
+
+    // set default
+    $phpWord->setDefaultFontSize(12);
+    $phpWord->setDefaultFontName('Times New Roman');
+    $phpWord->setDefaultParagraphStyle(
+      array(
+        'align'      => 'both',
+        'spaceAfter' => \PhpOffice\PhpWord\Shared\Converter::pointToTwip(0),
+        'spacing' => 120,
+        'lineHeight' => 1
+      )
+    );
+
+    // Add Header
+    $cellRowContinue = array('vMerge' => 'continue');
+    $header = $section->addHeader();
+    $tableHeader = $header->addTable(array(
+      'cellMargin' => 0,
+      'spaceBefore' => 0,
+      'spaceAfter' => 0,
+      'spacing' => 0
+    ));
+    // $tableHeader->addRow();
+    // $tableHeader->addCell(3500, $cellRowContinue)->addImage(base_url('img/' . $result['logo']), array('width' => 80));
+    // $tableHeader->addCell(2000, array('gridSpan' => 3))->addText($result['nama_agen'], array('bold' => true, 'size' => 14));
+    // $tableHeader->addRow();
+    // $tableHeader->addCell(3500, $cellRowContinue);
+    // $tableHeader->addCell(2000, array('gridSpan' => 3))->addText($result['desc'], array('bold' => true, 'size' => 12));
+    // $tableHeader->addRow();
+    // $tableHeader->addCell(3500, $cellRowContinue);
+    // $tableHeader->addCell(2000)->addText('Head Office', array('size' => 11));
+    // $tableHeader->addCell(150)->addText(':', array('size' => 11));
+    // $tableHeader->addCell()->addText('Wisma Baja 3rd Fl, Jl. Jend. Gatot Subroto Kav.54,Jakarta Selatan 12950 Phone : 021-5221244', array('size' => 11));
+    // $tableHeader->addRow();
+    // $tableHeader->addCell(3500, $cellRowContinue);
+    // $tableHeader->addCell(2000)->addText('Branch Office', array('size' => 11));
+    // $tableHeader->addCell(150)->addText(':', array('size' => 11));
+    // $tableHeader->addCell()->addText('Jl. Residence A Rozak Komplek Grand Pondok Indah No.4 Kalidoni Palembang – Sumatera Selatan', array('size' => 11));
+    // $tableHeader->addRow();
+    // $tableHeader->addCell(3500, $cellRowContinue);
+    // $tableHeader->addCell(2000)->addText('', array('size' => 11));
+    // $tableHeader->addCell(150)->addText(':', array('size' => 11));
+    // $tableHeader->addCell()->addText('Jl. Pakis No. 5, Rt. 019 Rw.000, Kel. Sidomulyo, Samarinda', array('size' => 11));
+    // $tableHeader->addRow();
+    // $tableHeader->addCell(3500, $cellRowContinue);
+    // $tableHeader->addCell(2000)->addText('Email', array('size' => 11));
+    // $tableHeader->addCell(150)->addText(':', array('size' => 11));
+    // $tableHeader->addCell()->addText('marketing@djsshipping.co.id', array('size' => 11));
+
+    $header->addLine(array('weight' => 2, 'width' => '450', 'height' => 0, 'color' => 00000));
+
+    // add footer
+    $footer = $section->addFooter();
+    $footer->addLine(array('weight' => 1, 'width' => '450', 'height' => 0, 'color' => 00000));
+    $phpWord->addParagraphStyle('footer', array('align' => 'center'));
+    $phpWord->addFontStyle('fstyle_footer1', array('italic' => true, 'size' => 11));
+    $phpWord->addFontStyle('fstyle_footer2', array('size' => 9, 'name' => 'Aptos Narrow'));
+    $footer = $footer->addTextRun('footer');
+    $footer->addText('Ship Agency, Ship Chartering, Ship Chandler Suplyer, Marine Engineering', 'fstyle_footer1');
+    $footer->addTextBreak(1);
+    $footer->addText('Gresik Office: One Place Building 2nd Fl, Jl.Jend Sudirman No.1, Gresik, East of Java, Indonesia, Phone: 031-3992-2545', 'fstyle_footer2');
+    $footer->addTextBreak(1);
+    $footer->addText('Merak Office: Gedong Cilegon Damai Blok C.39 No.8-A, Katimbang, Cibeber, Cilegon, Banten 42424, Phone: 0254-781.3126', 'fstyle_footer2');
+    $footer->addTextBreak(1);
+    $footer->addText('Pel.Ratu Office: Pantai Ratu Indah, Jl. Lumba-Lumba, Blok-B No.18, Palabuhanratu, Sukabumi 43364, Phone: 026-66448777', 'fstyle_footer2');
+    $footer->addTextBreak(1);
+    $footer->addText('Palembang Office : Jl. Residence A Rozak Komplek Grand Pondok Indah No.4 Kalidoni', 'fstyle_footer2');
+    $footer->addTextBreak(1);
+    $footer->addText('Samarinda Office : Jl. Pakis No. 5, Rt. 019 Rw.000, Kel. Sidomulyo,Samarinda.', 'fstyle_footer2');
+
+    // Break
+    $section->addTextBreak(1);
+
+    // Tanggal Surat
+    $phpWord->addParagraphStyle('tanggal', array('align' => 'right'));
+    $tanggal = $section->addTextRun('tanggal');
+    $tanggal->addText('Jakarta, ' . tgl_indo($result['tanggal']));
+
+    // informasi no surat dan perihal
+    $styleTable = array(
+      'cellMargin' => 0,
+      'spaceBefore' => 0,
+      'spaceAfter' => 0,
+      'spacing' => 0
+    );
+
+    $phpWord->addTableStyle('no-border', $styleTable);
+    $table = $section->addTable('no-border');
+    $table->addRow(0);
+    $table->addCell(1200)->addText('No. Surat');
+    $table->addCell(30)->addText(':');
+    $table->addCell(2500)->addText($result['no_surat']);
+    $table->addRow(0);
+    $table->addCell(1200)->addText('Perihal');
+    $table->addCell(30)->addText(':');
+    $table->addCell(4000)->addText($result['perihal']);
+
+    // Break
+    $section->addTextBreak();
+
+    // Tujuan
+    $section->addText('Kepada Yth. :');
+    $section->addText($result['nama_customer']);
+    if ($result['attn']) {
+      $section->addText('Attn : ' . $result['attn']);
+    }
+
+    // Break
+    $section->addTextBreak();
+
+    // Pengantar
+    $section->addText($result['isi']);
+
+    // Break
+    $section->addTextBreak(1);
+
+    // Table penawaran
+    $borderStyle = array('borderSize' => 6, 'borderColor' => '000305', 'cellMarginTop' => 0, 'cellMarginBottom' => 0, 'cellMarginLeft' => 80, 'cellMarginRight' => 80);
+    $fontStyle = array('bold' => true);
+    $phpWord->addTableStyle('border', $borderStyle);
+    $table = $section->addTable('border');
+    $table->addRow();
+    $table->addCell(600)->addText('No.', $fontStyle, array('align' => 'center'));
+    $table->addCell(5000)->addText('Description', $fontStyle, array('align' => 'center'));
+    $table->addCell(2500)->addText('Cost', $fontStyle, array('align' => 'center'));
+    $table->addCell(3000)->addText('Remarks', $fontStyle, array('align' => 'center'));
+    //Colspan
+    $table->addRow();
+    $table->addCell(600, array('gridSpan' => 4))->addText('BIAYA TETAP', $fontStyle, array('align' => 'center'));
+    $biaya_tetap = json_decode($result['item_tetap']);
+    foreach ($biaya_tetap->cost as $item) {
+      $cost[] = $item;
+    }
+
+    foreach ($biaya_tetap->remarks as $item) {
+      $remarks[] = $item;
+    }
+
+    $no = 1;
+    foreach ($biaya_tetap->id as $key => $item) {
+      $this->db->select('nama_penawaran');
+      $item_penawaran[] = $this->db->get_where('t_item_penawaran', ['Id' => $item])->row_array();
+      $table->addRow();
+      $table->addCell(600)->addText($no++);
+      $table->addCell(5000)->addText($item_penawaran[$key]['nama_penawaran']);
+      $table->addCell(2500)->addText($cost[$key] != 0 ? 'Rp.' . number_format($cost[$key], 0, ',', '.') : '-');
+      $table->addCell(3000)->addText($remarks[$key]);
+    }
+
+    $biaya_tambahan = json_decode($result['item_tambahan']);
+    if ($biaya_tambahan->id[0] != "") {
+      // Colspan
+      $table->addRow();
+      $table->addCell(600, array('gridSpan' => 4))->addText('BIAYA TAMBAHAN', $fontStyle, array('align' => 'center'));
+
+      foreach ($biaya_tambahan->cost as $item) {
+        $cost_tambahan[] = $item;
+      }
+
+      foreach ($biaya_tambahan->remarks as $item) {
+        $remarks_tambahan[] = $item;
+      }
+
+      $n = 1;
+      foreach ($biaya_tambahan->id as $k => $item) {
+        $this->db->select('nama_penawaran');
+        $item_penawaran_tambahan[] = $this->db->get_where('t_item_penawaran', ['Id' => $item])->row_array();
+        $table->addRow();
+        $table->addCell(600)->addText($n++);
+        $table->addCell(5000)->addText($item_penawaran_tambahan[$k]['nama_penawaran']);
+        $table->addCell(2500)->addText($cost_tambahan[$k] != 0 ? 'Rp.' . number_format($cost_tambahan[$k], 0, ',', '.') : '-');
+        $table->addCell(3000)->addText($remarks_tambahan[$k]);
+      }
+    }
+    // Break
+    $section->addTextBreak(1);
+
+    // Note
+    $section->addText($result['catatan']);
+
+    // Break
+    $section->addTextBreak(1);
+
+    // Informasi transfer
+    $section->addText('Transfer Bank ABC Cabang ABC');
+    $section->addText($result['nama_agen']);
+    $section->addText('No. Rek : 000000');
+
+    // Break
+    $section->addTextBreak(2);
+
+    // tanda tangan
+    $table = $section->addTable(array('width' => 100));
+    $table->addRow();
+    $table->addCell(10000)->addText('Hormat Kami,');
+    $table->addCell(5000)->addText('Disetujui,');
+
+    $table->addRow();
+    $table->addCell(10000)->addText($result['nama_agen']);
+    $table->addCell(5000)->addText($result['nama_customer']);
+
+    $table->addRow();
+    // $table->addCell(10000)->addImage(base_url('img/ttd/erdanalis.png'), array(
+    //   'width' => 150,
+    //   'positioning' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+    //   'posHorizontal' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+    //   'posVertical' => \PhpOffice\PhpWord\Style\Image::POSITION_ABSOLUTE,
+    //   'wrappingStyle' => 'square'
+    // ));
+    $table->addCell(5000)->addText("");
+
+    $table->addRow();
+    $table->addCell(10000)->addText('user');
+    if ($result['attn']) {
+      $table->addCell(5000)->addText($result['attn']);
+    }
+
+    $table->addRow();
+    $table->addCell(10000)->addText('Kepala Cabang');
+    $table->addCell(5000)->addText('');
+
+    $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+    \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document'); //mime type
+    header('Content-Disposition: attachment;filename="' . $result['no_surat'] . '.docx"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+    $objWriter->save('php://output');
   }
 }

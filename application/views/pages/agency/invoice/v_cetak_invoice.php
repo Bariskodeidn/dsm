@@ -90,7 +90,7 @@
 <body>
   <?php
   $penunjukan = $this->db->get_where('t_penunjukan', ['Id' => $invoice['penunjukan']])->row_array();
-  $customer = $this->db->get_where('t_customer', ['Id' => $invoice['customer']])->row_array();
+  $customer = $this->db->get_where('agency_customer', ['Id' => $invoice['customer']])->row_array();
   $detail = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id']])->result_array();
   $detail2 = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => null])->result_array();
   $agency = $this->db->get_where('agent', ['Id' => $penunjukan['agency']])->row_array();
