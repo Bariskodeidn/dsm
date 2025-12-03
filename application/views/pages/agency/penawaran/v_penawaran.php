@@ -52,7 +52,7 @@
                                                 if (!$value['file'] or !$value['file_name']) {
                                                 ?>
                                                     <a href="<?= base_url('agency/ubah_penawaran/') . $value['Id'] ?>" class="btn btn-success btn-sm"><i class="fe fe-edit" aria-hidden="true"></i></a>
-                                                    <!-- <a href="<?= base_url('agency/word_penawaran/') . $value['Id'] ?>" class="btn btn-primary btn-sm"><i class="fa fa-file-word-o" aria-hidden="true"></i> File Word</a> -->
+                                                    <a href="<?= base_url('agency/word_penawaran/') . $value['Id'] ?>" class="btn btn-primary btn-sm"><i class="fa fa-file-word-o" aria-hidden="true"></i> File Word</a>
                                                 <?php } ?>
                                                 <a href="<?= base_url('agency/view_penawaran/') . $value['Id'] ?>" class="btn btn-warning btn-sm"><i class="fe fe-eye" aria-hidden="true"></i></a>
                                                 <?php if (!$value['file'] and !$value['file_name']) { ?>
