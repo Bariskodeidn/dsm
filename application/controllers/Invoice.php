@@ -108,7 +108,7 @@ class Invoice extends CI_Controller
     } else {
       $data_penunjukan = $this->db->get_where('t_penunjukan', ['Id' => $penunjukan])->row_array();
       $agency = $this->db->get_where('agent', ['Id' => $data_penunjukan['agency']])->row_array();
-      $cabang = $this->db->get_where('t_cabang', ['Id' => $data_penunjukan['id_cabang']])->row_array();
+      $cabang = $this->db->get_where('agency_cabang', ['Id' => $data_penunjukan['id_cabang']])->row_array();
 
       $array_bln = array(1 => "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII");
       $bln = $array_bln[date('n', strtotime($tanggal))];
