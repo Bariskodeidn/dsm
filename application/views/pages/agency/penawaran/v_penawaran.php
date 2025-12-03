@@ -6,7 +6,7 @@
                 <div class="card-body">
                     <div class="row mb-4">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <a href="<?= base_url('agency/create_penawaran') ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> BUat Penawaran</a>
+                            <a href="<?= base_url('agency/create_penawaran') ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus" aria-hidden="true"></i> Buat Penawaran</a>
                         </div>
                     </div>
                     <div class="row">
