@@ -1,6 +1,33 @@
 <script>
     const isPremium = <?php echo json_encode($this->session->userdata('is_premium')); ?>;
     $(document).ready(function() {
+        $('input#notif_wa').change(function() {
+            var value = $(this).val();
+            if (value == 1) {
+                new_value = 0;
+            } else {
+                new_value = 1
+            }
+
+            $.ajax({
+                url: "<?= base_url('app/update_notif') ?>",
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    notif_wa: new_value
+                },
+                success: function(res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.msg,
+                        showConfirmButton: false,
+                    }, setTimeout(() => {
+                        location.reload();
+                    }, 2000))
+                }
+            })
+        })
+
         $('#user-table').dataTable({
             responsive: true,
             rowReorder: {
