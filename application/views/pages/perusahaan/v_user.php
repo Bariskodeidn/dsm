@@ -108,6 +108,12 @@
             <a href="#" id="addUserBtn" class="btn btn-primary">
               Add User
             </a>
+            <?php
+            $notif = $this->db->get('utility')->row();
+            ?>
+            <label class="m-4">
+              <input type="checkbox" value="<?= $notif->notif_wa ?>" id="notif_wa" <?= $notif->notif_wa == 1 ? 'checked' : '' ?>> Notif Wa
+            </label>
 
           </div>
           <div class="table-responsive">

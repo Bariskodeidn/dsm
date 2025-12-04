@@ -219,8 +219,11 @@ class App extends CI_Controller
             $phone_user = $phone;
           }
 
-          foreach ($phone_user as $p) {
-            $this->api_whatsapp->wa_notif($msg, $p);
+          $is_notif = $this->db->get('utility')->row();
+          if ($is_notif->notif_wa == 1) {
+            foreach ($phone_user as $pu) {
+              $this->api_whatsapp->wa_notif($msg, $pu);
+            }
           }
 
           $response = [
@@ -267,10 +270,12 @@ class App extends CI_Controller
           $phone_user = $phone;
         }
 
-        foreach ($phone_user as $p) {
-          $this->api_whatsapp->wa_notif($msg, $p);
+        $is_notif = $this->db->get('utility')->row();
+        if ($is_notif->notif_wa == 1) {
+          foreach ($phone_user as $pu) {
+            $this->api_whatsapp->wa_notif($msg, $pu);
+          }
         }
-
 
         $response = [
           'success' => true,
@@ -556,5 +561,24 @@ class App extends CI_Controller
 
 
     $this->load->view('index', $data);
+  }
+
+  public function update_notif()
+  {
+    $notif_wa = $this->input->post('notif_wa');
+    if ($notif_wa == 1) {
+      $msg = 'Notifikasi whatsapp dinyalakan!';
+    } else {
+      $msg = 'Notifikasi whatsapp dimatikan!';
+    }
+    $this->db->set('notif_wa', $notif_wa);
+    $this->db->update('utility');
+
+    $res = [
+      'success' => true,
+      'msg' => $msg
+    ];
+
+    echo json_encode($res);
   }
 }

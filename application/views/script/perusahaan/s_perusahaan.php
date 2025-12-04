@@ -5,6 +5,33 @@
     const selectedNoSbb = '<?= $perusahaan->nomor_coa_ppn_keluaran ?? '' ?>';
 
     $(document).ready(function() {
+
+        $('input#notif_wa').change(function() {
+            var value = $(this).val();
+            if (value == 1) {
+                new_value = 0;
+            } else {
+                new_value = 1
+            }
+
+            $.ajax({
+                url: "<?= base_url('app/update_notif') ?>",
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    notif_wa: new_value
+                },
+                success: function(res) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: res.msg,
+                        showConfirmButton: false,
+                    }, setTimeout(() => {
+                        location.reload();
+                    }, 2000))
+                }
+            })
+        })
         // --- 1. Prepare the Data ---
         // Default Option
         const defaultOption = {
