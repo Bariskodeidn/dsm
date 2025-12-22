@@ -1909,6 +1909,7 @@ class Pda extends CI_Controller
   public function er_excel($id)
   {
     $pda = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+    $penunjukan = $this->db->get_where('t_penunjukan', ['Id' => $pda['penunjukan']])->row_array();
     $hpp = json_decode($pda['hpp_rill']);
     $agency_remuneration_hpp = $hpp->agency_remuneration;
     $desc_hpp = $hpp->desc;
@@ -1948,13 +1949,13 @@ class Pda extends CI_Controller
     ];
 
     $data['no_er'] = [
-      'desc' => $noErDesc,
-      'amount' => $noErAmount,
-      'qty' => $noErQty,
-      'tanggal_mulai' => $noErMulai,
-      'tanggal_selesai' => $noErSelesai,
-      'remark' => $noErRemark,
-      'er' => $noErER
+      'desc' => $noErDesc ?? [],
+      'amount' => $noErAmount ?? [],
+      'qty' => $noErQty ?? [],
+      'tanggal_mulai' => $noErMulai ?? [],
+      'tanggal_selesai' => $noErSelesai ?? [],
+      'remark' => $noErRemark ?? [],
+      'er' => $noErER ?? []
     ];
 
     $this->db->select('nama');
@@ -2111,18 +2112,30 @@ class Pda extends CI_Controller
     $sheet->setCellValue('D7',  preg_replace('/[^a-zA-Z0-9\']/', '', $pda['grt']));
     $sheet->mergeCells('D7:H7');
 
-    $sheet->setCellValue('A8', 'NO.');
-    $sheet->setCellValue('B8', 'DESCRIPTION');
-    $sheet->setCellValue('G8', 'REMARKS');
-    $sheet->setCellValue('H8', 'GRT');
-    $sheet->setCellValue('I8', 'TARIF');
-    $sheet->setCellValue('K8', 'ACTIVITY');
-    $sheet->setCellValue('L8', 'AMOUNT (IDR)');
-    $sheet->setCellValue('M8', 'REMARK');
-    $sheet->mergeCells('B8:F8');
-    $sheet->mergeCells('I8:J8');
+    $sheet->mergeCells('A8:B8');
+    $sheet->setCellValue('A8', "ETA");
+    $sheet->setCellValue('C8', ":");
+    $sheet->setCellValue('D8',  $pda['eta']);
+    $sheet->mergeCells('D8:H8');
 
-    $sheet->getStyle('A8:M8')->applyFromArray(
+    $sheet->mergeCells('A9:B9');
+    $sheet->setCellValue('A9', "SPK");
+    $sheet->setCellValue('C9', ":");
+    $sheet->setCellValue('D9',  $penunjukan['no_surat']);
+    $sheet->mergeCells('D9:H9');
+
+    $sheet->setCellValue('A10', 'NO.');
+    $sheet->setCellValue('B10', 'DESCRIPTION');
+    $sheet->setCellValue('G10', 'REMARKS');
+    $sheet->setCellValue('H10', 'GRT');
+    $sheet->setCellValue('I10', 'TARIF');
+    $sheet->setCellValue('K10', 'ACTIVITY');
+    $sheet->setCellValue('L10', 'AMOUNT (IDR)');
+    $sheet->setCellValue('M10', 'REMARK');
+    $sheet->mergeCells('B10:F10');
+    $sheet->mergeCells('I10:J10');
+
+    $sheet->getStyle('A10:M10')->applyFromArray(
       [
         'borders' => [
           'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
@@ -2134,18 +2147,18 @@ class Pda extends CI_Controller
       ]
     );
 
-    $sheet->getStyle('A8')->applyFromArray($style_col);
-    $sheet->getStyle('B8')->applyFromArray($style_col);
-    $sheet->getStyle('G8')->applyFromArray($style_col);
-    $sheet->getStyle('H8')->applyFromArray($style_col);
-    $sheet->getStyle('I8')->applyFromArray($style_col);
-    $sheet->getStyle('K8')->applyFromArray($style_col);
-    $sheet->getStyle('L8')->applyFromArray($style_col);
-    $sheet->getStyle('M8')->applyFromArray($style_col);
+    $sheet->getStyle('A10')->applyFromArray($style_col);
+    $sheet->getStyle('B10')->applyFromArray($style_col);
+    $sheet->getStyle('G10')->applyFromArray($style_col);
+    $sheet->getStyle('H10')->applyFromArray($style_col);
+    $sheet->getStyle('I10')->applyFromArray($style_col);
+    $sheet->getStyle('K10')->applyFromArray($style_col);
+    $sheet->getStyle('L10')->applyFromArray($style_col);
+    $sheet->getStyle('M10')->applyFromArray($style_col);
 
 
     $no = 1;
-    $num_row = 9;
+    $num_row = 11;
     $gf_desc = 0;
     foreach ($desc_er->id_desc as $key => $val) {
       $this->db->select('desc');
@@ -2401,64 +2414,33 @@ class Pda extends CI_Controller
     );
 
     // AGENCY REMUNERATION
-    $num_row = $num_row + 1;
-    $sheet->setCellValue('A' . $num_row, 'C.');
-    $sheet->setCellValue('B' . $num_row, 'AGENCY REMUNERATION');
-    $sheet->mergeCells('B' . $num_row . ':' . 'M' . $num_row);
 
-    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
-    // style header 1
-    $sheet->getStyle('A' . $num_row)->applyFromArray(
-      [
-        'font' => [
-          'bold' => true,
-          'size' => 12,
-        ]
-      ]
-    );
-
-    $sheet->getStyle('B' . $num_row)->applyFromArray(
-      [
-        'font' => [
-          'bold' => true,
-          'size' => 12,
-        ]
-      ]
-    );
-
-    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
-      [
-        'borders' => [
-          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-          'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-        ]
-      ]
-    );
-
-    //  Agency Remuneration (NO ER)
-    $num_row = $num_row + 1;
-    $j = 1;
     $grand_total_noEr = 0;
-    foreach ($data['no_er']['desc'] as $k => $value) {
-      $this->db->select('desc');
-      $item_pda = $this->db->get_where('t_item_pda', ['Id' => $value])->row_array();
-      if ($agency_remuneration->qty[$k] != "") {
-        // $amount[] = $agency_remuneration->qty[$k] * preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]);
-        $amount[] = floatval($data['no_er']['qty'][$k]) * floatval(preg_replace('/[^a-zA-Z0-9\']/', '', $data['no_er']['amount'][$k]));
-      } else {
-        $amount[] = preg_replace('/[^a-zA-Z0-9\']/', '', $data['no_er']['amount'][$k]);
-      }
-      $grand_total_noEr += preg_replace('/[^a-zA-Z0-9\']/', '', $amount[$k]);
+    if (count($data['no_er']['desc']) > 0) {
+      $num_row = $num_row + 1;
+      $sheet->setCellValue('A' . $num_row, 'C.');
+      $sheet->setCellValue('B' . $num_row, 'AGENCY REMUNERATION');
+      $sheet->mergeCells('B' . $num_row . ':' . 'M' . $num_row);
 
-      $sheet->setCellValue('A' . $num_row, $j++);
-      $sheet->setCellValue('B' . $num_row, $item_pda['desc']);
-      $sheet->mergeCells('B' . $num_row . ':' . 'K' . $num_row);
-      $sheet->setCellValue('L' . $num_row, $amount[$k]);
-      $sheet->setCellValue('M' . $num_row, $agency_remuneration->remark[$k]);
+      $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('00B0F0');
+      // style header 1
+      $sheet->getStyle('A' . $num_row)->applyFromArray(
+        [
+          'font' => [
+            'bold' => true,
+            'size' => 12,
+          ]
+        ]
+      );
 
-      $sheet->getStyle('A' . $num_row)->applyFromArray($style_col);
+      $sheet->getStyle('B' . $num_row)->applyFromArray(
+        [
+          'font' => [
+            'bold' => true,
+            'size' => 12,
+          ]
+        ]
+      );
 
       $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
         [
@@ -2466,37 +2448,70 @@ class Pda extends CI_Controller
             'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
             'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
             'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+            'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
           ]
         ]
       );
 
-      $num_row++;
-    }
+      //  Agency Remuneration (NO ER)
+      $num_row = $num_row + 1;
+      $j = 1;
+      foreach ($data['no_er']['desc'] as $k => $value) {
+        $this->db->select('desc');
+        $item_pda = $this->db->get_where('t_item_pda', ['Id' => $value])->row_array();
+        if ($agency_remuneration->qty[$k] != "") {
+          // $amount[] = $agency_remuneration->qty[$k] * preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration->amount[$k]);
+          $amount_noEr[] = floatval($data['no_er']['qty'][$k]) * floatval(preg_replace('/[^a-zA-Z0-9\']/', '', $data['no_er']['amount'][$k]));
+        } else {
+          $amount_noEr[] = preg_replace('/[^a-zA-Z0-9\']/', '', $data['no_er']['amount'][$k]);
+        }
+        $grand_total_noEr += preg_replace('/[^a-zA-Z0-9\']/', '', $amount_noEr[$k]);
 
-    $sheet->setCellValue('A' . $num_row, "GF");
-    $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $grand_total_noEr));
-    $sheet->getStyle('A' . $num_row)->applyFromArray(
-      [
-        'alignment' => [
-          'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, // Set text jadi ditengah secara horizontal (center)
-          'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
-        ],
-      ]
-    );
+        $sheet->setCellValue('A' . $num_row, $j++);
+        $sheet->setCellValue('B' . $num_row, $item_pda['desc']);
+        $sheet->mergeCells('B' . $num_row . ':' . 'K' . $num_row);
+        $sheet->setCellValue('L' . $num_row, $amount_noEr[$k]);
+        $sheet->setCellValue('M' . $num_row, $agency_remuneration->remark[$k]);
 
-    $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
-      [
-        'borders' => [
-          'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-          'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-          'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
-          'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
-          'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+        $sheet->getStyle('A' . $num_row)->applyFromArray($style_col);
+
+        $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+          [
+            'borders' => [
+              'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+              'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+              'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+            ]
+          ]
+        );
+
+        $num_row++;
+      }
+
+      $sheet->setCellValue('A' . $num_row, "GF");
+      $sheet->mergeCells('A' . $num_row . ':' . 'K' . $num_row);
+      $sheet->setCellValue('L' . $num_row, preg_replace('/[^a-zA-Z0-9\']/', '', $grand_total_noEr));
+      $sheet->getStyle('A' . $num_row)->applyFromArray(
+        [
+          'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT, // Set text jadi ditengah secara horizontal (center)
+            'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER // Set text jadi di tengah secara vertical (middle)
+          ],
         ]
-      ]
-    );
+      );
 
+      $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
+        [
+          'borders' => [
+            'top' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+            'left' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+            'right' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK],
+            'vertical' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+            'bottom' => ['borderStyle'  => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN],
+          ]
+        ]
+      );
+    }
     // Grand Total Disbursement
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, "GRAND TOTAL DISBURSEMENT");
@@ -2525,14 +2540,9 @@ class Pda extends CI_Controller
       ]
     );
 
-
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, 'Request');
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Sincerely,');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'Approved by,');
-    $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'M' . $num_row);
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -2554,11 +2564,7 @@ class Pda extends CI_Controller
 
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, '');
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, '');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, '');
-    $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'M' . $num_row);
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -2575,11 +2581,7 @@ class Pda extends CI_Controller
     $this->db->select('nama, nama_jabatan');
     $user = $this->db->get_where('users', ['nip' => $pda['user_request']])->row_array();
     $sheet->setCellValue('A' . $num_row, $user['nama']);
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Jumari');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'Rahma Irianto');
-    $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'M' . $num_row);
 
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
@@ -2601,11 +2603,8 @@ class Pda extends CI_Controller
 
     $num_row = $num_row + 1;
     $sheet->setCellValue('A' . $num_row, $user['nama_jabatan']);
-    $sheet->mergeCells('A' . $num_row . ':' . 'E' . $num_row);
-    $sheet->setCellValue('F' . $num_row, 'Manager Ops');
-    $sheet->mergeCells('F' . $num_row . ':' . 'K' . $num_row);
-    $sheet->setCellValue('L' . $num_row, 'General Manager');
-    $sheet->mergeCells('L' . $num_row . ':' . 'M' . $num_row);
+    $sheet->mergeCells('A' . $num_row . ':' . 'M' . $num_row);
+
     $sheet->getStyle('A' . $num_row . ':' . 'M' . $num_row)->applyFromArray(
       [
         'alignment' => [
@@ -2628,10 +2627,12 @@ class Pda extends CI_Controller
 
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment; filename="EXPENSE_REPORT.xlsx"'); // Set nama file excel nya
+    header('Content-Disposition: attachment; filename="EXPENSE_REPORT_' . $pda['vessel_name'] . '.xlsx"'); // Set nama file excel nya
     header('Cache-Control: max-age=0');
     $writer = new Xlsx($spreadsheet);
     $writer->save('php://output');
+    // print_r($data);
+    // exit;
   }
 
   public function view_prapda_excel($id)
