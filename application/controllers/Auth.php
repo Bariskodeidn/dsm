@@ -90,6 +90,7 @@ class Auth extends CI_Controller
         $this->session->set_userdata('nama_ppn', $setting->nama_ppn);
         $this->session->set_userdata('ppn', $setting->besaran_ppn);
         $this->session->set_userdata('nama_akronim', $setting->nama_akronim);
+        $this->session->set_userdata('is_premium', $setting->is_premium);
         $response = [
           'success' => TRUE,
           'msg' => 'Berhasil Masuk!',
