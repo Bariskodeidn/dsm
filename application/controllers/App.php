@@ -39,18 +39,18 @@ class App extends CI_Controller
     $perusahaan = $this->db->get()->row(); // Get the number of rows
 
     $limit_memo = $perusahaan->kuota_memo;
-    if ($total_memo >= $limit_memo) {
-      $this->session->set_flashdata('swal_message', [
-        'icon' => 'info',
-        'title' => 'Singgasana Menunggu Anda!',
-        'text' => 'Batas jumlah Surat (Memo) dalam kerajaan Anda telah tercapai. Tambah kapasitas pesan dan kirim lebih banyak pesan penting dengan menaikkan derajat kekuasaan Anda.',
-        'confirmButtonText' => 'Klaim Takhta Sekarang!',
-        'showCancelButton' => true,
-        'cancelButtonText' => 'Tunda Penobatan',
-        'redirectUrl' => base_url('subscription/upgrade')
-      ]);
-      redirect('home');
-    }
+    // if ($total_memo >= $limit_memo) {
+    //   $this->session->set_flashdata('swal_message', [
+    //     'icon' => 'info',
+    //     'title' => 'Singgasana Menunggu Anda!',
+    //     'text' => 'Batas jumlah Surat (Memo) dalam kerajaan Anda telah tercapai. Tambah kapasitas pesan dan kirim lebih banyak pesan penting dengan menaikkan derajat kekuasaan Anda.',
+    //     'confirmButtonText' => 'Klaim Takhta Sekarang!',
+    //     'showCancelButton' => true,
+    //     'cancelButtonText' => 'Tunda Penobatan',
+    //     'redirectUrl' => base_url('subscription/upgrade')
+    //   ]);
+    //   redirect('home');
+    // }
 
     $data['limit_memo'] = $limit_memo;
     $data['total_memo'] = $total_memo;
