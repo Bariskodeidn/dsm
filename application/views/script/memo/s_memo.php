@@ -1,30 +1,6 @@
 <script>
   $(document).ready(function() {
-    $('#tujuan, #cc').select2({
-      placeholder: 'Search user',
-      ajax: {
-        url: '<?= base_url('app/search_user_memo') ?>',
-        dataType: 'json',
-        delay: 250,
-        data: function(params) {
-          return {
-            q: params.term || '',
-            page: params.page || 1
-          };
-        },
-        processResults: function(data, params) {
-          params.page = params.page || 1;
-
-          return {
-            results: data.items,
-            pagination: {
-              more: data.more
-            }
-          };
-        },
-        cache: true
-      }
-    });
+    $('#tujuan, #cc').select2();
 
     <?php if (isset($selected_item)) { ?>
       // Optional: Load preselected items (e.g., in edit form)
@@ -264,5 +240,25 @@
       });
     }
 
+  });
+
+  $('#selectAll').on('click', function() {
+    let allValues = [];
+
+    $('#tujuan option').each(function() {
+      allValues.push($(this).val());
+    });
+
+    $('#tujuan').val(allValues).trigger('change');
+  });
+
+  $('#selectAllCc').on('click', function() {
+    let allValues = [];
+
+    $('#cc option').each(function() {
+      allValues.push($(this).val());
+    });
+
+    $('#cc').val(allValues).trigger('change');
   });
 </script>

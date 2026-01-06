@@ -19,7 +19,6 @@ class M_app extends CI_Model
     }
 
     if ($this->session->userdata('level_jabatan') == 1) {
-
       $this->db->group_start();
       $this->db->where('level_jabatan', 1);
       $this->db->or_where('level_jabatan', 3);
@@ -43,6 +42,42 @@ class M_app extends CI_Model
     $this->db->order_by('level_jabatan', 'Desc');
 
     $this->db->limit($limit, $offset);
+    $query = $this->db->get();
+
+    return $query->result();
+  }
+
+  public function get_users()
+  {
+    $this->db->select('username, nama, nip');
+    $this->db->from('users');
+
+    if ($this->session->userdata('level_jabatan') == 1) {
+      $this->db->group_start();
+      $this->db->where('level_jabatan', 1);
+      $this->db->group_start();
+      $this->db->where('level_jabatan', 3);
+      $this->db->or_where('bagian', $this->session->userdata('bagian'));
+      $this->db->group_end();
+      // $this->db->where('bagian', $this->session->userdata('bagian'));
+      $this->db->group_end();
+    } else if ($this->session->userdata('level_jabatan') == 2) {
+      // Selects records where the level_jabatan is 1 AND the 'bagian' is the same as the session
+      $this->db->group_start();
+      $this->db->where('level_jabatan', 1);
+      $this->db->where('bagian', $this->session->userdata('bagian'));
+      $this->db->group_end();
+
+      // OR selects records where the level_jabatan is 3 OR 5
+      $this->db->or_group_start();
+      $this->db->where_in('level_jabatan', [3, 5]);
+      $this->db->group_end();
+    }
+
+    // $this->db->where('t_cabang.id_perusahaan', $this->session->userdata('user_perusahaan_id'));
+    $this->db->where('username !=', $this->session->userdata('username'));
+
+    $this->db->order_by('level_jabatan', 'Desc');
     $query = $this->db->get();
 
     return $query->result();

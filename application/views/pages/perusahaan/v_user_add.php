@@ -261,95 +261,89 @@
                     <td width="800">
                       <div class="row">
                         <?php foreach ($all_menus_hierarchical as $parent_menu) : ?>
-                          <?php if ($parent_menu->is_active == 1) :
-                            // if ($parent_menu->menu_name == "Menu Admin" || "Perusahaan")
-                          ?>
-                            <div class="col-md-6 mb-3 mt-2">
-                              <div class="form-check">
-                                <input class="form-check-input parent-checkbox" type="checkbox"
-                                  name="menu_ids[]"
-                                  <?php if ($parent_menu->premium == 1) {
-                                    echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
-                                  } ?>
-                                  <?php
-                                  if ($parent_menu->premium == 1 && !$this->session->userdata('is_premium')) {
-                                  } else if ($parent_menu->menu_name == "Menu Admin" || $parent_menu->menu_name == "Menu Perusahaan") {
-                                  } else if ($this->uri->segment(4) == "Manager" && $parent_menu->menu_name == "Financial") {
-                                  } else if ($this->uri->segment(4) == "Staff" && $parent_menu->menu_name == "Financial") {
-                                  } else {
-                                    echo "Checked";
-                                  }
-                                  ?>
+                          <div class="col-md-6 mb-3 mt-2">
+                            <div class="form-check">
+                              <input class="form-check-input parent-checkbox" type="checkbox"
+                                name="menu_ids[]"
+                                <?php if ($parent_menu->premium == 1) {
+                                  echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
+                                } ?>
+                                <?php
+                                if ($parent_menu->premium == 1 && !$this->session->userdata('is_premium')) {
+                                } else if ($parent_menu->menu_name == "Menu Admin" || $parent_menu->menu_name == "Menu Perusahaan") {
+                                } else if ($this->uri->segment(4) == "Manager" && $parent_menu->menu_name == "Financial") {
+                                } else if ($this->uri->segment(4) == "Staff" && $parent_menu->menu_name == "Financial") {
+                                } else {
+                                  echo "Checked";
+                                }
+                                ?>
 
 
-                                  value="<?= html_escape($parent_menu->Id); ?>"
-                                  id="menu_<?= html_escape($parent_menu->Id); ?>">
-                                <label class="form-check-label font-weight-bold" for="menu_<?= html_escape($parent_menu->Id); ?>">
-                                  <i class="<?= html_escape($parent_menu->icon); ?>"></i> <?= html_escape($parent_menu->menu_name); ?>
-                                  <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
-                                </label>
-                              </div>
-                              <?php if (!empty($parent_menu->children)) : ?>
-                                <div style="margin-left: 25px;">
-                                  <?php foreach ($parent_menu->children as $child_menu) : ?>
-                                    <?php if ($child_menu->is_active == 1) : ?>
-                                      <div class="form-check">
-                                        <input class="form-check-input child-checkbox" type="checkbox"
-                                          name="menu_ids[]"
-
-                                          <?php if ($parent_menu->premium == 1) {
-                                            echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
-                                          } ?>
-
-                                          value="<?= html_escape($child_menu->Id); ?>"
-                                          id="menu_<?= html_escape($child_menu->Id); ?>"
-                                          data-parent-id="<?= html_escape($parent_menu->Id); ?>"
-
-                                          <?php
-                                          if ($child_menu->menu_name == "Buat Pengajuan" || $child_menu->menu_name == "List Pengajuan") {
-                                            // if ($child_menu->menu_name == "Buat Pengajuan") {
-                                            if ($this->uri->segment(4) == "Staff") {
-                                              echo "Checked";
-                                            }
-                                          } else if ($child_menu->menu_name == "Approval Supervisi") {
-                                            if ($this->uri->segment(4) == "Manager") {
-                                              echo "Checked";
-                                            }
-                                          } else if ($child_menu->menu_name == "Approval Keuangan") {
-                                            if ($this->uri->segment(4) == "Keuangan") {
-                                              echo "Checked";
-                                            }
-                                          } else if ($child_menu->menu_name == "Approval Direktur" || $child_menu->menu_name == "Approval Direksi") {
-                                            if ($this->uri->segment(4) == "Direktur") {
-                                              echo "Checked";
-                                            }
-                                          } else if ($child_menu->menu_name == "Neraca Konsolidasi") {
-                                            if ($this->uri->segment(4) == "Direktur") {
-                                              echo "Checked";
-                                            }
-                                          } else if ($parent_menu->menu_name == "Menu Admin" || $parent_menu->menu_name == "Menu Perusahaan" || $parent_menu->menu_name == "Settings") {
-                                          } else if ($this->uri->segment(4) == "Manager" && $parent_menu->menu_name == "Financial") {
-                                          } else if ($this->uri->segment(4) == "Staff" && $parent_menu->menu_name == "Financial") {
-                                          } else if ($this->session->userdata('is_premium') && $parent_menu->premium == 1) {
-                                            // continue;
-                                            echo "Checked";
-                                          } else if (!$this->session->userdata('is_premium') && $parent_menu->premium == 1) {
-                                            // echo "Checked";
-                                          } else {
-                                            echo "Checked";
-                                          }
-                                          ?>>
-                                        <label class="form-check-label" for="menu_<?= html_escape($child_menu->Id); ?>">
-                                          <i class="<?= html_escape($child_menu->icon); ?>"></i> <?= html_escape($child_menu->menu_name); ?>
-                                          <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
-                                        </label>
-                                      </div>
-                                    <?php endif; ?>
-                                  <?php endforeach; ?>
-                                </div>
-                              <?php endif; ?>
+                                value="<?= html_escape($parent_menu->Id); ?>"
+                                id="menu_<?= html_escape($parent_menu->Id); ?>">
+                              <label class="form-check-label font-weight-bold" for="menu_<?= html_escape($parent_menu->Id); ?>">
+                                <i class="<?= html_escape($parent_menu->icon); ?>"></i> <?= html_escape($parent_menu->menu_name); ?>
+                                <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
+                              </label>
                             </div>
-                          <?php endif; ?>
+                            <?php if (!empty($parent_menu->children)) : ?>
+                              <div style="margin-left: 25px;">
+                                <?php foreach ($parent_menu->children as $child_menu) : ?>
+                                  <div class="form-check">
+                                    <input class="form-check-input child-checkbox" type="checkbox"
+                                      name="menu_ids[]"
+
+                                      <?php if ($parent_menu->premium == 1) {
+                                        echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
+                                      } ?>
+
+                                      value="<?= html_escape($child_menu->Id); ?>"
+                                      id="menu_<?= html_escape($child_menu->Id); ?>"
+                                      data-parent-id="<?= html_escape($parent_menu->Id); ?>"
+
+                                      <?php
+                                      if ($child_menu->menu_name == "Buat Pengajuan" || $child_menu->menu_name == "List Pengajuan") {
+                                        // if ($child_menu->menu_name == "Buat Pengajuan") {
+                                        if ($this->uri->segment(4) == "Staff") {
+                                          echo "Checked";
+                                        }
+                                      } else if ($child_menu->menu_name == "Approval Supervisi") {
+                                        if ($this->uri->segment(4) == "Manager") {
+                                          echo "Checked";
+                                        }
+                                      } else if ($child_menu->menu_name == "Approval Keuangan") {
+                                        if ($this->uri->segment(4) == "Keuangan") {
+                                          echo "Checked";
+                                        }
+                                      } else if ($child_menu->menu_name == "Approval Direktur" || $child_menu->menu_name == "Approval Direksi") {
+                                        if ($this->uri->segment(4) == "Direktur") {
+                                          echo "Checked";
+                                        }
+                                      } else if ($child_menu->menu_name == "Neraca Konsolidasi") {
+                                        if ($this->uri->segment(4) == "Direktur") {
+                                          echo "Checked";
+                                        }
+                                      } else if ($parent_menu->menu_name == "Menu Admin" || $parent_menu->menu_name == "Menu Perusahaan" || $parent_menu->menu_name == "Settings") {
+                                      } else if ($this->uri->segment(4) == "Manager" && $parent_menu->menu_name == "Financial") {
+                                      } else if ($this->uri->segment(4) == "Staff" && $parent_menu->menu_name == "Financial") {
+                                      } else if ($this->session->userdata('is_premium') && $parent_menu->premium == 1) {
+                                        // continue;
+                                        echo "Checked";
+                                      } else if (!$this->session->userdata('is_premium') && $parent_menu->premium == 1) {
+                                        // echo "Checked";
+                                      } else {
+                                        echo "Checked";
+                                      }
+                                      ?>>
+                                    <label class="form-check-label" for="menu_<?= html_escape($child_menu->Id); ?>">
+                                      <i class="<?= html_escape($child_menu->icon); ?>"></i> <?= html_escape($child_menu->menu_name); ?>
+                                      <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
+                                    </label>
+                                  </div>
+                                <?php endforeach; ?>
+                              </div>
+                            <?php endif; ?>
+                          </div>
                         <?php endforeach; ?>
                       </div>
                     </td>
@@ -573,41 +567,36 @@
                     <label>User Menu Access</label>
                     <div class="row">
                       <?php foreach ($all_menus_hierarchical as $parent_menu) : ?>
-                        <?php if ($parent_menu->is_active == 1) : // Optional: Only show active parent menus 
-                        ?>
-                          <div class="col-md-6 mb-3 mt-2">
-                            <div class="form-check">
-                              <input class="form-check-input parent-checkbox" type="checkbox"
-                                <?php if ($parent_menu->premium == 1) {
-                                  echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
-                                } ?>
-                                name="menu_ids[]"
-                                value="<?= html_escape($parent_menu->Id); ?>" id="menu_<?= html_escape($parent_menu->Id); ?>" <?= in_array($parent_menu->Id, $user_menu_ids) ? 'checked' : ''; ?>> <label class="form-check-label font-weight-bold" for="menu_<?= html_escape($parent_menu->Id); ?>"> <i class="<?= html_escape($parent_menu->icon); ?>"></i> <?= html_escape($parent_menu->menu_name); ?>
-                                <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
-                              </label>
-                            </div>
-                            <?php if (!empty($parent_menu->children)) : ?>
-                              <div style="margin-left: 25px;">
-                                <?php foreach ($parent_menu->children as $child_menu) : ?>
-                                  <?php if ($child_menu->is_active == 1) : // Optional: Only show active child menus 
-                                  ?>
-                                    <div class="form-check">
-                                      <input class="form-check-input child-checkbox" type="checkbox"
-                                        <?php if ($parent_menu->premium == 1) {
-                                          echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
-                                        } ?>
-                                        name="menu_ids[]"
-                                        value="<?= html_escape($child_menu->Id); ?>" id="menu_<?= html_escape($child_menu->Id); ?>" data-parent-id="<?= html_escape($parent_menu->Id); ?>" <?= in_array($child_menu->Id, $user_menu_ids) ? 'checked' : ''; ?>> <label class="form-check-label" for="menu_<?= html_escape($child_menu->Id); ?>"> <i class="<?= html_escape($child_menu->icon); ?>"></i> <?= html_escape($child_menu->menu_name); ?>
-                                        <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
 
-                                      </label>
-                                    </div>
-                                  <?php endif; ?>
-                                <?php endforeach; ?>
-                              </div>
-                            <?php endif; ?>
+                        <div class="col-md-6 mb-3 mt-2">
+                          <div class="form-check">
+                            <input class="form-check-input parent-checkbox" type="checkbox"
+                              <?php if ($parent_menu->premium == 1) {
+                                echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
+                              } ?>
+                              name="menu_ids[]"
+                              value="<?= html_escape($parent_menu->Id); ?>" id="menu_<?= html_escape($parent_menu->Id); ?>" <?= in_array($parent_menu->Id, $user_menu_ids) ? 'checked' : ''; ?>> <label class="form-check-label font-weight-bold" for="menu_<?= html_escape($parent_menu->Id); ?>"> <i class="<?= html_escape($parent_menu->icon); ?>"></i> <?= html_escape($parent_menu->menu_name); ?>
+                              <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
+                            </label>
                           </div>
-                        <?php endif; ?>
+                          <?php if (!empty($parent_menu->children)) : ?>
+                            <div style="margin-left: 25px;">
+                              <?php foreach ($parent_menu->children as $child_menu) : ?>
+                                <div class="form-check">
+                                  <input class="form-check-input child-checkbox" type="checkbox"
+                                    <?php if ($parent_menu->premium == 1) {
+                                      echo $this->session->userdata('is_premium') == $parent_menu->premium ? '' : 'disabled';
+                                    } ?>
+                                    name="menu_ids[]"
+                                    value="<?= html_escape($child_menu->Id); ?>" id="menu_<?= html_escape($child_menu->Id); ?>" data-parent-id="<?= html_escape($parent_menu->Id); ?>" <?= in_array($child_menu->Id, $user_menu_ids) ? 'checked' : ''; ?>> <label class="form-check-label" for="menu_<?= html_escape($child_menu->Id); ?>"> <i class="<?= html_escape($child_menu->icon); ?>"></i> <?= html_escape($child_menu->menu_name); ?>
+                                    <?= $parent_menu->premium == 1 ? ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="16" height="16"><path fill="#FFD43B" d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6l277.2 0c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"/></svg>' : '' ?>
+
+                                  </label>
+                                </div>
+                              <?php endforeach; ?>
+                            </div>
+                          <?php endif; ?>
+                        </div>
                       <?php endforeach; ?>
                     </div>
                   </div>

@@ -36,6 +36,7 @@ class M_user_access extends CI_Model
             // $this->db->where_in('premium', '0');
             // $this->db->or_where('premium IS NULL', NULL, FALSE); // Checks for premium IS NULL
         }
+
         $this->db->order_by('sort_order', 'ASC'); // Order by sort_order
         $query = $this->db->get('menus');
         $menus = $query->result();

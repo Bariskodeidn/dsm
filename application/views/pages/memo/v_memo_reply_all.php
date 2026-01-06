@@ -11,13 +11,22 @@
             <div class="form-group row">
               <label for="tujuan" class="col-sm-3 col-form-label">Tujuan <strong>(*)</strong></label>
               <div class="col-sm-9">
-                <select name="tujuan[]" id="tujuan" class="form-control select2" multiple></select>
+                <select name="tujuan[]" id="tujuan" class="form-control select2" multiple>
+                  <?php foreach ($users as $user) : ?>
+                    <option value="<?= $user->nip ?>"><?= $user->nama ?></option>
+                  <?php endforeach ?>
+                </select>
               </div>
             </div>
             <div class="form-group row">
               <label for="cc" class="col-sm-3 col-form-label">CC</label>
               <div class="col-sm-9">
-                <select name="cc[]" id="cc" class="form-control select2" multiple></select>
+                <select name="cc[]" id="cc" class="form-control select2" multiple>
+                  <?php foreach ($users as $user) : ?>
+                    <option value="<?= $user->nip ?>"><?= $user->nama ?></option>
+                  <?php endforeach ?>
+                  <?php var_dump($selected_item_cc); ?>
+                </select>
               </div>
             </div>
             <div class="form-group row">

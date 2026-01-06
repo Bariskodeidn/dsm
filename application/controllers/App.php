@@ -54,6 +54,7 @@ class App extends CI_Controller
 
     $data['limit_memo'] = $limit_memo;
     $data['total_memo'] = $total_memo;
+    $data['users'] = $this->M_app->get_users();
 
     $this->load->view('index', $data);
   }
@@ -222,7 +223,10 @@ class App extends CI_Controller
           $is_notif = $this->db->get('utility')->row();
           if ($is_notif->notif_wa == 1) {
             foreach ($phone_user as $pu) {
-              $this->api_whatsapp->wa_notif($msg, $pu);
+              $send_wa = $this->api_whatsapp->wa_notif($msg, $pu);
+              if (!$send_wa) {
+                return;
+              }
             }
           }
 
@@ -273,7 +277,10 @@ class App extends CI_Controller
         $is_notif = $this->db->get('utility')->row();
         if ($is_notif->notif_wa == 1) {
           foreach ($phone_user as $pu) {
-            $this->api_whatsapp->wa_notif($msg, $pu);
+            $send_wa = $this->api_whatsapp->wa_notif($msg, $pu);
+            if (!$send_wa) {
+              return;
+            }
           }
         }
 
@@ -429,6 +436,8 @@ class App extends CI_Controller
       ]
     ];
 
+    $data['users'] = $this->M_app->get_users();
+
     $this->load->view('index', $data);
   }
 
@@ -440,6 +449,7 @@ class App extends CI_Controller
     $data['memo'] = $this->M_app->memo_get_detail($id);
     $data['pages_script'] = 'script/memo/s_memo';
     $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $data['users'] = $this->M_app->get_users();
 
     if (!$data['memo']) {
       show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
