@@ -95,3 +95,19 @@ function terbilang($angka)
     return 'Angka terlalu besar';
   }
 }
+
+function potong_nama($string, $limit)
+{
+  // Pastikan input adalah string dan limit adalah integer positif
+  if (!is_string($string) || !is_numeric($limit) || $limit <= 0) {
+    return $string;
+  }
+
+  // Cek apakah string lebih panjang dari limit
+  if (mb_strlen($string, 'UTF-8') > $limit) {
+    // Potong string ke limit yang ditentukan
+    $string = mb_substr($string, 0, $limit, 'UTF-8') . '...';
+  }
+
+  return $string;
+}

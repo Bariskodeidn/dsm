@@ -114,6 +114,7 @@
         <span class="avatar avatar-sm mt-2">
           <!-- <img src="<?= base_url('assets') ?>/avatars/face-1.jpg" alt="..." class="avatar-img rounded-circle"> -->
           <img src="<?= base_url('assets') ?>/avatars/avatar.png" alt="..." class="avatar-img rounded-circle">
+          <span><?= potong_nama($this->session->userdata('nama'), 10) ?></span>
         </span>
       </a>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
