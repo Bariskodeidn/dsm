@@ -775,7 +775,7 @@ class Agency extends CI_Controller
     $data['title'] = 'Buat Penunjukan';
     $data['utility'] = $this->db->get('utility')->row_array();
     $data['pages'] = 'pages/agency/v_create_penunjukan';
-    $data['pages_script'] = 'script/agency/s_agency';
+    $data['pages_script'] = 'script/agency/s_penunjukan';
     $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
 
     $data['cabang'] = $this->db->get('agency_cabang');
@@ -783,6 +783,7 @@ class Agency extends CI_Controller
     $data['agency'] = $this->db->get('agent');
     $data['penawaran'] = $this->db->get('t_penawaran');
     $data['port'] = $this->db->get('agency_port');
+    $data['kategori_kapal'] = $this->db->get('agency_kapal_kategori')->result();
 
     $this->load->view('index', $data);
   }
@@ -792,6 +793,7 @@ class Agency extends CI_Controller
     $agency = $this->input->post('agency');
     $penawaran = $this->input->post('surat-penawaran');
     $no_surat = $this->input->post('surat-penunjukan');
+    $type = $this->input->post('type');
     $kapal = $this->input->post('kapal');
     $jenis = $this->input->post('jenis');
     $file = $_FILES['file-penunjukan']['name'];
@@ -801,16 +803,27 @@ class Agency extends CI_Controller
     $port = $this->input->post('port');
     $eta = $this->input->post('eta');
     $grt = $this->input->post('grt');
+    $grt_barge = $this->input->post('grt_barge');
 
     $this->form_validation->set_rules('cabang', 'Cabang', 'required', array('required' => "%s wajib dipilih!"));
-    $this->form_validation->set_rules('customer', 'Nama customer', 'required', array('required' => "%s wajib dipilih!"));
-    $this->form_validation->set_rules('agency', 'Nama agency', 'required', array('required' => "%s wajib dipilih!"));
+    $this->form_validation->set_rules('customer', 'Nama customer', 'required|callback_exists[agency_customer.Id]', array(
+      'required' => "%s wajib dipilih!",
+    ));
+    $this->form_validation->set_rules('agency', 'Nama agency', 'required|callback_exists[agent.Id]', array(
+      'required' => "%s wajib dipilih!",
+    ));
+    $this->form_validation->set_rules('type', 'Type kapal', 'required|callback_exists[agency_kapal_kategori.Id]', array(
+      'required' => "%s wajib dipilih!",
+    ));
     $this->form_validation->set_rules('surat-penunjukan', 'No surat penunjukan', 'required|trim', array('required' => "%s wajib diisi!"));
     $this->form_validation->set_rules('kapal', 'Nama Kapal', 'required', array('required|trim' => "%s wajib diisi!"));
     $this->form_validation->set_rules('jenis', 'Jenis', 'required', array('required' => "%s wajib dipilih!"));
-    $this->form_validation->set_rules('port', 'Port', 'required', array('required' => "%s wajib dipilih!"));
+    $this->form_validation->set_rules('port', 'Port', 'required|callback_exists[agency_port.Id]', array(
+      'required' => "%s wajib dipilih!",
+    ));
     $this->form_validation->set_rules('eta', 'ETA', 'required', array('required' => "%s wajib diisi!"));
-    $this->form_validation->set_rules('grt', 'GRT', 'required', array('required|trim' => "%s wajib diisi!"));
+    $this->form_validation->set_rules('grt', 'GRT', 'required', array('required' => "%s wajib diisi!"));
+    $this->form_validation->set_rules('grt_barge', 'GRT Barge', 'trim', array('required' => "%s wajib diisi!"));
 
     $config['upload_path'] = './upload/penunjukan';
     $config['allowed_types'] =  'jpg|jpeg|png|pdf';
@@ -823,15 +836,36 @@ class Agency extends CI_Controller
     }
 
     if ($this->form_validation->run() == FALSE) {
+      $errors = [
+        'cabang' => form_error('cabang'),
+        'customer' => form_error('customer'),
+        'agency' => form_error('agency'),
+        'type' => form_error('type'),
+        'kapal' => form_error('kapal'),
+        'surat-penawaran' => form_error('surat-penawaran'),
+        'surat-penunjukan' => form_error('surat-penunjukan'),
+        'jenis' => form_error('jenis'),
+        'port' => form_error('port'),
+        'eta' => form_error('eta'),
+        'grt' => form_error('grt'),
+        'grt_barge' => form_error('grt_barge')
+      ];
+
       $response = [
         'success' => false,
-        'msg' => array_values($this->form_validation->error_array())[0]
+        'msg' => 'Gagal input periksa kembali inputan anda',
+        'errors' => $errors
       ];
     } else {
       if (!$this->upload->do_upload('file-penunjukan')) {
+        $errors = [
+          'file-penunjukan' => $this->upload->display_errors()
+        ];
+
         $response = [
           'success' => false,
-          'msg' => $this->upload->display_errors()
+          'msg' => 'Gagal input file',
+          'errors' => $errors,
         ];
       } else {
         $upload = $this->upload->data();
@@ -917,7 +951,8 @@ class Agency extends CI_Controller
           'from' => $agency['kode'] . ' ' . $data_cabang['nama'],
           'port' => $port,
           'eta' => $eta,
-          'grt' => $grt,
+          'grt' => str_replace(',', '', $grt),
+          'grt_barge' => str_replace(',', '', $grt_barge),
           'vessel_name' => $kapal,
           'est' => json_encode($data),
           'user_request' => $cabang == 1 ? '202501116' : '',
@@ -1823,5 +1858,290 @@ class Agency extends CI_Controller
     header('Content-Disposition: attachment;filename="' . $result['no_surat'] . '.docx"'); //tell browser what's the file name
     header('Cache-Control: max-age=0'); //no cache
     $objWriter->save('php://output');
+  }
+
+  public function kapal()
+  {
+    $has_access = $this->M_menu->has_access();
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+    $data['title'] = 'List Kapal';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/kapal/v_list_kapal';
+    $data['pages_script'] = 'script/agency/s_agency';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+
+    $this->load->view('index', $data);
+  }
+
+  public function kapal_ajax_list()
+  {
+    $list = $this->M_agency->get_kapalDatatables();
+    $data = array();
+    $no = $this->input->post('start');
+    $i = 1;
+    foreach ($list as $kapal) {
+
+      $ubah = '<a href="' . base_url("agency/ubah_kapal/") . $kapal->Id . '" class="btn btn-success btn-xs"><i class="fa fa-pencil" aria-hidden="true"></i> Update</a>';
+
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $kapal->name;
+      $row[] = strtoupper($kapal->type);
+      $row[] = $kapal->flag;
+      $row[] = number_format($kapal->grt) . " T";
+      $row[] = number_format($kapal->dwt) . " T";
+      $row[] = $ubah;
+      $data[] = $row;
+    }
+
+    $minSearchLength = 3;
+    $search = $this->input->post('search')['value'];
+    $draw = intval($this->input->post('draw'));
+    // Check if search length is less than the minimum
+    if (strlen($search) > 0 && strlen($search) < $minSearchLength) {
+      echo json_encode([
+        "draw" => $draw,
+        "recordsTotal" => 0,
+        "recordsFiltered" => 0,
+        "data" => []
+      ]);
+      return;
+    }
+
+    $output = array(
+      "draw" => $this->input->post('draw'),
+      "recordsTotal" => $this->M_agency->count_all_kapal(),
+      "recordsFiltered" => $this->M_agency->count_filtered_kapal(),
+      "data" => $data,
+    );
+    //output to json format
+    $this->output->set_output(json_encode($output));
+  }
+
+  public function add_kapal()
+  {
+    $has_access = $this->M_menu->has_access();
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('agency/kapal', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+    $data['title'] = 'Form Kapal';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/kapal/v_form_kapal';
+    $data['pages_script'] = 'script/agency/s_kapal';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $data['kategori'] = $this->db->get('agency_kapal_kategori')->result();
+
+    $this->load->view('index', $data);
+  }
+
+  public function insert_kapal()
+  {
+    $has_access = $this->M_menu->has_access();
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('agency/kapal', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $vessel = $this->input->post('vessel-name');
+    $type = $this->input->post('type');
+    $flag = $this->input->post('flag');
+    $gross = $this->input->post('gross');
+    $gross_bg = $this->input->post('gross_barge');
+    $dwt = $this->input->post('dwt');
+
+    $this->form_validation->set_rules('vessel-name', 'vessel of name', 'required|trim');
+    $this->form_validation->set_rules('type', 'type', 'required');
+    $this->form_validation->set_rules('flag', 'flag', 'required|trim');
+    $this->form_validation->set_rules('gross', 'gross tonnage', 'required|trim');
+    $this->form_validation->set_rules('gross_barge', 'gross tonnage barge', 'required|trim');
+    $this->form_validation->set_rules('dwt', 'dwt', 'required|trim');
+
+    if ($this->form_validation->run() == FALSE) {
+
+      $errors = [
+        'vessel-name' => form_error('vessel-name'),
+        'type' => form_error('type'),
+        'flag' => form_error('flag'),
+        'gross' => form_error('gross'),
+        'dwt' => form_error('dwt'),
+      ];
+
+      $response = [
+        'success' => false,
+        'msg' => 'Gagal Input!',
+        'errors' => $errors
+      ];
+
+      echo json_encode($response);
+      return false;
+    }
+
+    $this->db->trans_start();
+    $insert = [
+      'name' => $vessel,
+      'type' => $type,
+      'flag' => $flag,
+      'grt' => str_replace(',', '', $gross),
+      'grt_barge' => str_replace(',', '', $gross_bg),
+      'dwt' => str_replace(',', '', $dwt)
+    ];
+
+    $this->db->insert('agency_kapal', $insert);
+
+    $this->db->trans_complete();
+
+    if ($this->db->trans_status() == false) {
+      $this->db->trans_rollback();
+    } else {
+      $this->db->trans_commit();
+      $response = [
+        'success' => true,
+        'reload' => base_url('agency/kapal'),
+        'msg' => 'Data kapal berhasil disimpan!'
+      ];
+    }
+
+    echo json_encode($response);
+  }
+
+  public function ubah_kapal($id)
+  {
+    $has_access = $this->M_menu->has_access();
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('agency/kapal', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+    $data['title'] = 'Form Kapal';
+    $data['utility'] = $this->db->get('utility')->row_array();
+    $data['pages'] = 'pages/agency/kapal/v_form_ubah_kapal';
+    $data['pages_script'] = 'script/agency/s_kapal';
+    $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
+    $data['kategori'] = $this->db->get('agency_kapal_kategori')->result();
+    $data['kapal'] = $this->db->get_where('agency_kapal', ['Id' => $id])->row();
+
+    if (!$data['kapal']) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $this->load->view('index', $data);
+  }
+
+  public function update_kapal($id)
+  {
+    $has_access = $this->M_menu->has_access();
+    $access_menu_all = $this->M_menu->get_allowed_routes($this->session->userdata('nip'));
+
+    if (!$has_access and !in_array('agency/kapal', $access_menu_all)) {
+      show_error('Forbidden Access: You do not have permission to view this page.', 403, '403 Forbidden');
+    }
+
+    $vessel = $this->input->post('vessel-name');
+    $type = $this->input->post('type');
+    $flag = $this->input->post('flag');
+    $gross = $this->input->post('gross');
+    $gross_bg = $this->input->post('gross_barge');
+    $dwt = $this->input->post('dwt');
+
+    $this->form_validation->set_rules('vessel-name', 'vessel of name', 'required|trim');
+    $this->form_validation->set_rules('type', 'type', 'required');
+    $this->form_validation->set_rules('flag', 'flag', 'required|trim');
+    $this->form_validation->set_rules('gross', 'gross tonnage', 'required|trim');
+    $this->form_validation->set_rules('gross_barge', 'gross tonnage barge', 'required|trim');
+    $this->form_validation->set_rules('dwt', 'dwt', 'required|trim');
+
+    if ($this->form_validation->run() == FALSE) {
+
+      $errors = [
+        'vessel-name' => form_error('vessel-name'),
+        'type' => form_error('type'),
+        'flag' => form_error('flag'),
+        'gross' => form_error('gross'),
+        'dwt' => form_error('dwt'),
+      ];
+
+      $response = [
+        'success' => false,
+        'msg' => 'Gagal Input!',
+        'errors' => $errors
+      ];
+
+      echo json_encode($response);
+      return false;
+    }
+
+    $this->db->trans_start();
+    $update = [
+      'name' => $vessel,
+      'type' => $type,
+      'flag' => $flag,
+      'grt' => str_replace(',', '', $gross),
+      'grt_barge' => str_replace(',', '', $gross_bg),
+      'dwt' => str_replace(',', '', $dwt)
+    ];
+
+    $this->db->where('Id', $id);
+    $this->db->update('agency_kapal', $update);
+
+    $this->db->trans_complete();
+
+    if ($this->db->trans_status() == false) {
+      $this->db->trans_rollback();
+    } else {
+      $this->db->trans_commit();
+      $response = [
+        'success' => true,
+        'reload' => base_url('agency/kapal'),
+        'msg' => 'Data kapal berhasil diubah!'
+      ];
+    }
+
+    echo json_encode($response);
+  }
+
+  public function getKapalByType()
+  {
+    $type = $this->input->post('id');
+    $data = $this->db->where('type', $type)->get('agency_kapal')->result();
+    echo json_encode($data);
+  }
+
+  public function getKapalById()
+  {
+    $id = $this->input->post('id');
+    $kapal = $this->db->get_where('agency_kapal', ['Id' => $id])->row();
+
+    echo json_encode($kapal);
+  }
+
+  public function exists($value, $params)
+  {
+    list($table, $field) = explode('.', $params);
+
+    if ($value == '') {
+      return TRUE;
+    }
+
+    $exists = $this->db
+      ->where($field, $value)
+      ->get($table)
+      ->num_rows();
+
+    if ($exists == 0) {
+      $this->form_validation->set_message(
+        'exists',
+        '%s tidak valid'
+      );
+      return FALSE;
+    }
+    return TRUE;
   }
 }

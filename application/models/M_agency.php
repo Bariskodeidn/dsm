@@ -8,6 +8,10 @@ class M_agency extends CI_Model
   var $column_search_penunjukan = array('d.nama_customer', 'a.no_surat');
   var $order_penunjukan = array('Id' => 'desc');
 
+  var $column_order_kapal = array(null, 'name', 'type', 'flag', 'grt', 'dwt');
+  var $column_search_kapal = array('name', 'type', 'flag', 'grt', 'dwt');
+  var $order_kapal = array('Id' => 'desc');
+
 
   public function __construct()
   {
@@ -193,5 +197,53 @@ class M_agency extends CI_Model
     $result = $this->db->query($sql);
 
     return $result;
+  }
+
+  public function get_kapalDatatables()
+  {
+    $this->_get_kapalDatatables_query();
+    if ($this->input->post('length') != -1)
+      $this->db->limit($this->input->post('length'), $this->input->post('start'));
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  private function _get_kapalDatatables_query()
+  {
+    $this->db->select('*')->from('agency_kapal');
+    $i = 0;
+    foreach ($this->column_search_kapal as $item) {
+      if ($this->input->post('search')['value']) {
+        if ($i === 0) {
+          $this->db->group_start();
+          $this->db->like($item, $this->input->post('search')['value']);
+        } else {
+          $this->db->or_like($item, $this->input->post('search')['value']);
+        }
+        if (count($this->column_search_kapal) - 1 == $i) //looping terakhir
+          $this->db->group_end();
+      }
+      $i++;
+    }
+    // jika datatable mengirim POST untuk order
+    if ($this->input->post('order')) {
+      $this->db->order_by($this->column_order_kapal[$this->input->post('order')['0']['column']], $this->input->post('order')['0']['dir']);
+    } else if (isset($this->order_kapal)) {
+      $order = $this->order_kapal;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+
+  public function count_filtered_kapal()
+  {
+    $this->_get_kapalDatatables_query();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  public function count_all_kapal()
+  {
+    $this->_get_kapalDatatables_query();
+    return $this->db->count_all_results();
   }
 }

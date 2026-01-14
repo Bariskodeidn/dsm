@@ -722,4 +722,16 @@ class Invoice extends CI_Controller
     // Close the output stream
     fclose($output);
   }
+
+  public function get_penunjukan()
+  {
+    $id = $this->input->get('id_penunjukan');
+    $this->db->join('agency_kapal b', 'a.nama_kapal=b.Id', 'left');
+    $penunjukan = $this->db->get_where('t_penunjukan a', ['a.Id' => $id])->row_array();
+    $response = [
+      'data' => $penunjukan
+    ];
+
+    echo json_encode($response);
+  }
 }

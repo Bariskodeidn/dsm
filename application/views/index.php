@@ -30,12 +30,8 @@
   <link rel="stylesheet" href="<?= base_url('assets') ?>/css/app-dark.css" id="darkTheme" disabled>
   <!-- Sweetalert2 -->
   <link rel="stylesheet" href="<?= base_url('assets') ?>/sweetalert2/css/sweetalert2.min.css">
-  <!-- Datatables -->
-  <!-- <link rel="stylesheet" href="<?= base_url('assets') ?>/vendors/bootstrap/dist/css/bootstrap.min.css"> -->
 
-  <!-- <link rel="stylesheet" href="<?= base_url('assets') ?>/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css"> -->
-  <!-- <link rel="stylesheet" href="<?= base_url('assets') ?>/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css"> -->
-  <!-- <link rel="stylesheet" href="<?= base_url('assets') ?>/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css"> -->
+
   <link rel="stylesheet" href="<?= base_url('assets') ?>/dataTables/css/datatables.min.css">
   <link rel="manifest" href="<?= base_url() ?>assets/_manifest.json" />
 
@@ -100,7 +96,10 @@
   <!-- DataTables -->
   <script src="<?= base_url('assets') ?>/dataTables/js/datatables.min.js"></script>
   <!-- Jquery Mask -->
-  <script src="<?= base_url('assets') ?>/jquery/jquey.mask.js"></script>
+  <script src="<?= base_url('assets') ?>/jquery/jquery.mask.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+
 
   <!-- My Script -->
   <?php if (isset($pages_script)) $this->load->view($pages_script); ?>
@@ -108,8 +107,7 @@
   <!-- Your SweetAlert2 JS check (as provided previously) -->
 
   <script src="<?= base_url('assets') ?>/js/apps.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56159088-1"></script>
+
 
 </body>
 

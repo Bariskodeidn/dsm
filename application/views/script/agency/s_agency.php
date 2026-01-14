@@ -85,6 +85,23 @@
   });
 
   $(document).ready(function() {
+    initSelect2('.select2');
+
+    $('#penunjukan').change(function() {
+      var value = $(this).val();
+      $.ajax({
+        url: "<?= base_url('invoice/get_penunjukan') ?>",
+        dataType: "JSON",
+        method: "GET",
+        data: {
+          id_penunjukan: value
+        },
+        success: function(res) {
+          $('#kapal').val(res.data.name);
+        }
+      })
+    })
+
     $(".uang").mask("000.000.000.000.000", {
       reverse: true,
     });
@@ -116,6 +133,21 @@
       },
       "columnDefs": [{
         "targets": [0, 4],
+        "orderable": false
+      }],
+      "responsive": true
+    })
+
+    $('#tableKapalAgency').DataTable({
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        "url": '<?= site_url('agency/kapal_ajax_list') ?>',
+        "type": "POST",
+      },
+      "columnDefs": [{
+        "targets": [0, 6],
         "orderable": false
       }],
       "responsive": true
@@ -257,7 +289,7 @@
     });
   })
 
-  $('.select2').select2();
+
 
   function modalMonitor(id) {
     $('#myModalMonitor').modal('show');
@@ -336,6 +368,76 @@
         console.log(res);
         $('input[name="referensi"]').val(res.data.referensi);
       }
+    })
+  }
+
+  function closePenunjukan(id) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want close this project?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '<?= base_url('agency/close_penunjukan') ?>',
+          method: "GET",
+          dataType: "JSON",
+          data: {
+            penunjukanId: id
+          },
+          beforeSend: () => {
+            Swal.fire({
+              title: "Loading....",
+              timerProgressBar: true,
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
+          },
+          success: function(res) {
+            if (res.success) {
+              Swal.fire({
+                icon: "success",
+                title: `${res.msg}`,
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(function() {
+                Swal.close();
+                location.reload();
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: `${res.msg}`,
+                showConfirmButton: false,
+                timer: 1500,
+              }).then(function() {
+                Swal.close();
+              });
+            }
+          },
+          error: function(xhr, status, error) {
+            console.log(error)
+            Swal.fire({
+              icon: "error",
+              title: `${error}`,
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          },
+        });
+      }
+    });
+  }
+
+  function initSelect2(selector) {
+    $(selector).select2({
+      width: "100%",
     })
   }
 </script>

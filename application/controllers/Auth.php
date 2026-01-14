@@ -56,6 +56,7 @@ class Auth extends CI_Controller
         $this->session->set_userdata('user_user_id', $data->id);
         $this->session->set_userdata('level', $data->level);
         $this->session->set_userdata('nama', $data->nama);
+        $this->session->set_userdata('role', $data->role_name);
         $this->session->set_userdata('nip', $data->nip);
         $this->session->set_userdata('kd_agent', $data->kd_agent);
         $this->session->set_userdata('level_jabatan', $data->level_jabatan);

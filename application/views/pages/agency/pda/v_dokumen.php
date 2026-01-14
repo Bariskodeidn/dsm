@@ -26,7 +26,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <?php
               $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
-              $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,a.nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
+              $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,c.name as nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->join('agency_kapal c', 'a.nama_kapal = c.Id', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
               ?>
               <table class="table">
                 <tr>

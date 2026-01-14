@@ -72,4 +72,25 @@ class M_pda extends CI_Model
 
     return $query->result();
   }
+
+  public function get_all_requests()
+  {
+    $this->db->join('t_penunjukan', 't_pda.penunjukan = t_penunjukan.Id', 'left');
+    return $this->db->where('er IS NOT NULL')->get('t_pda')->result();
+  }
+
+  public function get_data($id)
+  {
+    return $this->db->get_where('t_pda', ['Id' => $id])->row();
+  }
+
+  public function update_report($id, $data_json, $total = null)
+  {
+    $update = ['er' => $data_json];
+    if ($total !== null) {
+      $update['total_expense'] = $total;
+    }
+    $this->db->where('Id', $id);
+    return $this->db->update('t_pda', $update);
+  }
 }

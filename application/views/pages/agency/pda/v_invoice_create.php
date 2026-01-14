@@ -31,7 +31,7 @@
               <div class="col-md-5">
                 <div class="form-group">
                   <label for="label" class="form-label">Nama Kapal</label>
-                  <input type="text" name="kapal" id="kapal" class="form-control" value="<?= $pda['vessel_name'] ?>">
+                  <input type="text" name="kapal" id="kapal" class="form-control" value="<?= $pda['nama_kapal'] ?>">
                 </div>
               </div>
             </div>

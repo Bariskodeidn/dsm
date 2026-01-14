@@ -9,7 +9,7 @@
 
           <?php
           $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
-          $penunjukan = $this->db->select('a.jenis, a.customer,a.Id,a.no_surat,a.nama_kapal,b.nama_customer')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
+          $penunjukan = $this->db->select('a.Id,a.jenis,a.no_surat,a.customer,b.nama_customer,c.name as nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->join('agency_kapal c', 'a.nama_kapal = c.Id', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
           $item_pda = $this->db->select('*')->from('t_item_pda')->where('jenis', $penunjukan['jenis'])->where('port', $port['kode'])->where('title', 'AGENCY REMUNERATION')->get()->result_array();
           $item_pda_desc = $this->db->select('*')->from('t_item_pda')->where('jenis', $penunjukan['jenis'])->where('port', $port['kode'])->where('title', 'DESC')->get()->result_array();
           $data_invoice = $this->db->get_where('t_invoice', ['penunjukan' => $penunjukan['Id'], 'jenis' => 2])->row_array();
@@ -102,16 +102,16 @@
                         <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span>
                       </td>
                       <td width="90px">
-                        <input type="text" class="form-control uang" name="grt[]" id="grt" value="<?= $desc->grt[$key] ?>">
+                        <input type="text" class="form-control amount" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="tarif[]" id="tarif" value="<?= $desc->tarif[$key] ?>">
+                        <input type="text" class="form-control amount" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>">
                       </td>
                       <td width="30px">
-                        <input type="text" class="form-control uang" name="activity[]" id="activity" value="<?= $desc->activity[$key] ?>">
+                        <input type="text" class="form-control amount" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="amount-desc[]" id="amount-desc" value="<?= $desc->amount_desc[$key] ?>">
+                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', ''], $desc->amount_desc[$key]) ?>">
                       </td>
                       <td>
                         <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>">
@@ -157,10 +157,10 @@
                         </div>
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="amount[]" id="amount" value="<?= $harga_jual ? $harga_jual['harga'] : 0 ?>">
+                        <input type="text" class="form-control amount" name="amount[]" id="amount" value="<?= $harga_jual ? ($harga_jual['harga']) : 0 ?>">
                       </td>
                       <td width="70px">
-                        <input type="text" class="form-control uang" name="qty[]" id="qty" value="<?= $agency_remuneration->qty[$k] ?>">
+                        <input type="text" class="form-control amount" name="qty[]" id="qty" value="<?= $agency_remuneration->qty[$k] ?>">
                       </td>
                       <td>
                         <input type="date" class="form-control" name="mulai[]" id="mulai" value="<?= $agency_remuneration->tanggal_mulai[$k] ?>">
@@ -199,8 +199,8 @@
                             <span style="text-transform: uppercase;"><?= $o ?></span>
                             <!-- <textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control"><?= $o ?></textarea> -->
                           </td>
-                          <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= $other->amount[$index] ?>"></td>
-                          <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
+                          <td><input type="text" class="form-control amount" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= str_replace([',', '.'], ['', ''], $other->amount[$index]) ?>"></td>
+                          <td><input type="text" class="form-control amount" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>"></td>
                           <td><input type="text" class="form-control" name="remark-other[]" id="remark-other-<?= $index ?>" value="<?= $other->remark[$index] ?>"></td>
@@ -259,16 +259,16 @@
                         <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span>
                       </td>
                       <td width="90px">
-                        <input type="text" class="form-control uang" name="grt[]" id="grt" value="<?= $desc->grt[$key] ?>">
+                        <input type="text" class="form-control amount" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="tarif[]" id="tarif" value="<?= $desc->tarif[$key] ?>">
+                        <input type="text" class="form-control amount" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>">
                       </td>
                       <td width="30px">
-                        <input type="text" class="form-control uang" name="activity[]" id="activity" value="<?= $desc->activity[$key] ?>">
+                        <input type="text" class="form-control amount" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="amount-desc[]" id="amount-desc" value="<?= $desc->amount_desc[$key] ?>">
+                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', ''], $desc->amount_desc[$key]) ?>">
                       </td>
                       <td>
                         <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>">
@@ -311,10 +311,10 @@
                         </div>
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="amount[]" id="amount" value="<?= $agency_remuneration->amount[$k] ?>">
+                        <input type="text" class="form-control amount" name="amount[]" id="amount" value="<?= str_replace(['.', ','], ['', ''], $agency_remuneration->amount[$k]) ?>">
                       </td>
                       <td width="70px">
-                        <input type="text" class="form-control uang" name="qty[]" id="qty" value="<?= $agency_remuneration->qty[$k] ?>">
+                        <input type="text" class="form-control amount" name="qty[]" id="qty" value="<?= str_replace(['.', ','], ['', ''], $agency_remuneration->qty[$k]) ?>">
                       </td>
                       <td>
                         <input type="date" class="form-control" name="mulai[]" id="mulai" value="<?= $agency_remuneration->tanggal_mulai[$k] ?>">
@@ -353,8 +353,8 @@
                             <span style="text-transform: uppercase;"><?= $o ?></span>
                             <!-- <textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control"><?= $o ?></textarea> -->
                           </td>
-                          <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= $other->amount[$index] ?>"></td>
-                          <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
+                          <td><input type="text" class="form-control amount" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= str_replace([',', '.'], ['', ''], $other->amount[$index]) ?>"></td>
+                          <td><input type="text" class="form-control amount" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>"></td>
                           <td><input type="text" class="form-control" name="remark-other[]" id="remark-other-<?= $index ?>" value="<?= $other->remark[$index] ?>"></td>

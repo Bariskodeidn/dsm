@@ -10,19 +10,14 @@
           <div class="mb-4">
             <a href="<?= base_url('agency/penunjukan') ?>" class="btn btn-warning btn-sm">Kembali</a>
             <?php if ($pda['hpp_rill'] != null) { ?>
-              <a href="<?= base_url('pda/view_hpprill_excel/') . $pda['Id'] ?>" class="btn btn-success btn-sm" target="_blank"><i class="fa fa-file-excel-o" aria-hidden="true"></i> HPP RILL EXCEL</a>
-              <?php if ($pda['er'] != null) { ?>
-                <a href="<?= base_url('pda/er_excel/') . $pda['Id'] ?>" class="btn btn-success btn-sm" target="_blank"><i class="fa fa-file-excel-o" aria-hidden="true"></i> ER EXCEL</a>
-                <a href="<?= base_url('pda/update_er/') . $pda['Id'] ?>" class="btn btn-primary btn-sm">Update ER</a>
-              <?php } else { ?>
-                <a href="<?= base_url('pda/create_er/') . $pda['Id'] ?>" class="btn btn-primary btn-sm">Create ER</a>
-            <?php }
+              <a href="<?= base_url('pda/create_er/') . $pda['Id'] ?>" class="btn btn-primary btn-sm">Create ER</a>
+            <?php
             } ?>
           </div>
 
           <?php
           $port = $this->db->get_where('agency_port', ['Id' => $pda['port']])->row_array();
-          $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,a.nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
+          $penunjukan = $this->db->select('a.jenis,a.no_surat,b.nama_customer,c.name as nama_kapal')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->join('agency_kapal c', 'a.nama_kapal = c.Id', 'left')->where('a.Id', $pda['penunjukan'])->get()->row_array();
           ?>
           <table class="table">
             <tr>
@@ -56,7 +51,7 @@
           ?>
             <form action="<?= base_url('pda/insert_hpprill/') . $this->uri->segment(3) ?>" method="post" enctype="multipart/form-data">
               <div class="table-responsive">
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="table1">
                   <thead class="thead-dark">
                     <tr>
                       <th>DESCRIPTION</th>
@@ -66,6 +61,7 @@
                       <th>ACTIVITY</th>
                       <th>AMOUNT</th>
                       <th>REMARK</th>
+                      <th>#</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -77,32 +73,39 @@
                       $this->db->select('desc, remarks');
                       $item_desc = $this->db->get_where('t_item_pda', ['Id' => $val])->row_array();
                     ?>
-                      <tr>
+                      <tr class="baris">
                         <td>
                           <input type="hidden" name="id_desc[]" id="id_desc" value="<?= $val ?>">
                           <span style="text-transform: uppercase;"><?= $item_desc['desc'] ?></span>
                         </td>
                         <td>
-                          <input type="hidden" name="remarks[]" id="remarks" value="<?= $item_desc['remarks'] ?>">
-                          <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span>
+                          <input type="text" class="form-control" name="remarks[]" id="remarks" value="<?= $item_desc['remarks'] ?>">
+                          <!-- <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span> -->
                         </td>
                         <td width="90px">
-                          <input type="text" class="form-control uang" name="grt[]" id="grt" value="<?= $desc->grt[$key] ?>">
+                          <input type="text" class="form-control grt hitung" name="grt[]" id="grt" value="<?= $desc->grt[$key] ?>">
                         </td>
                         <td>
-                          <input type="text" class="form-control uang" name="tarif[]" id="tarif" value="<?= $desc->tarif[$key] ?>">
+                          <input type="text" class="form-control tarif hitung" name="tarif[]" id="tarif" value="<?= $desc->tarif[$key] ?>">
                         </td>
                         <td width="30px">
-                          <input type="text" class="form-control uang" name="activity[]" id="activity" value="<?= $desc->activity[$key] ?>">
+                          <input type="text" class="form-control activity hitung" name="activity[]" id="activity" value="<?= $desc->activity[$key] ?>">
                         </td>
                         <td>
-                          <input type="text" class="form-control uang" name="amount-desc[]" id="amount-desc" value="<?= $desc->amount_desc[$key] ?>">
+                          <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= $desc->amount_desc[$key] ?>">
                         </td>
                         <td>
                           <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>">
                         </td>
+                        <td>
+                          <button type="button" class="btn btn-danger btn-sm hapusRowDesc"><i class="fe fe-trash"></i></button>
+                        </td>
                       </tr>
                     <?php } ?>
+                    <tr>
+                      <td colspan="5" style="text-align: right; font-weight:bold;">TOTAL</td>
+                      <td colspan="2"><input type="text" id="grandTotal" class="form-control" readonly placeholder="0"></td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -119,7 +122,7 @@
                       <th>#</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="itemWrapper">
                     <?php
                     $i = 1;
                     foreach ($agency_remuneration->desc as $k => $data) {
@@ -136,7 +139,7 @@
                             </div>
                           </td>
                           <td width="150px">
-                            <input type="text" class="form-control uang" name="amount[]" id="amount-<?= $k ?>" value="<?= $item_pda_list['hpp_rill'] ?>">
+                            <input type="text" class="form-control uang amount-field" name="amount[]" id="amount-<?= $k ?>" value="<?= $item_pda_list['hpp_rill'] ?>">
                           </td>
                           <td width="70px">
                             <input type="text" class="form-control uang" name="qty[]" id="qty-<?= $k ?>" value="<?= $agency_remuneration->qty[$k] ?>">
@@ -196,7 +199,7 @@
             </form>
           <?php } else { ?>
             <form action="<?= base_url('pda/insert_hpprill/') . $this->uri->segment(3) ?>" method="post" enctype="multipart/form-data">
-              <table class="table table-bordered">
+              <table class="table table-bordered" id="table1">
                 <thead class="thead-dark">
                   <tr>
                     <th>DESCRIPTION</th>
@@ -206,6 +209,7 @@
                     <th>ACTIVITY</th>
                     <th>AMOUNT</th>
                     <th>REMARK</th>
+                    <th>#</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -220,36 +224,47 @@
                   } else {
                     $other_desc = [""];
                   }
+
                   foreach ($desc->id_desc as $key => $val) {
                     $this->db->select('desc, remarks');
                     $item_desc = $this->db->get_where('t_item_pda', ['Id' => $val])->row_array();
                   ?>
-                    <tr>
+                    <?php $is_locked = in_array($key, $locked['desc']); ?>
+                    <tr class="baris">
                       <td>
                         <input type="hidden" name="id_desc[]" id="id_desc" value="<?= $val ?>">
                         <span style="text-transform: uppercase;"><?= $item_desc['desc'] ?></span>
                       </td>
                       <td>
-                        <input type="hidden" name="remarks[]" id="remarks" value="<?= $item_desc['remarks'] ?>">
-                        <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span>
+                        <input type="text" class="form-control" name="remarks[]" id="remarks" value="<?= $desc->remarks[$key] ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                        <!-- <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span> -->
                       </td>
                       <td width="90px">
-                        <input type="text" class="form-control uang" name="grt[]" id="grt" value="<?= $desc->grt[$key] ?>">
+                        <input type="text" class="form-control grt hitung" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="tarif[]" id="tarif" value="<?= $desc->tarif[$key] ?>">
+                        <input type="text" class="form-control tarif hitung" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td width="30px">
-                        <input type="text" class="form-control uang" name="activity[]" id="activity" value="<?= $desc->activity[$key] ?>">
+                        <input type="text" class="form-control activity hitung" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
-                        <input type="text" class="form-control uang" name="amount-desc[]" id="amount-desc" value="<?= $desc->amount_desc[$key] ?>">
+                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', ''], $desc->amount_desc[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
-                        <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>">
+                        <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                      </td>
+                      <td>
+                        <?php if (!$is_locked): ?>
+                          <button type="button" class="btn btn-danger btn-sm hapusRowDesc"><i class="fe fe-trash"></i></button>
+                        <?php endif ?>
                       </td>
                     </tr>
                   <?php } ?>
+                  <tr>
+                    <td colspan="5" style="text-align: right; font-weight:bold;">TOTAL</td>
+                    <td colspan="2"><input type="text" id="grandTotal" class="form-control" readonly placeholder="0"></td>
+                  </tr>
                 </tbody>
               </table>
               <div class="table-responsive">
@@ -272,36 +287,45 @@
                       $this->db->select('Id,desc');
                       $item_pda_list = $this->db->get_where('t_item_pda', ['Id' => $data])->row_array();
                     ?>
+                      <?php $is_locked = in_array($k, $locked['agency']); ?>
                       <tr class="tr_clone">
                         <td>
                           <div class="input-select">
                             <!-- <input type="hidden" name="desc[]" id="desc" value="<?= $item_pda_list['Id'] ?>">
                                 <span><?= $item_pda_list['desc'] ?></span> -->
                             <div class="input-select">
-                              <select name="desc[]" id="desc-<?= $k ?>" class="form-control items">
-                                <option value="<?= $item_pda_list['Id'] ?>"><?= $item_pda_list['desc'] ?></option>
-                              </select>
+                              <?php if ($is_locked) : ?>
+                                <select name="desc[]" id="desc-<?= $k ?>" class="form-control" readonly>
+                                  <option value="<?= $item_pda_list['Id'] ?>"><?= $item_pda_list['desc'] ?></option>
+                                </select>
+                              <?php else : ?>
+                                <select name="desc[]" id="desc-<?= $k ?>" class="form-control items">
+                                  <option value="<?= $item_pda_list['Id'] ?>"><?= $item_pda_list['desc'] ?></option>
+                                </select>
+                              <?php endif ?>
                             </div>
                           </div>
                         </td>
                         <td>
-                          <input type="text" class="form-control uang" name="amount[]" id="amount-<?= $k ?>" value="<?= $agency_remuneration->amount[$k] ?>">
+                          <input type="text" class="form-control uang" name="amount[]" id="amount-<?= $k ?>" value="<?= $agency_remuneration->amount[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td width="70px">
-                          <input type="text" class="form-control uang" name="qty[]" id="qty-<?= $k ?>" value="<?= $agency_remuneration->qty[$k] ?>">
+                          <input type="text" class="form-control uang" name="qty[]" id="qty-<?= $k ?>" value="<?= $agency_remuneration->qty[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td>
-                          <input type="date" class="form-control" name="mulai[]" id="mulai-<?= $k ?>" value="<?= $agency_remuneration->tanggal_mulai[$k] ?>">
+                          <input type="date" class="form-control" name="mulai[]" id="mulai-<?= $k ?>" value="<?= $agency_remuneration->tanggal_mulai[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td>
-                          <input type="date" class="form-control" name="selesai[]" id="selesai-<?= $k ?>" value="<?= $agency_remuneration->tanggal_selesai[$k] ?>">
+                          <input type="date" class="form-control" name="selesai[]" id="selesai-<?= $k ?>" value="<?= $agency_remuneration->tanggal_selesai[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td>
-                          <input type="text" class="form-control" name="remark[]" id="remark-<?= $k ?>" value="<?= $agency_remuneration->remark[$k] ?>">
+                          <input type="text" class="form-control" name="remark[]" id="remark-<?= $k ?>" value="<?= $agency_remuneration->remark[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td>
-                          <button type="button" class="btn btn-danger btn-sm hapusRow"><i class="fe fe-trash"></i></button>
-                          <button type="button" class="btn btn-success btn-sm add-row"><i class="fe fe-plus" aria-hidden="true"></i></button>
+                          <?php if (!$is_locked) : ?>
+                            <button type="button" class="btn btn-danger btn-sm hapusRow"><i class="fe fe-trash"></i></button>
+                            <button type="button" class="btn btn-success btn-sm add-row"><i class="fe fe-plus" aria-hidden="true"></i></button>
+                          <?php endif ?>
                         </td>
                       </tr>
                     <?php } ?>
@@ -327,13 +351,16 @@
                     <?php
                     foreach ($other_desc as $index => $o) {
                     ?>
+                      <?php
+                      $is_locked = in_array($index, $locked['other']);
+                      ?>
                       <tr class="baris-other">
-                        <td><textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control"><?= $o ?></textarea></td>
-                        <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= $other->amount[$index] ?>"></td>
-                        <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
-                        <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>"></td>
-                        <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>"></td>
-                        <td><input type="text" class="form-control" name="remark-other[]" id="remark-other-<?= $index ?>" value="<?= $other->remark[$index] ?>"></td>
+                        <td><textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control" <?= $is_locked ? 'readonly' : '' ?>><?= $o ?></textarea></td>
+                        <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= $other->amount[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
+                        <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
+                        <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
+                        <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
+                        <td><input type="text" class="form-control" name="remark-other[]" id="remark-other-<?= $index ?>" value="<?= $other->remark[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
                         <td>
                           <button type="button" class="btn btn-danger btn-sm hapusRowOther"><i class="fe fe-trash"></i></button>
                           <button type="button" class="btn btn-success btn-sm add-row-other"><i class="fe fe-plus" aria-hidden="true"></i></button>

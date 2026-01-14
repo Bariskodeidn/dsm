@@ -98,8 +98,8 @@
   <table width="100%" page-break-inside: auto>
     <thead>
       <tr>
-        <td colspan="7">
-          <!-- <img src="<?= base_url('img/header-invoice/') . $agency['header'] ?>" alt="" width="100%"> -->
+        <td colspan="2">
+          <img src="<?= base_url('assets/images/dsa.png') ?>" alt="logo" width="100%">
         </td>
       </tr>
       <tr>
@@ -115,7 +115,6 @@
       <tr>
         <td style="height: 5px;"></td>
       </tr>
-
     </thead>
     <tbody>
       <tr class="" style="background-color: #DCDCDC;">
