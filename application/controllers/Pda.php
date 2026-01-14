@@ -386,7 +386,7 @@ class Pda extends CI_Controller
     }
 
     $data['order'] = $order;
-    $data['hpp'] = json_decode($order->hpp_rill, true);
+    // $data['hpp'] = json_decode($order->hpp_rill, true);
     $data['history'] = $report_data['history']; // Dijamin selalu array
 
     // Index penguncian juga aman

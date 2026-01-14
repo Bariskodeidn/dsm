@@ -143,7 +143,6 @@
                       <tbody>
                         <?php foreach ($hpp['other']['desc'] as $k => $v): ?>
                           <?php
-                          if (empty($v)) continue;
                           $is_locked = in_array($k, $locked['other']);
                           ?>
                           <tr class="<?= $is_locked ? 'bg-danger text-muted' : '' ?>">
