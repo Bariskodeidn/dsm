@@ -98,8 +98,8 @@
   <table width="100%" page-break-inside: auto>
     <thead>
       <tr>
-        <td colspan="2">
-          <img src="<?= base_url('assets/images/dsa.png') ?>" alt="logo" width="100%">
+        <td colspan="7">
+          <img src="<?= base_url('assets/header-invoice/DSA.png') ?>" alt="" width="100%">
         </td>
       </tr>
       <tr>

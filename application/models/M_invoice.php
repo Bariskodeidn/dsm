@@ -19,7 +19,7 @@ class M_invoice extends CI_Model
         $this->db->select('a.*, b.nama_customer, CASE 
                                                 WHEN tgl_bayar is null THEN datediff(current_date(), date_kirim)
                                                 ELSE datediff(a.tgl_bayar, a.date_kirim)
-                                              END as selisih')->from('t_invoice a')->join('t_penunjukan', 't_penunjukan.Id = a.penunjukan', 'left')->join('agency_customer b', 'b.Id = t_penunjukan.customer');
+                                              END as selisih')->from('t_invoice a')->join('t_penunjukan', 't_penunjukan.Id = a.penunjukan', 'left')->join('agency_customer b', 'b.Id = a.customer', 'left');
         $i = 0;
         foreach ($this->column_search as $item) {
             if ($this->input->post('search')['value']) {
