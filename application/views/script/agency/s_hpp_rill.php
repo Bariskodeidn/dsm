@@ -40,16 +40,44 @@
     }
 
     function hitungBaris(row) {
-      var grt = AutoNumeric.getAutoNumericElement(row.find('.grt')[0]).getNumber();
-      var tarif = AutoNumeric.getAutoNumericElement(row.find('.tarif')[0]).getNumber();
-      var activity = AutoNumeric.getAutoNumericElement(row.find('.activity')[0]).getNumber();
+      let grt = 0;
+      let tarif = 0;
+      let activity = 0;
 
-      // Jika ketiganya terisi, update kolom amount
-      if (grt > 0 && tarif > 0 && activity > 0) {
+      if (row.find('.chk-grt')[0].checked) {
+        grt = AutoNumeric.getAutoNumericElement(row.find('.grt')[0]).getNumber();
+      } else {
+        grt = 1;
+      }
+
+      if (row.find('.chk-tarif')[0].checked) {
+        tarif = AutoNumeric.getAutoNumericElement(row.find('.tarif')[0]).getNumber();
+      } else {
+        tarif = 1;
+      }
+
+      if (row.find('.chk-activity')[0].checked) {
+        activity = AutoNumeric.getAutoNumericElement(row.find('.activity')[0]).getNumber();
+      } else {
+        activity = 1;
+      }
+
+      if (row.find('.chk-grt')[0].checked || row.find('.chk-tarif')[0].checked || row.find('.chk-activity')[0].checked) {
+        row.find('.amount')[0].readOnly = true;
         var hasil = grt * tarif * activity;
         AutoNumeric.getAutoNumericElement(row.find('.amount')[0]).set(hasil);
+      } else {
+        row.find('.amount')[0].readOnly = false;
+        // AutoNumeric.getAutoNumericElement(row.find('.amount')[0]).set(hasil);
       }
+
+      // AutoNumeric.getAutoNumericElement(row.find('.amount')[0]).set(total);
     }
+
+    $('#table1').on('input', '.hitung', function() {
+      hitungBaris($(this).closest('tr'));
+      hitungGrandTotal();
+    });
 
     $('.baris').each(function() {
       hitungBaris($(this));
@@ -57,7 +85,7 @@
 
     hitungGrandTotal();
 
-    $('#table1').on('input', '.hitung', function() {
+    $('#table1').on('change', '.chk-grt, .chk-tarif, .chk-activity', function() {
       hitungBaris($(this).closest('tr'));
       hitungGrandTotal();
     });
@@ -308,6 +336,16 @@
         }
       }
     });
+  });
+
+  $(document).on('click', '.btn-upload-dokumen', function() {
+    var id = $(this).data('id');
+    var name = $(this).data('name');
+
+    $('#item-name').val(name);
+    $('#id_item').val(id);
+
+    $('#modalUploadDokumen').modal('show');
   });
 
   function countBarisOther() {

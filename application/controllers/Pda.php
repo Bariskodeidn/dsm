@@ -180,6 +180,59 @@ class Pda extends CI_Controller
     echo json_encode($response);
   }
 
+  public function upload2()
+  {
+    $id_pda = $this->input->post('id_pda');
+    $id_item = $this->input->post('id_item');
+    $title = $this->input->post('title');
+    $file = $_FILES['file']['name'];
+
+    $this->form_validation->set_rules('title', 'Nama Kegiatan', 'required', array('required' => '%s wajib diisi!'));
+
+    if ($this->form_validation->run() == FALSE) {
+      $response = [
+        'success' => false,
+        'msg' => array_values($this->form_validation->error_array())[0],
+      ];
+    } else {
+      $config['upload_path'] = './upload/dokumen-pda/' . $id_pda;
+      $config['allowed_types'] = 'pdf';
+      $config['max_size'] = 5120;
+      $config['encrypt_name'] = TRUE;
+      $this->upload->initialize($config);
+
+      if (!is_dir('upload/dokumen-pda/' . $id_pda)) {
+        mkdir('./upload/dokumen-pda/' . $id_pda, 0777, TRUE);
+      }
+
+      if (!$this->upload->do_upload('file')) {
+        $response = [
+          'success' => false,
+          'msg' => $this->upload->display_errors()
+        ];
+      } else {
+        $upload = $this->upload->data();
+        $insert = [
+          'id_pda' => $id_pda,
+          'id_item' => $id_item,
+          'title' => $title,
+          'file' => $file,
+          'file_name' => $upload['file_name'],
+          'user' => $this->session->userdata('nip')
+        ];
+
+        $this->db->insert('t_dokumen', $insert);
+
+        $response = [
+          'success' => true,
+          'reload' => base_url('pda/hpp_rill/') . $id_pda,
+          'msg' => 'Dokumen berhasil ditambahkan!'
+        ];
+      }
+    }
+    echo json_encode($response);
+  }
+
   public function update_dokumen()
   {
     $id_dok = $this->input->post('id_dokumen');
@@ -483,6 +536,7 @@ class Pda extends CI_Controller
         $this->db->update('monitoring_hpprill', $update_monitoring);
       }
     }
+
     $id_desc = $this->input->post('id_desc[]');
     $remarks = $this->input->post('remarks[]');
     $grt = $this->input->post('grt[]');
@@ -490,6 +544,8 @@ class Pda extends CI_Controller
     $activity = $this->input->post('activity[]');
     $amount_desc = $this->input->post('amount-desc[]');
     $remark_desc = $this->input->post('remark-desc[]');
+    $chk = $this->input->post('chk');
+
 
     $desc = $this->input->post('desc[]');
     $amount = $this->input->post('amount[]');
@@ -513,7 +569,8 @@ class Pda extends CI_Controller
         'tarif' => $tarif,
         'activity' => $activity,
         'amount_desc' => $amount_desc,
-        'remark_desc' => $remark_desc
+        'remark_desc' => $remark_desc,
+        'chk' => $chk
       ],
       'agency_remuneration' => [
         'desc' => $desc,

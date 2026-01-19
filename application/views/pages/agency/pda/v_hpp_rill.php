@@ -83,12 +83,18 @@
                           <!-- <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span> -->
                         </td>
                         <td width="90px">
+                          <input type="hidden" name="chk[<?= $val ?>][grt]" value="0">
+                          <input type="checkbox" class="chk-grt" name="chk[<?= $val ?>][grt]" value="1" checked>
                           <input type="text" class="form-control grt hitung" name="grt[]" id="grt" value="<?= $desc->grt[$key] ?>">
                         </td>
                         <td>
+                          <input type="hidden" name="chk[<?= $val ?>][tarif]" value="0">
+                          <input type="checkbox" class="chk-tarif" name="chk[<?= $val ?>][tarif]" value="1" checked>
                           <input type="text" class="form-control tarif hitung" name="tarif[]" id="tarif" value="<?= $desc->tarif[$key] ?>">
                         </td>
                         <td width="30px">
+                          <input type="hidden" name="chk[<?= $val ?>][activity]" value="0">
+                          <input type="checkbox" class="chk-activity" name="chk[<?= $val ?>][activity]" value="1" checked>
                           <input type="text" class="form-control activity hitung" name="activity[]" id="activity" value="<?= $desc->activity[$key] ?>">
                         </td>
                         <td>
@@ -240,12 +246,18 @@
                         <!-- <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span> -->
                       </td>
                       <td width="90px">
+                        <input type="hidden" name="chk[<?= $val ?>][grt]" value="0">
+                        <input type="checkbox" class="chk-grt" name="chk[<?= $val ?>][grt]" value="1" <?= $desc->chk->$val->grt == 1 ? 'checked' : '' ?>>
                         <input type="text" class="form-control grt hitung" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
+                        <input type="hidden" name="chk[<?= $val ?>][tarif]" value="0">
+                        <input type="checkbox" class="chk-tarif" name="chk[<?= $val ?>][tarif]" value="1" <?= $desc->chk->$val->tarif == 1 ? 'checked' : '' ?>>
                         <input type="text" class="form-control tarif hitung" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td width="30px">
+                        <input type="hidden" name="chk[<?= $val ?>][activity]" value="0">
+                        <input type="checkbox" class="chk-activity" value="1" name="chk[<?= $val ?>][activity]" <?= $desc->chk->$val->activity == 1 ? 'checked' : '' ?>>
                         <input type="text" class="form-control activity hitung" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
@@ -326,6 +338,15 @@
                             <button type="button" class="btn btn-danger btn-sm hapusRow"><i class="fe fe-trash"></i></button>
                             <button type="button" class="btn btn-success btn-sm add-row"><i class="fe fe-plus" aria-hidden="true"></i></button>
                           <?php endif ?>
+
+                          <?php
+                          $dokumen_remuneration = $this->db->get_where('t_dokumen', ['id_item' => $data, 'id_pda' => $pda['Id']])->row();
+                          if ($dokumen_remuneration) {
+                          ?>
+                            <a href="<?= base_url('upload/dokumen-pda/' . $pda['Id'] . '/' . $dokumen_remuneration->file_name) ?>" class="btn btn-warning btn-sm" target="_blank"><i class="fe fe-file"></i></a>
+                          <?php } else { ?>
+                            <button type="button" class="btn btn-primary btn-sm btn-upload-dokumen" data-id="<?= $data ?>" data-name="<?= $item_pda_list['desc'] ?>"><i class="fe fe-upload-cloud"></i></button>
+                          <?php } ?>
                         </td>
                       </tr>
                     <?php } ?>
@@ -411,3 +432,31 @@
     </div> <!-- .col-12 -->
   </div> <!-- .row -->
 </div> <!-- .container-fluid -->
+
+<div class="modal fade" id="modalUploadDokumen" tabindex="-1">
+  <div class="modal-dialog">
+    <form action="<?= base_url('pda/upload2') ?>" method="POST" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h4 class="modal-title" style="color:white;">Upload Dokumen</h4>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id_item" id="id_item">
+          <input type="hidden" name="id_pda" id="id_pda" value="<?= $pda['Id'] ?>">
+          <div class="form-group">
+            <label>Nama Dokumen</label>
+            <input type="name" name="title" id="item-name" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Upload Dokumen</label>
+            <input type="file" name="file" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success btn-simpan">Upload</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
