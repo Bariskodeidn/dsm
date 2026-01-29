@@ -16,7 +16,7 @@
 
     function initAutoNumeric() {
       // Hanya inisialisasi input yang belum memiliki AutoNumeric
-      $('.hitung, .amount').each(function() {
+      $('.hitung, .amount, .amount_item').each(function() {
         if (!AutoNumeric.getAutoNumericElement(this)) {
           new AutoNumeric(this, autoNumericOptions);
         }
@@ -135,6 +135,8 @@
 
       newRow.insertAfter(row);
       initSelect2('.items');
+
+      initAutoNumeric();
     });
 
     $('#table-item-pda').on('click', '.hapusRow', function() {
@@ -315,7 +317,7 @@
     var $this = $(this);
     var itemId = $this.val();
     var $row = $this.closest('tr');
-    var $amountInput = $row.find('.amount-field');
+    var $amountInput = $row.find('.amount_item');
 
     if (!itemId) {
       $amountInput.val('');
@@ -331,8 +333,13 @@
       dataType: "JSON",
       success: function(res) {
         if (res.data) {
-          // Menggunakan formatNumber (pastikan fungsi ini sudah ada di js Anda)
-          $amountInput.val(formatNumber(res.data.est));
+          // $amountInput.val(res.data.est)
+          var domElement = $amountInput[0];
+
+          // 2. Cek apakah elemen ini sudah diinisialisasi sebagai AutoNumeric
+          var anElement = AutoNumeric.getAutoNumericElement(domElement);
+
+          anElement.set(res.data.est);
         }
       }
     });

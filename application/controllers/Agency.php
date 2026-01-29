@@ -879,7 +879,8 @@ class Agency extends CI_Controller
           'jenis' => $jenis,
           'penawaran' => $penawaran,
           'customer' => $customer,
-          'id_cabang' => $cabang
+          'id_cabang' => $cabang,
+          'type' => $type,
         ];
 
         $this->db->trans_start();
@@ -1043,7 +1044,7 @@ class Agency extends CI_Controller
     $data['title'] = 'Ubah Penunjukan ' . $data['detail']['no_surat'];
     $data['utility'] = $this->db->get('utility')->row_array();
     $data['pages'] = 'pages/agency/v_ubah_penunjukan';
-    $data['pages_script'] = 'script/agency/s_agency';
+    $data['pages_script'] = 'script/agency/s_penunjukan';
     $data['menus'] = $this->M_menu->get_accessible_menus($this->session->userdata('nip'));
 
     $data['cabang'] = $this->db->get('agency_cabang');
@@ -1052,6 +1053,8 @@ class Agency extends CI_Controller
     $data['penawaran'] = $this->db->get('t_penawaran');
     $data['port'] = $this->db->get('agency_port');
     $data['data_pda'] = $this->db->get_where('t_pda', ['penunjukan' => $data['detail']['Id']])->row_array();
+    $data['kategori_kapal'] = $this->db->get('agency_kapal_kategori')->result();
+    $data['kapal'] = $this->db->get_where('agency_kapal', ['type' => $data['detail']['type']])->result();
 
     $this->load->view('index', $data);
   }
@@ -1069,6 +1072,8 @@ class Agency extends CI_Controller
     $port = $this->input->post('port');
     $eta = $this->input->post('eta');
     $grt = $this->input->post('grt');
+    $grt_barge = $this->input->post('grt_barge');
+    $type = $this->input->post('type');
 
     $config['upload_path'] = './upload/penunjukan';
     $config['allowed_types'] =  'jpg|jpeg|png|pdf';
@@ -1156,11 +1161,12 @@ class Agency extends CI_Controller
       'from' => $data_agency['kode'] . ' ' . $data_cabang['nama'],
       'port' => $port,
       'eta' => $eta,
-      'grt' => $grt,
+      'grt' => str_replace(',', '', $grt),
+      'grt_barge' => str_replace(',', '', $grt_barge),
       'vessel_name' => $kapal,
       'est' => json_encode($data),
       'user_request' => $cabang == 1 ? '202501116' : '',
-      'id_cabang' => $cabang
+      'id_cabang' => $cabang,
     ];
 
     // update pda
@@ -1207,7 +1213,8 @@ class Agency extends CI_Controller
           'jenis' => $jenis,
           'penawaran' => $penawaran,
           'customer' => $customer,
-          'id_cabang' => $cabang
+          'id_cabang' => $cabang,
+          'type' => $type
         ];
 
         $this->db->where('Id', $id);
@@ -1222,7 +1229,8 @@ class Agency extends CI_Controller
         'jenis' => $jenis,
         'penawaran' => $penawaran,
         'customer' => $customer,
-        'id_cabang' => $cabang
+        'id_cabang' => $cabang,
+        'type' => $type
       ];
 
       $this->db->where('Id', $id);

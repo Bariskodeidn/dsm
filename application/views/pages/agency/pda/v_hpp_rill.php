@@ -145,7 +145,7 @@
                             </div>
                           </td>
                           <td width="150px">
-                            <input type="text" class="form-control uang amount-field" name="amount[]" id="amount-<?= $k ?>" value="<?= $item_pda_list['hpp_rill'] ?>">
+                            <input type="text" class="form-control amount_item" name="amount[]" id="amount-<?= $k ?>" value="<?= $item_pda_list['hpp_rill'] ?>">
                           </td>
                           <td width="70px">
                             <input type="text" class="form-control uang" name="qty[]" id="qty-<?= $k ?>" value="<?= $agency_remuneration->qty[$k] ?>">
@@ -319,7 +319,7 @@
                           </div>
                         </td>
                         <td>
-                          <input type="text" class="form-control uang" name="amount[]" id="amount-<?= $k ?>" value="<?= $agency_remuneration->amount[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                          <input type="text" class="form-control uang amount_item" name="amount[]" id="amount-<?= $k ?>" value="<?= $agency_remuneration->amount[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td width="70px">
                           <input type="text" class="form-control uang" name="qty[]" id="qty-<?= $k ?>" value="<?= $agency_remuneration->qty[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>

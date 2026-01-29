@@ -56,6 +56,30 @@
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
+                      <label class="form-label">Type Kapal</label>
+                      <select name="type" id="type" class="form-control select2">
+                        <option value=""> :: Pilih Type Kapal</option>
+                        <?php foreach ($kategori_kapal as $kat) : ?>
+                          <option value="<?= $kat->Id ?>" <?= $kat->Id == $detail['type'] ? 'selected' : '' ?>><?= $kat->nama_kategori ?></option>
+                        <?php endforeach ?>
+                      </select>
+                      <small class="error" id="type_error" style="color:red"></small>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label class="form-label">Nama Kapal <span id="loading" style="display:none; color: blue; font-style: italic;">(Loading...)</span></label>
+                      <select name="kapal" id="kapal" class="form-control select2">
+                        <option value=""> :: Pilih Kapal</option>
+                        <?php foreach ($kapal as $kap) : ?>
+                          <option value="<?= $kap->Id ?>" <?= $kap->Id == $detail['nama_kapal'] ? 'selected' : '' ?>><?= $kap->name ?></option>
+                        <?php endforeach ?>
+                      </select>
+                      <small class="error" id="kapal_error" style="color:red"></small>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
                       <label for="form-label">Surat Penawaran</label>
                       <select class="form-control select2" name="surat-penawaran" id="surat-penawaran">
                         <option value="0">Tidak ada surat penawaran</option>
@@ -76,12 +100,6 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="form-label">Nama Kapal</label>
-                      <input type="text" class="form-control" name="kapal" id="kapal" value="<?= $detail['nama_kapal'] ?>">
-                    </div>
-                  </div>
                   <div class="col-md-6">
                     <div class=" form-group">
                       <label for="form-label">Surat Penunjukan</label>
@@ -115,16 +133,23 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <div class=" form-group">
                       <label for="form-label">ETA</label>
                       <input type="date" class="form-control" name="eta" id="eta" value="<?= $data_pda ? $data_pda['eta'] : '' ?>">
                     </div>
                   </div>
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <div class=" form-group">
                       <label for="grt" class="form-label">GRT</label>
-                      <input type="text" class="form-control uang" name="grt" id="grt" value="<?= $data_pda ? $data_pda['grt'] : '' ?>">
+                      <input type="text" class="form-control uang" name="grt" id="grt" value="<?= $data_pda ? number_format($data_pda['grt']) : '' ?>">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class=" form-group">
+                      <label for="grt_barge" class="form-label">GRT BARGE</label>
+                      <input type="text" class="form-control nominal" name="grt_barge" id="grt_barge" value="<?= $data_pda ? number_format($data_pda['grt_barge']) : '' ?>">
+                      <small class="error" id="grt_barge_error" style="color:red"></small>
                     </div>
                   </div>
                 </div>
