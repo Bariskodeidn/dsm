@@ -163,10 +163,18 @@
                         <label for="label" class="form-label">Harga</label>
                         <input type="text" class="form-control uang" name="harga[]" id="harga" value="<?= $di['jumlah'] ?>">
                       </td>
+                      <td width="300px">
+                        <label for="label" class="form-label">Kategori</label>
+                        <select name="kategori[]" id="kategori" class="form-control">
+                          <option value="1" <?= $di['kategori'] == 1 ? 'selected' : "" ?>>PORT CHARGES</option>
+                          <option value="2" <?= $di['kategori'] == 2 ? 'selected' : "" ?>>PORT CLEARENCE IN/OUT EXPENSE</option>
+                          <option value="3" <?= $di['kategori'] == 3 ? 'selected' : "" ?>>MISCLEANNEOUS</option>
+                        </select>
+                      </td>
                       <td width="100px">
                         <label for="label" class="form-label">#</label><br>
-                        <button type="button" class="btn btn-danger btn-sm hapusRow"><i class="fa fa-trash"></i></button>
-                        <button type="button" class="btn btn-success btn-sm add-row"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-danger btn-sm hapusRow"><i class="fe fe-trash"></i></button>
+                        <button type="button" class="btn btn-success btn-sm add-row"><i class="fe fe-plus" aria-hidden="true"></i></button>
                       </td>
                     </tr>
                   <?php } ?>

@@ -157,6 +157,14 @@
                     <label for="label" class="form-label">Harga</label>
                     <input type="text" class="form-control uang" name="harga[]" id="harga">
                   </td>
+                  <td width="300px">
+                    <label for="label" class="form-label">Kategori</label>
+                    <select name="kategori[]" id="kategori" class="form-control">
+                      <option value="1">PORT CHARGES</option>
+                      <option value="2">PORT CLEARENCE IN/OUT EXPENSE</option>
+                      <option value="3">MISCLEANNEOUS</option>
+                    </select>
+                  </td>
                   <td width="100px">
                     <label for="label" class="form-label">#</label><br>
                     <button type="button" class="btn btn-danger btn-sm hapusRow"><i class="fe fe-trash"></i></button>

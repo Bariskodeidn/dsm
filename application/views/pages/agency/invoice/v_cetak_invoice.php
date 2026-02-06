@@ -83,6 +83,26 @@
     table {
       border-collapse: collapse;
     }
+
+    .money.total {
+      line-height: 0.5;
+    }
+
+    .total .symbol {
+      text-align: left;
+    }
+
+    .total .amount {
+      text-align: right;
+    }
+
+    td .total span:first-child {
+      float: left;
+    }
+
+    td .total span:last-child {
+      float: right;
+    }
   </style>
 </head>
 
@@ -99,7 +119,7 @@
       <tr>
         <td colspan="2" rowspan="6" width="100px" style="padding: 3px;"><img src="<?= base_url('assets/images/logo-dsa.png') ?>" alt="" width="100%"></td>
         <td></td>
-        <td colspan="7"><span style="font-weight: bold; font-size: 18px;">PT. Dharma Solusi Agency</span></td>
+        <td colspan="8"><span style="font-weight: bold; font-size: 18px;">PT. Dharma Solusi Agency</span></td>
       </tr>
       <tr>
         <td></td>
@@ -130,7 +150,7 @@
         <td style="font-size: 10px; vertical-align: top;" colspan="5"><a href="mailto:marketing@dsagency.co.id">marketing@dsagency.co.id</a> - <a href="https://dsmshipping.co.id/dsa/">https://dsmshipping.co.id/dsa/</a></td>
       </tr>
       <tr>
-        <td colspan="10">
+        <td colspan="11">
           <hr>
         </td>
       </tr>
@@ -146,42 +166,42 @@
     </thead>
     <tbody>
       <tr class="" style=" background-color: #DCDCDC;">
-        <td class="text-center border-full" colspan="10"><b><u><span style="font-size: 22px;">INVOICE</span></u></b></td>
+        <td class="text-center border-full" colspan="11"><b><u><span style="font-size: 22px;">INVOICE</span></u></b></td>
       </tr>
       <tr>
-        <td class="text-center border-left border-right" colspan="10">NO : <?= $invoice['referensi'] ?></td>
+        <td class="text-center border-left border-right" colspan="11">NO : <?= $invoice['referensi'] ?></td>
       </tr>
       <tr>
-        <td class="text-center border-left border-right" colspan="10">TANGGAL : <?= tgl_indo(date('Y-m-d', strtotime($invoice['tanggal']))) ?></td>
+        <td class="text-center border-left border-right" colspan="11">TANGGAL : <?= tgl_indo(date('Y-m-d', strtotime($invoice['tanggal']))) ?></td>
       </tr>
       <tr>
-        <td class="text-center border-left border-right" colspan="10">SURAT PENUNJUKAN : <?= $penunjukan['no_surat'] ?></td>
+        <td class="text-center border-left border-right" colspan="11">SURAT PENUNJUKAN : <?= $penunjukan['no_surat'] ?></td>
       </tr>
       <tr>
-        <td class="text-center border-left border-right" colspan="10"></td>
+        <td class="text-center border-left border-right" colspan="11"></td>
       </tr>
       <tr>
         <th class="border-full" width="25px">NO</th>
         <th class="border-full" colspan="6">URAIAN PEKERJAAN</th>
         <th class="border-full" width="80px">JUMLAH</th>
         <th class="border-full" width="80px">SATUAN</th>
-        <th class="border-full" width="80px">TOTAL HARGA</th>
+        <th class="border-full" width="80px" colspan="2">TOTAL HARGA</th>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="border-left border-right p-left" colspan="6"><b><u>FINAL PORT DISB. ACCOUNT</u></b></td>
+        <td class="border-left border-right p-left" colspan="6" style="font-size: 12px;"><b><u>FINAL PORT DISB. ACCOUNT</u></b></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right p-l"></td>
-        <td width="150px" class="p-left">NAMA KAPAL</td>
-        <td width="10px">:</td>
-        <td class="border-right" colspan="4"><?= $invoice['nama_kapal'] ?></td>
+        <td width="150px" class="p-left" style="font-size: 12px;">NAMA KAPAL</td>
+        <td width="10px" style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['nama_kapal'] ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <?php if ($invoice['jml_muatan_bs'] != null) { ?>
         <tr>
@@ -191,101 +211,101 @@
           <td class="border-right" colspan="4"><?= $invoice['jml_muatan_bs'] ?></td>
           <td class="border-right"></td>
           <td class="border-right"></td>
-          <td class="border-right"></td>
+          <td class="border-right" colspan="2"></td>
         </tr>
       <?php } ?>
       <?php if ($invoice['pel_muat_bs'] != null) { ?>
         <tr>
           <td class="border-left border-right"></td>
-          <td class="p-left">PELABUHAN MUAT BS</td>
-          <td>:</td>
-          <td class="border-right" colspan="4"><?= $invoice['pel_muat_bs'] ?></td>
+          <td class="p-left" style="font-size: 12px;">PELABUHAN MUAT BS</td>
+          <td style="font-size: 12px;">:</td>
+          <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['pel_muat_bs'] ?></td>
           <td class="border-right"></td>
           <td class="border-right"></td>
-          <td class="border-right"></td>
+          <td class="border-right" colspan="2"></td>
         </tr>
       <?php } ?>
       <?php if ($invoice['pel_bongkar_bs'] != null) { ?>
         <tr>
           <td class="border-left border-right"></td>
-          <td class="p-left">PELABUHAN BONGKAR BS</td>
-          <td>:</td>
-          <td class="border-right" colspan="4"><?= $invoice['pel_bongkar_bs'] ?></td>
+          <td class="p-left" style="font-size: 12px;">PELABUHAN BONGKAR BS</td>
+          <td style="font-size: 12px;">:</td>
+          <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['pel_bongkar_bs'] ?></td>
           <td class="border-right"></td>
           <td class="border-right"></td>
-          <td class="border-right"></td>
+          <td class="border-right" colspan="2"></td>
         </tr>
       <?php } ?>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="p-left">JUMLAH MUATAN BB</td>
-        <td>:</td>
-        <td class="border-right" colspan="4"><?= $invoice['jml_muatan'] ?></td>
+        <td class="p-left" style="font-size: 12px;">JUMLAH MUATAN BB</td>
+        <td style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['jml_muatan'] ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="p-left">PELABUHAN MUAT BB</td>
-        <td>:</td>
-        <td class="border-right" colspan="4"><?= $invoice['pel_muat'] ?></td>
+        <td class="p-left" style="font-size: 12px;">PELABUHAN MUAT BB</td>
+        <td style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['pel_muat'] ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="p-left">PELABUHAN BONGKAR BB</td>
-        <td>:</td>
-        <td class="border-right" colspan="4"><?= $invoice['pel_bongkar'] ?></td>
+        <td class="p-left" style="font-size: 12px;">PELABUHAN BONGKAR BB</td>
+        <td style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['pel_bongkar'] ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="p-left">CARGO</td>
-        <td>:</td>
-        <td class="border-right" colspan="4"><?= $invoice['cargo'] ?></td>
+        <td class="p-left" style="font-size: 12px;">CARGO</td>
+        <td style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= $invoice['cargo'] ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="p-left">TA/NOR</td>
-        <td>:</td>
-        <td class="border-right" colspan="4"><?= date('d/m/Y', strtotime($invoice['ta_nor'])) ?></td>
+        <td class="p-left" style="font-size: 12px;">TA/NOR</td>
+        <td style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= date('d/m/Y', strtotime($invoice['ta_nor'])) ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
-        <td class="p-left">TD</td>
-        <td>:</td>
-        <td class="border-right" colspan="4"><?= date('d/m/Y', strtotime($invoice['td'])) ?></td>
+        <td class="p-left" style="font-size: 12px;">TD</td>
+        <td style="font-size: 12px;">:</td>
+        <td class="border-right" colspan="4" style="font-size: 12px;"><?= date('d/m/Y', strtotime($invoice['td'])) ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
         <td class="border-right" colspan="6" style="height: 20px;"></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
-        <td class="border-right"></td>
+        <td class="border-right" colspan="2"></td>
       </tr>
 
       <?php
       if ($invoice['jenis'] == 2) { ?>
         <tr>
-          <td class="border-left border-right text-center">1</td>
-          <td class="border-right p-left" colspan="6">PORT CHARGES</td>
+          <td class="border-left border-right text-center" style="font-size: 12px;">1</td>
+          <td class="border-right p-left" colspan="6" style="font-size: 12px;">PORT CHARGES</td>
           <td class="border-right text-center"></td>
           <td class="border-right text-center"></td>
-          <td class="border-right text-center"></td>
+          <td class="border-right text-center" colspan="2"></td>
         </tr>
         <?php
         $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
@@ -294,10 +314,20 @@
         ?>
           <tr>
             <td class="border-left border-right text-center"></td>
-            <td class="border-right p-left" colspan="6"><?= $pc['kategori'] . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
-            <td class="border-right text-right p-right"><span>Rp.</span> <?= number_format($pc['jumlah']) ?></td>
+            <td class="border-right p-left" colspan="6" style="font-size: 12px;"><?= $pc['kategori'] . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
+            <td class="border-right text-right p-right">
+              <div class="money">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($pc['jumlah']) ?></span>
+              </div>
+            </td>
             <td class="border-right text-center"><?= $pc['satuan'] ?></td>
-            <td class="border-right text-right p-right">Rp. <?= number_format($pc['total']) ?></td>
+            <td class="border-right text-right p-right" colspan="2">
+              <div class="money total">
+                <span class="symbol">Rp.</span>
+                <span class="amount"><?= number_format($pc['total']) ?></span>
+              </div>
+            </td>
           </tr>
         <?php } ?>
         <?php
@@ -309,14 +339,14 @@
             <td class="border-right p-left" colspan="6"></td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
           </tr>
           <tr>
-            <td class="border-left border-right text-center">2</td>
-            <td class="border-right p-left" colspan="6">PORT CLEARENCE IN/OUT EXPENSES</td>
+            <td class="border-left border-right text-center" style="font-size: 12px;">2</td>
+            <td class="border-right p-left" colspan="6" style="font-size: 12px;">PORT CLEARENCE IN/OUT EXPENSES</td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
           </tr>
           <?php
           $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
@@ -324,10 +354,20 @@
           foreach ($port_expense as $pe) { ?>
             <tr>
               <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6"><?= $pe['kategori'] . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
-              <td class="border-right text-right p-right">Rp. <?= number_format($pe['jumlah']) ?></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 12px;"><?= $pe['kategori'] . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
+              <td class="border-right text-right p-right">
+                <div class="money">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($pe['jumlah']) ?></span>
+                </div>
+              </td>
               <td class="border-right text-center"><?= $pe['satuan'] ?></td>
-              <td class="border-right text-right p-right">Rp. <?= number_format($pe['total']) ?></td>
+              <td class="border-right text-right p-right" colspan="2">
+                <div class="money total">
+                  <span class="symbol">Rp.</span>
+                  <span class="amount"><?= number_format($pe['total']) ?></span>
+                </div>
+              </td>
             </tr>
         <?php }
         } ?>
@@ -341,16 +381,16 @@
             <td class="border-right p-left" colspan="6"></td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center"></td>
-            <td class="border-right text-center">
+            <td class="border-right text-center" colspan="2">
               <div style="page-break-after: always;"></div>
             </td>
           </tr>
           <tr>
-            <td class="border-left border-right border-top text-center">3</td>
-            <td class="border-right border-top p-left" colspan="6">MISCLEANNEOUS</td>
+            <td class="border-left border-right border-top text-center" style="font-size: 12px;">3</td>
+            <td class="border-right border-top p-left" colspan="6" style="font-size: 12px;">MISCLEANNEOUS</td>
             <td class="border-right border-top text-center"></td>
             <td class="border-right border-top text-center"></td>
-            <td class="border-right border-top text-center"></td>
+            <td class="border-right border-top text-center" colspan="2"></td>
           </tr>
           <?php
           $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
@@ -358,30 +398,160 @@
           foreach ($miscleanneous as $mis) { ?>
             <tr>
               <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6"><?= $mis['kategori'] . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
-              <td class="border-right text-right p-right">Rp. <?= number_format($mis['jumlah']) ?></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 12px;"><?= $mis['kategori'] . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
+              <td class="border-right text-right p-right">
+                <div class="money">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($mis['jumlah']) ?></span>
+                </div>
+              </td>
               <td class="border-right text-center"><?= $mis['satuan'] ?></td>
-              <td class="border-right text-right p-right">Rp. <?= number_format($mis['total']) ?></td>
+              <td class="border-right text-right p-right" colspan="2">
+                <div class="money total">
+                  <span class="symbol">Rp.</span>
+                  <span class="amount"><?= number_format($mis['total']) ?></span>
+                </div>
+              </td>
             </tr>
           <?php }
         }
       } else {
+
         $no = 1;
         foreach ($detail2 as $det) {
           ?>
-          <tr>
+          <!-- <tr>
             <td class="border-left border-right text-center"><?= $no++ ?></td>
             <td class="border-right p-left" colspan="6"><?= $det['mulai'] && $det['selesai'] ? $det['uraian'] . " <b>(" . date('d M y', strtotime($det['mulai'])) . '-' . date('d M y', strtotime($det['selesai'])) . ")</b>" : $det['uraian'] ?></td>
             <td class="border-right text-right p-right">Rp. <?= number_format($det['jumlah']) ?></td>
             <td class="border-right text-center"><?= $det['satuan'] ?></td>
             <td class="border-right text-right p-right">Rp. <?= number_format($det['total']) ?></td>
+          </tr> -->
+        <?php } ?>
+
+        <tr>
+          <td class="border-left border-right text-center" style="font-size: 12px;">1</td>
+          <td class="border-right p-left" colspan="6" style="font-size: 12px;">PORT CHARGES</td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center" colspan="2"></td>
+        </tr>
+        <?php
+        $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
+        $no_pc = 1;
+        foreach ($port_charges as $pc) {
+        ?>
+          <tr>
+            <td class="border-left border-right text-center"></td>
+            <td class="border-right p-left" colspan="6" style="font-size: 12px;"><?= $pc['kategori'] . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
+            <td class="border-right text-right p-right">
+              <div class="money">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($pc['jumlah']) ?></span>
+              </div>
+            </td>
+            <td class="border-right text-center"><?= $pc['satuan'] ?></td>
+            <td class="border-right text-right p-right" colspan="2">
+              <div class="money total">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($pc['total']) ?></span>
+              </div>
+            </td>
           </tr>
-      <?php }
-      } ?>
+        <?php } ?>
+        <?php
+        $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
+        if ($port_expense) {
+        ?>
+          <tr>
+            <td class="border-left border-right text-center" style="height: 10px;"></td>
+            <td class="border-right p-left" colspan="6"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
+          </tr>
+          <tr>
+            <td class="border-left border-right text-center" style="font-size: 12px;">2</td>
+            <td class="border-right p-left" colspan="6" style="font-size: 12px;">PORT CLEARENCE IN/OUT EXPENSES</td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
+          </tr>
+          <?php
+          $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
+          $no_pe = 1;
+          foreach ($port_expense as $pe) { ?>
+            <tr>
+              <td class="border-left border-right text-center"></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 12px;"><?= $pe['kategori'] . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
+              <td class="border-right text-right p-right">
+                <div class="money">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($pe['jumlah']) ?></span>
+                </div>
+              </td>
+              <td class="border-right text-center"><?= $pe['satuan'] ?></td>
+              <td class="border-right text-right p-right" colspan="2">
+                <div class="money total">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($pe['total']) ?></span>
+                </div>
+              </td>
+            </tr>
+        <?php }
+        } ?>
+
+        <?php
+        $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
+        if ($miscleanneous) {
+        ?>
+          <tr>
+            <td class="border-left border-right text-center" style="height: 10px;"></td>
+            <td class="border-right p-left" colspan="6"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
+          </tr>
+          <tr>
+            <td class="border-left border-right text-center" style="font-size: 12px;">3</td>
+            <td class="border-right p-left" colspan="6" style="font-size: 12px;">MISCLEANNEOUS</td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
+          </tr>
+          <?php
+          $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
+          $no_mis = 1;
+          foreach ($miscleanneous as $mis) { ?>
+            <tr>
+              <td class="border-left border-right text-center"></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 12px;"><?= $mis['kategori'] . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
+              <td class="border-right text-right p-right">
+                <div class="money">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($mis['jumlah']) ?></span>
+                </div>
+              </td>
+              <td class="border-right text-center"><?= $mis['satuan'] ?></td>
+              <td class="border-right text-right p-right" colspan="2">
+                <div class="money total">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($mis['total']) ?></span>
+                </div>
+              </td>
+            </tr>
+        <?php }
+        } ?>
+      <?php } ?>
       <tr>
         <td class="border-top" colspan="7"></td>
         <td class="text-center border-left border-top border-right" colspan="2"><b>SUB TOTAL</b></td>
-        <td class="text-right border-left border-top border-right p-right"><b>Rp. <?= number_format($invoice['sub_total']) ?></b></td>
+        <td class="text-right border-left border-top border-right p-right" colspan="2">
+          <div class="money total">
+            <span class="symbol" style="font-weight: bold;">Rp.</span>
+            <span class="amount" style="font-weight: bold;"><?= number_format($invoice['sub_total']) ?></span>
+          </div>
+        </td>
       </tr>
       <?php if ($invoice['ppn'] == 1) { ?>
         <!-- <tr>
@@ -394,57 +564,87 @@
         <tr>
           <td class="" colspan="7"></td>
           <td class="text-center border-left border-top border-right" colspan="2"><b>MATERAI / STAMP DUTY </b></td>
-          <td class="text-right border-left border-top border-right p-right"><b>Rp. <?= number_format($invoice['nominal_materai']) ?></b></td>
+          <td class="text-right border-left border-top border-right p-right" colspan="2">
+            <div class="money total" style="font-weight: bold;">
+              <span class="symbol" style="">Rp.</span>
+              <span class="amount" style="font-weight: bold;"><?= number_format($invoice['nominal_materai']) ?></span>
+            </div>
+          </td>
         </tr>
       <?php } ?>
 
       <?php if ($invoice['down_payment'] > 0) { ?>
         <tr>
-          <td class="" colspan="7"></td>
+          <td class="" colspan="6"></td>
           <td class="text-center border-left border-top border-right" colspan="2"><b>DP</b></td>
-          <td class="text-right border-left border-top border-right p-right"><b> - Rp. <?= number_format($invoice['down_payment']) ?></b></td>
+          <td class="text-right border-left border-top border-right p-right" colspan="2">
+            <div class="money total" style="font-family: bold;">
+              <span class="symbol" style="">- Rp.</span>
+              <span class="amount" style="font-weight: bold;"><?= number_format($invoice['down_payment']) ?></span>
+            </div>
+          </td>
         </tr>
       <?php } ?>
       <tr>
         <td class="" colspan="7"></td>
         <td class="text-center border-left border-top border-right" colspan="2"><b>PPN 11%</b></td>
-        <td class="text-right border-left border-top border-right p-right"><b>Rp. <?= number_format($invoice['nominal_ppn']) ?></b></td>
+        <td class="text-right border-left border-top border-right p-right" colspan="2">
+          <div class="money total" style="font-weight: bold;">
+            <span class="symbol" style="">Rp.</span>
+            <span class="amount" style="font-weight: bold;"><?= number_format($invoice['nominal_ppn']) ?></span>
+          </div>
+        </td>
       </tr>
       <?php if ($invoice['nominal_pph'] > 0) { ?>
         <tr>
           <td class="" colspan="7"></td>
           <td class="text-center border-left border-top border-right" colspan="2"><b>PPH 23 2%</b></td>
-          <td class="text-right border-left border-top border-right p-right"><b> - Rp. <?= number_format($invoice['nominal_pph']) ?></b></td>
+          <td class="text-right border-left border-top border-right p-right" colspan="2">
+            <div class="money total" style="font-weight: bold;">
+              <span class="symbol" style="">- Rp.</span>
+              <span class="amount" style="font-weight: bold;"><?= number_format($invoice['nominal_pph']) ?></span>
+            </div>
+          </td>
         </tr>
       <?php } ?>
       <tr>
-        <td colspan="2">Rekening Bank</td>
+        <td colspan="2" style="font-size:14px;">Rekening Bank</td>
         <td>:</td>
-        <td colspan="4"><b><?= $agency['bank'] ?></b></td>
+        <td colspan="4" style="font-size: 14px;"><b><?= $agency['bank'] ?></b></td>
         <td class="text-center border-left border-top border-right" colspan="2"><b>TOTAL</b></td>
-        <td class="text-right border-left border-top border-right p-right"><b>Rp. <?= number_format($invoice['total'] + (($invoice['nominal_pph'] > 0) ? $invoice['nominal_pph'] : 0)) ?></b></td>
+        <td class="text-right border-left border-top border-right p-right" colspan="2">
+          <div class="money total" style="font-weight: bold;">
+            <span class="symbol" style="">Rp.</span>
+            <span class="amount" style="font-weight: bold;"><?= number_format($invoice['total'] + (($invoice['nominal_pph'] > 0) ? $invoice['nominal_pph'] : 0)) ?></span>
+          </div>
+        </td>
       </tr>
       <tr>
-        <td colspan="2">Rekening No.</td>
+        <td colspan="2" style="font-size:14px;">Rekening No.</td>
         <td>:</td>
-        <td colspan="4"><b><?= $agency['no_rekening'] ?></b></td>
+        <td colspan="4" style="font-size: 14px;"><b><?= $agency['no_rekening'] ?></b></td>
         <td class="text-center border-left border-top border-right border-bottom" colspan="2" rowspan="2"><b>GRAND TOTAL <?= ($invoice['nominal_pph'] > 0) ? " (Potong PPH 23)" : '' ?></b></td>
-        <td class="text-right border-left border-top border-right border-bottom p-right" rowspan="2"><b>Rp. <?= number_format($invoice['total']) ?></b></td>
+        <td class="text-right border-left border-top border-right border-bottom p-right" rowspan="2" colspan="2">
+          <div class="money total" style="font-weight: bold;">
+            <span class="symbol" style="">Rp.</span>
+            <span class="amount" style="font-weight: bold;"><?= number_format($invoice['total']) ?></span>
+          </div>
+        </td>
       </tr>
       <tr>
-        <td colspan="2">Rekening a/n</td>
+        <td colspan="2" style="font-size:14px;">Rekening a/n</td>
         <td>:</td>
-        <td colspan="4"><b><?= $agency['nama_rekening'] ?></b></td>
+        <td colspan="4" style="font-size: 14px;"><b><?= $agency['nama_rekening'] ?></b></td>
       </tr>
     </tbody>
   </table>
-  <div style="margin-top: 10px; font-size:10px">
+  <div style="margin-top: 10px; font-size:13px">
     <b>Note:</b><br>
     Bukti transfer mohon dikirim via e-mail ke : marketing@dsmshipping.co.id, marketing@dsagency.co.id - CP Riyant : 0812 - 9268 1115 <br>
     <?= ($invoice['nominal_pph'] > 0) ?  " Mohon untuk PPH 23 dipotongkan dari DPP." : '' ?>
     <?= $invoice['notes'] ?>
   </div>
-  <div style="margin-top: 10px; font-size: 10px">
+  <div style="margin-top: 10px; font-size: 14px">
     Hormat Kami,<br>
     <b><?= $agency['nama'] ?></b>
     <br>

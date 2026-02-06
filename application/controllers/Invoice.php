@@ -81,6 +81,7 @@ class Invoice extends CI_Controller
     $uraian = $this->input->post('uraian[]');
     $satuan = $this->input->post('satuan[]');
     $harga = $this->input->post('harga[]');
+    $kategori = $this->input->post('kategori[]');
 
     $sql = "SELECT agency_customer.kode, agency_customer.Id FROM agency_customer WHERE agency_customer.Id = '$customer'";
     $data_customer = $this->db->query($sql)->row_array();
@@ -163,6 +164,7 @@ class Invoice extends CI_Controller
           'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
           'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
           'total' => $total,
+          'kategori' => $kategori[$i]
         ];
 
         $this->db->insert('t_detail_invoice', $detail);
@@ -381,6 +383,7 @@ class Invoice extends CI_Controller
             'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
             'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
             'total' => $total,
+            'kategori' => $kategori[$i]
           ];
         } else {
           $detail = [
@@ -461,9 +464,9 @@ class Invoice extends CI_Controller
 
     // run dompdf
     $this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
-    // $this->load->view('djs/invoice/v_cetak_invoice', $data);
+    // $this->load->view('pages/agency/invoice/v_cetak_invoice', $data);
 
-    $this->load->view('index', $data);
+    // $this->load->view('index', $data);
   }
 
   public function invoice_ajax_list()
