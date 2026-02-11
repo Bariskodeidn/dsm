@@ -52,7 +52,7 @@
                       <td><?= ++$page; ?></td>
                       <td><?= $value['desc'] ?></td>
                       <td><?= $value['remarks'] ?? "-" ?></td>
-                      <td><?= $value['jenis'] == 1 ? 'STS' : "LONGTOWING" ?></td>
+                      <td><?= $value['jenis'] == 1 ? 'LONGTOWING' : "STS" ?></td>
                       <td><?= $value['port'] ?></td>
                       <td><?= $value['est'] ?></td>
                       <td><?= $value['hpp_rill'] ?></td>
@@ -81,8 +81,8 @@
                                     <div class="col-md-6 mt-3">
                                       <label for="nama" class="form-label">Jenis</label>
                                       <select name="jenis" id="jenis" class="form-control">
-                                        <option value="1" <?= $value['jenis']  == 1 ? 'selected' : '' ?>>STS</option>
-                                        <option value="2" <?= $value['jenis']  == 2 ? 'selected' : '' ?>>LONGTOWING</option>
+                                        <option value="2" <?= $value['jenis']  == 2 ? 'selected' : '' ?>>STS</option>
+                                        <option value="1" <?= $value['jenis']  == 1 ? 'selected' : '' ?>>LONGTOWING</option>
                                       </select>
                                     </div>
                                     <div class="col-12 mt-3">
@@ -165,8 +165,8 @@
             <div class="col-md-6 mt-3">
               <label for="nama" class="form-label">Jenis</label>
               <select name="jenis" id="jenis" class="form-control">
-                <option value="1">STS</option>
-                <option value="2">LONGTOWING</option>
+                <option value="2">STS</option>
+                <option value="1">LONGTOWING</option>
               </select>
             </div>
             <div class="col-12 mt-3">
