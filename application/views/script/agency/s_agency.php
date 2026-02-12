@@ -59,21 +59,6 @@
       }],
     })
 
-    $('#tablePenunjukan').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "order": [],
-      "ajax": {
-        "url": '<?= site_url('agency/penunjukan_ajax_list') ?>',
-        "type": "POST",
-      },
-      "columnDefs": [{
-        "targets": [0, 4],
-        "orderable": false
-      }],
-      "responsive": true
-    })
-
     $('#tableKapalAgency').DataTable({
       "processing": true,
       "serverSide": true,
