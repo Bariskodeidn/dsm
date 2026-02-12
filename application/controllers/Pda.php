@@ -1877,7 +1877,7 @@ class Pda extends CI_Controller
     // 1. Ambil data dari database
     $order = $this->db->get_where('t_pda', ['Id' => $id])->row();
     $port = $this->db->get_where('agency_port', ['Id' => $order->port])->row_array();
-    $penunjukan = $this->db->select('a.jenis, a.customer,a.Id,c.name as nama_kapal,a.no_surat, b.nama_customer')->from('t_penunjukan a')->join('t_customer b', 'b.Id = a.customer', 'left')->join('agency_kapal c', 'c.Id = a.nama_kapal', 'left')->where('a.Id', $order->penunjukan)->get()->row_array();
+    $penunjukan = $this->db->select('a.jenis, a.customer,a.Id,c.name as nama_kapal,a.no_surat, b.nama_customer')->from('t_penunjukan a')->join('agency_customer b', 'b.Id = a.customer', 'left')->join('agency_kapal c', 'c.Id = a.nama_kapal', 'left')->where('a.Id', $order->penunjukan)->get()->row_array();
 
 
     $report = json_decode($order->er, true);
