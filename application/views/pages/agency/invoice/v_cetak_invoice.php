@@ -418,55 +418,50 @@
                 </div>
               </td>
             </tr>
-          <?php }
+        <?php }
         }
-      } else {
+      } else { ?>
 
-        $no = 1;
-        foreach ($detail2 as $det) {
-          ?>
-          <!-- <tr>
-            <td class="border-left border-right text-center"><?= $no++ ?></td>
-            <td class="border-right p-left" colspan="6"><?= $det['mulai'] && $det['selesai'] ? $det['uraian'] . " <b>(" . date('d M y', strtotime($det['mulai'])) . '-' . date('d M y', strtotime($det['selesai'])) . ")</b>" : $det['uraian'] ?></td>
-            <td class="border-right text-right p-right">Rp. <?= number_format($det['jumlah']) ?></td>
-            <td class="border-right text-center"><?= $det['satuan'] ?></td>
-            <td class="border-right text-right p-right">Rp. <?= number_format($det['total']) ?></td>
-          </tr> -->
-        <?php } ?>
-
-        <tr>
-          <td class="border-left border-right text-center" style="font-size: 10px;">1</td>
-          <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CHARGES</td>
-          <td class="border-right text-center"></td>
-          <td class="border-right text-center"></td>
-          <td class="border-right text-center" colspan="2"></td>
-        </tr>
         <?php
         $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
-        $no_pc = 1;
-        foreach ($port_charges as $pc) {
+        $no = 0;
+        if ($port_charges) {
+          $no = $no + 1;
         ?>
           <tr>
-            <td class="border-left border-right text-center"></td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $pc['kategori'] . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
-            <td class="border-right text-right p-right">
-              <div class="money">
-                <span class="symbol" style="float: left;">Rp.</span>
-                <span class="amount"><?= number_format($pc['jumlah']) ?></span>
-              </div>
-            </td>
-            <td class="border-right text-center"><?= $pc['satuan'] ?></td>
-            <td class="border-right text-right p-right" colspan="2">
-              <div class="money total">
-                <span class="symbol" style="float: left;">Rp.</span>
-                <span class="amount"><?= number_format($pc['total']) ?></span>
-              </div>
-            </td>
+            <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no; ?></td>
+            <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CHARGES</td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center"></td>
+            <td class="border-right text-center" colspan="2"></td>
           </tr>
-        <?php } ?>
+          <?php
+          $no_pc = 1;
+          foreach ($port_charges as $pc) {
+          ?>
+            <tr>
+              <td class="border-left border-right text-center"></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
+              <td class="border-right text-right p-right">
+                <div class="money">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($pc['jumlah']) ?></span>
+                </div>
+              </td>
+              <td class="border-right text-center"><?= $pc['satuan'] ?></td>
+              <td class="border-right text-right p-right" colspan="2">
+                <div class="money total">
+                  <span class="symbol" style="float: left;">Rp.</span>
+                  <span class="amount"><?= number_format($pc['total']) ?></span>
+                </div>
+              </td>
+            </tr>
+        <?php }
+        } ?>
         <?php
         $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
         if ($port_expense) {
+          $no = $no + 1;
         ?>
           <tr>
             <td class="border-left border-right text-center" style="height: 10px;"></td>
@@ -476,19 +471,18 @@
             <td class="border-right text-center" colspan="2"></td>
           </tr>
           <tr>
-            <td class="border-left border-right text-center" style="font-size: 10px;">2</td>
+            <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no ?></td>
             <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CLEARENCE IN/OUT EXPENSES</td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center" colspan="2"></td>
           </tr>
           <?php
-          $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
           $no_pe = 1;
           foreach ($port_expense as $pe) { ?>
             <tr>
               <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $pe['kategori'] . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
               <td class="border-right text-right p-right">
                 <div class="money">
                   <span class="symbol" style="float: left;">Rp.</span>
@@ -509,6 +503,7 @@
         <?php
         $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
         if ($miscleanneous) {
+          $no = $no + 1;
         ?>
           <tr>
             <td class="border-left border-right text-center" style="height: 10px;"></td>
@@ -518,19 +513,18 @@
             <td class="border-right text-center" colspan="2"></td>
           </tr>
           <tr>
-            <td class="border-left border-right text-center" style="font-size: 10px;">3</td>
+            <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no ?></td>
             <td class="border-right p-left" colspan="6" style="font-size: 10px;">MISCLEANNEOUS</td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center"></td>
             <td class="border-right text-center" colspan="2"></td>
           </tr>
           <?php
-          $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
           $no_mis = 1;
           foreach ($miscleanneous as $mis) { ?>
             <tr>
               <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $mis['kategori'] . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
+              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
               <td class="border-right text-right p-right">
                 <div class="money">
                   <span class="symbol" style="float: left;">Rp.</span>
