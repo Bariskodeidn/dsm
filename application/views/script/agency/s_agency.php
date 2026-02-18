@@ -177,23 +177,6 @@
     })
 
 
-    $('#tableInvoiceAgency').DataTable({
-      "processing": true,
-      "serverSide": true,
-      "order": [],
-      "ajax": {
-        "url": '<?= site_url('invoice/invoice_ajax_list') ?>',
-        "type": "POST",
-        // "success": function(res) {
-        //   console.log(res)
-        // }
-      },
-      "columnDefs": [{
-        "targets": [0, 1, 9],
-        "orderable": false
-      }],
-    })
-
     $('#tablePenunjukan').DataTable({
       "processing": true,
       "serverSide": true,
