@@ -594,18 +594,6 @@
           </div>
         </td>
       </tr>
-      <?php if ($invoice['nominal_pph'] > 0) { ?>
-        <tr>
-          <td class="" colspan="7"></td>
-          <td class="text-center border-left border-top border-right" colspan="2"><b>PPH 23 2%</b></td>
-          <td class="text-right border-left border-top border-right p-right" colspan="2">
-            <div class="money total" style="font-weight: bold;">
-              <span class="symbol">- Rp.</span>
-              <span class="amount" style="font-weight: bold;"><?= number_format($invoice['nominal_pph']) ?></span>
-            </div>
-          </td>
-        </tr>
-      <?php } ?>
       <tr>
         <td colspan="2" style="font-size:11px;">Rekening Bank</td>
         <td>:</td>
@@ -618,6 +606,18 @@
           </div>
         </td>
       </tr>
+      <?php if ($invoice['nominal_pph'] > 0) { ?>
+        <tr>
+          <td class="" colspan="7"></td>
+          <td class="text-center border-left border-top border-right" colspan="2"><b>PPH 23 2%</b></td>
+          <td class="text-right border-left border-top border-right p-right" colspan="2">
+            <div class="money total" style="font-weight: bold;">
+              <span class="symbol">- Rp.</span>
+              <span class="amount" style="font-weight: bold;"><?= number_format($invoice['nominal_pph']) ?></span>
+            </div>
+          </td>
+        </tr>
+      <?php } ?>
       <tr>
         <td colspan="2" style="font-size:11px;">Rekening No.</td>
         <td>:</td>
