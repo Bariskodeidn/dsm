@@ -382,7 +382,11 @@ class Pda extends CI_Controller
 
     $dokumen = $this->db->get_where('t_dokumen', ['id_pda' => $id])->result_array();
     foreach ($dokumen as $dok) {
-      $pdf->addPDF('upload/dokumen-pda/' . $id . '/' . $dok['file_name'], 'all');
+      $filePath = 'upload/dokumen-pda/' . $id . '/' . $dok['file_name'];
+      if (file_exists($filePath)) {
+        $pdf->addPDF($filePath, 'all');
+      }
+      // $pdf->addPDF('upload/dokumen-pda/' . $id . '/' . $dok['file_name'], 'all');
     }
 
     if (ob_get_contents()) ob_end_clean();
