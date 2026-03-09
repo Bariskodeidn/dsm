@@ -385,6 +385,7 @@ class Pda extends CI_Controller
       $pdf->addPDF('upload/dokumen-pda/' . $id . '/' . $dok['file_name'], 'all');
     }
 
+    if (ob_get_contents()) ob_end_clean();
     $pdf->merge('browser', 'test.pdf');
   }
 
