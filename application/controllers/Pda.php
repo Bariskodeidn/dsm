@@ -361,35 +361,54 @@ class Pda extends CI_Controller
     $pdf = new PDFMerger;
 
     $pda = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
+    if (!$pda) {
+      die("Data PDA tidak ditemukan.");
+    }
+
     $penunjukan = $this->db->get_where('t_penunjukan', ['Id' => $pda['penunjukan']])->row_array();
+
     $invoices = $this->db->get_where('t_invoice', ['penunjukan' => $penunjukan['Id']]);
 
-    $pdf->addPDF('upload/penunjukan/' . $penunjukan['file_name'], 'all');
+    // Tambahkan PDF Penunjukan
+    $file_penunjukan = FCPATH . 'upload/penunjukan/' . $penunjukan['file_name'];
+    if (!empty($penunjukan['file_name']) && file_exists($file_penunjukan)) {
+      $pdf->addPDF($file_penunjukan, 'all');
+    }
+
+    // Tambahkan PDF Penawaran
     if ($penunjukan['penawaran'] != 0) {
       $penawaran = $this->db->get_where('t_penawaran', ['Id' => $penunjukan['penawaran']])->row_array();
-      if ($penawaran['file_name'] != null) {
-        $pdf->addPDF('upload/penawaran/' . $penawaran['file_name'], 'all');
+      $file_penawaran = FCPATH . 'upload/penawaran/' . $penawaran['file_name'];
+      if (!empty($penawaran['file_name']) && file_exists($file_penawaran)) {
+        $pdf->addPDF($file_penawaran, 'all');
       }
     }
 
+    // Tambahkan PDF Invoices
     if ($invoices->num_rows() > 0) {
       foreach ($invoices->result_array() as $inv) {
-        if ($inv['file_upload']) {
-          $pdf->addPDF('upload/invoice-upload/' . $inv['file_upload'], 'all');
+        $file_inv = FCPATH . 'upload/invoice-upload/' . $inv['file_upload'];
+        if (!empty($inv['file_upload']) && file_exists($file_inv)) {
+          $pdf->addPDF($file_inv, 'all');
         }
       }
     }
 
+    // Tambahkan PDF Dokumen PDA
     $dokumen = $this->db->get_where('t_dokumen', ['id_pda' => $id])->result_array();
     foreach ($dokumen as $dok) {
-      $filePath = 'upload/dokumen-pda/' . $id . '/' . $dok['file_name'];
-      if (file_exists($filePath)) {
-        $pdf->addPDF($filePath, 'all');
+      $file_dok = FCPATH . 'upload/dokumen-pda/' . $id . '/' . $dok['file_name'];
+      if (!empty($dok['file_name']) && file_exists($file_dok)) {
+        $pdf->addPDF($file_dok, 'all');
       }
-      // $pdf->addPDF('upload/dokumen-pda/' . $id . '/' . $dok['file_name'], 'all');
     }
 
-    if (ob_get_contents()) ob_end_clean();
+    // --- BAGIAN KRUSIAL ---
+    // Hapus semua output buffer (spasi, error notice, dll) sebelum kirim PDF
+    if (ob_get_length()) {
+      ob_end_clean();
+    }
+
     $pdf->merge('browser', 'test.pdf');
   }
 
