@@ -409,7 +409,12 @@ class Pda extends CI_Controller
       ob_end_clean();
     }
 
-    $pdf->merge('browser', 'test.pdf');
+    try {
+      $pdf->merge('browser', 'test.pdf');
+    } catch (Exception $e) {
+      // Jika error, ini akan muncul dan memberitahu file mana yang bermasalah
+      die('Terjadi kesalahan saat menggabungkan: ' . $e->getMessage());
+    }
   }
 
   public function hpp_rill($id)
