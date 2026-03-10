@@ -1,6 +1,7 @@
 <?php
 
 use PDFMerger\PDFMerger;
+use setasign\Fpdi\Fpdi;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -359,6 +360,9 @@ class Pda extends CI_Controller
   {
     include APPPATH . 'libraries/PDFMerger/PDFMerger.php';
     $pdf = new PDFMerger;
+
+    error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING); // Matikan Warning & Notice
+    ini_set('display_errors', 0);
 
     $pda = $this->db->get_where('t_pda', ['Id' => $id])->row_array();
     if (!$pda) {
