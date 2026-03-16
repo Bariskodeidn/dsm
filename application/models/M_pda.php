@@ -75,8 +75,10 @@ class M_pda extends CI_Model
 
   public function get_all_requests()
   {
+    $this->db->select('t_pda.*,t_penunjukan.no_surat')->from('t_pda');
     $this->db->join('t_penunjukan', 't_pda.penunjukan = t_penunjukan.Id', 'left');
-    return $this->db->where('er IS NOT NULL')->get('t_pda')->result();
+    $this->db->where('er is NOT NULL');
+    return $this->db->get()->result();
   }
 
   public function get_data($id)
