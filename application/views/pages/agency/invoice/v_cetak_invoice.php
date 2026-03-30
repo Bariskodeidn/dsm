@@ -574,7 +574,7 @@
 
       <?php if ($invoice['down_payment'] > 0) { ?>
         <tr>
-          <td class="" colspan="6"></td>
+          <td class="" colspan="7"></td>
           <td class="text-center border-left border-top border-right" colspan="2"><b>DP</b></td>
           <td class="text-right border-left border-top border-right p-right" colspan="2">
             <div class="money total" style="font-size: bold;">
