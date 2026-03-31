@@ -95,7 +95,7 @@ class Invoice extends CI_Controller
     $this->form_validation->set_rules('pel_bongkar_bb', 'Pelabuhan bongkar batu bara', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('cargo', 'Cargo', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('ta_nor', 'TA/NOR', 'required|trim', array('required' => '%s wajib diisi!'));
-    $this->form_validation->set_rules('td', 'TD', 'required|trim', array('required' => '%s wajib diisi!'));
+    // $this->form_validation->set_rules('td', 'TD', 'required|trim', array('required' => '%s wajib diisi!'));
     // $this->form_validation->set_rules('note', 'Note', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('uraian[]', 'Uraian pekerjaan', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('satuan[]', 'Satuan', 'required|trim', array('required' => '%s wajib diisi!'));
@@ -298,7 +298,7 @@ class Invoice extends CI_Controller
     $this->form_validation->set_rules('pel_bongkar_bb', 'Pelabuhan bongkar batu bara', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('cargo', 'Cargo', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('ta_nor', 'TA/NOR', 'required|trim', array('required' => '%s wajib diisi!'));
-    $this->form_validation->set_rules('td', 'TD', 'required|trim', array('required' => '%s wajib diisi!'));
+    // $this->form_validation->set_rules('td', 'TD', 'required|trim', array('required' => '%s wajib diisi!'));
 
     $this->form_validation->set_rules('uraian[]', 'Uraian pekerjaan', 'required|trim', array('required' => '%s wajib diisi!'));
     $this->form_validation->set_rules('satuan[]', 'Satuan', 'required|trim', array('required' => '%s wajib diisi!'));

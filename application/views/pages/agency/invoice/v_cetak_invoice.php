@@ -290,7 +290,7 @@
         <td class="border-left border-right"></td>
         <td class="p-left" style="font-size: 10px;">TD</td>
         <td style="font-size: 10px;">:</td>
-        <td class="border-right" colspan="4" style="font-size: 10px;"><?= date('d/m/Y', strtotime($invoice['td'])) ?></td>
+        <td class="border-right" colspan="4" style="font-size: 10px;"><?= $invoice['td'] ? date('d/m/Y', strtotime($invoice['td'])) : "-" ?></td>
         <td class="border-right"></td>
         <td class="border-right"></td>
         <td class="border-right" colspan="2"></td>
@@ -303,23 +303,28 @@
         <td class="border-right" colspan="2"></td>
       </tr>
 
+
+
       <?php
-      if ($invoice['jenis'] == 2) { ?>
+      $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
+      $no = 0;
+      if ($port_charges) {
+        $no = $no + 1;
+      ?>
         <tr>
-          <td class="border-left border-right text-center" style="font-size: 10px;">1</td>
+          <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no; ?></td>
           <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CHARGES</td>
           <td class="border-right text-center"></td>
           <td class="border-right text-center"></td>
           <td class="border-right text-center" colspan="2"></td>
         </tr>
         <?php
-        $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
         $no_pc = 1;
         foreach ($port_charges as $pc) {
         ?>
           <tr>
             <td class="border-left border-right text-center"></td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $pc['kategori'] . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
+            <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
             <td class="border-right text-right p-right">
               <div class="money">
                 <span class="symbol" style="float: left;">Rp.</span>
@@ -329,219 +334,96 @@
             <td class="border-right text-center"><?= $pc['satuan'] ?></td>
             <td class="border-right text-right p-right" colspan="2">
               <div class="money total">
-                <span class="symbol">Rp.</span>
+                <span class="symbol" style="float: left;">Rp.</span>
                 <span class="amount"><?= number_format($pc['total']) ?></span>
               </div>
             </td>
           </tr>
-        <?php } ?>
+      <?php }
+      } ?>
+      <?php
+      $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
+      if ($port_expense) {
+        $no = $no + 1;
+      ?>
+        <tr>
+          <td class="border-left border-right text-center" style="height: 10px;"></td>
+          <td class="border-right p-left" colspan="6"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center" colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no ?></td>
+          <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CLEARENCE IN/OUT EXPENSES</td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center" colspan="2"></td>
+        </tr>
         <?php
-        $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
-        if ($port_expense) {
-        ?>
+        $no_pe = 1;
+        foreach ($port_expense as $pe) { ?>
           <tr>
-            <td class="border-left border-right text-center" style="height: 20px;"></td>
-            <td class="border-right p-left" colspan="6"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
-          </tr>
-          <tr>
-            <td class="border-left border-right text-center" style="font-size: 10px;">2</td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CLEARENCE IN/OUT EXPENSES</td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
-          </tr>
-          <?php
-          $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
-          $no_pe = 1;
-          foreach ($port_expense as $pe) { ?>
-            <tr>
-              <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $pe['kategori'] . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
-              <td class="border-right text-right p-right">
-                <div class="money">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($pe['jumlah']) ?></span>
-                </div>
-              </td>
-              <td class="border-right text-center"><?= $pe['satuan'] ?></td>
-              <td class="border-right text-right p-right" colspan="2">
-                <div class="money total">
-                  <span class="symbol">Rp.</span>
-                  <span class="amount"><?= number_format($pe['total']) ?></span>
-                </div>
-              </td>
-            </tr>
-        <?php }
-        } ?>
-
-        <?php
-        $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
-        if ($miscleanneous) {
-        ?>
-          <tr class="page-break">
             <td class="border-left border-right text-center"></td>
-            <td class="border-right p-left" colspan="6"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2">
-              <div style="page-break-after: always;"></div>
+            <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
+            <td class="border-right text-right p-right">
+              <div class="money">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($pe['jumlah']) ?></span>
+              </div>
+            </td>
+            <td class="border-right text-center"><?= $pe['satuan'] ?></td>
+            <td class="border-right text-right p-right" colspan="2">
+              <div class="money total">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($pe['total']) ?></span>
+              </div>
             </td>
           </tr>
-          <tr>
-            <td class="border-left border-right border-top text-center" style="font-size: 10px;">3</td>
-            <td class="border-right border-top p-left" colspan="6" style="font-size: 10px;">MISCLEANNEOUS</td>
-            <td class="border-right border-top text-center"></td>
-            <td class="border-right border-top text-center"></td>
-            <td class="border-right border-top text-center" colspan="2"></td>
-          </tr>
-          <?php
-          $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
-          $no_mis = 1;
-          foreach ($miscleanneous as $mis) { ?>
-            <tr>
-              <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $mis['kategori'] . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
-              <td class="border-right text-right p-right">
-                <div class="money">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($mis['jumlah']) ?></span>
-                </div>
-              </td>
-              <td class="border-right text-center"><?= $mis['satuan'] ?></td>
-              <td class="border-right text-right p-right" colspan="2">
-                <div class="money total">
-                  <span class="symbol">Rp.</span>
-                  <span class="amount"><?= number_format($mis['total']) ?></span>
-                </div>
-              </td>
-            </tr>
-        <?php }
-        }
-      } else { ?>
+      <?php }
+      } ?>
 
+      <?php
+      $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
+      if ($miscleanneous) {
+        $no = $no + 1;
+      ?>
+        <tr>
+          <td class="border-left border-right text-center" style="height: 10px;"></td>
+          <td class="border-right p-left" colspan="6"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center" colspan="2"></td>
+        </tr>
+        <tr>
+          <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no ?></td>
+          <td class="border-right p-left" colspan="6" style="font-size: 10px;">MISCLEANNEOUS</td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center"></td>
+          <td class="border-right text-center" colspan="2"></td>
+        </tr>
         <?php
-        $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
-        $no = 0;
-        if ($port_charges) {
-          $no = $no + 1;
-        ?>
+        $no_mis = 1;
+        foreach ($miscleanneous as $mis) { ?>
           <tr>
-            <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no; ?></td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CHARGES</td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
+            <td class="border-left border-right text-center"></td>
+            <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
+            <td class="border-right text-right p-right">
+              <div class="money">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($mis['jumlah']) ?></span>
+              </div>
+            </td>
+            <td class="border-right text-center"><?= $mis['satuan'] ?></td>
+            <td class="border-right text-right p-right" colspan="2">
+              <div class="money total">
+                <span class="symbol" style="float: left;">Rp.</span>
+                <span class="amount"><?= number_format($mis['total']) ?></span>
+              </div>
+            </td>
           </tr>
-          <?php
-          $no_pc = 1;
-          foreach ($port_charges as $pc) {
-          ?>
-            <tr>
-              <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
-              <td class="border-right text-right p-right">
-                <div class="money">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($pc['jumlah']) ?></span>
-                </div>
-              </td>
-              <td class="border-right text-center"><?= $pc['satuan'] ?></td>
-              <td class="border-right text-right p-right" colspan="2">
-                <div class="money total">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($pc['total']) ?></span>
-                </div>
-              </td>
-            </tr>
-        <?php }
-        } ?>
-        <?php
-        $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
-        if ($port_expense) {
-          $no = $no + 1;
-        ?>
-          <tr>
-            <td class="border-left border-right text-center" style="height: 10px;"></td>
-            <td class="border-right p-left" colspan="6"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
-          </tr>
-          <tr>
-            <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no ?></td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CLEARENCE IN/OUT EXPENSES</td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
-          </tr>
-          <?php
-          $no_pe = 1;
-          foreach ($port_expense as $pe) { ?>
-            <tr>
-              <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
-              <td class="border-right text-right p-right">
-                <div class="money">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($pe['jumlah']) ?></span>
-                </div>
-              </td>
-              <td class="border-right text-center"><?= $pe['satuan'] ?></td>
-              <td class="border-right text-right p-right" colspan="2">
-                <div class="money total">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($pe['total']) ?></span>
-                </div>
-              </td>
-            </tr>
-        <?php }
-        } ?>
-
-        <?php
-        $miscleanneous = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 3])->result_array();
-        if ($miscleanneous) {
-          $no = $no + 1;
-        ?>
-          <tr>
-            <td class="border-left border-right text-center" style="height: 10px;"></td>
-            <td class="border-right p-left" colspan="6"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
-          </tr>
-          <tr>
-            <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no ?></td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;">MISCLEANNEOUS</td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center"></td>
-            <td class="border-right text-center" colspan="2"></td>
-          </tr>
-          <?php
-          $no_mis = 1;
-          foreach ($miscleanneous as $mis) { ?>
-            <tr>
-              <td class="border-left border-right text-center"></td>
-              <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
-              <td class="border-right text-right p-right">
-                <div class="money">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($mis['jumlah']) ?></span>
-                </div>
-              </td>
-              <td class="border-right text-center"><?= $mis['satuan'] ?></td>
-              <td class="border-right text-right p-right" colspan="2">
-                <div class="money total">
-                  <span class="symbol" style="float: left;">Rp.</span>
-                  <span class="amount"><?= number_format($mis['total']) ?></span>
-                </div>
-              </td>
-            </tr>
-        <?php }
-        } ?>
-      <?php } ?>
+      <?php }
+      } ?>
       <tr>
         <td class="border-top" colspan="7"></td>
         <td class="text-center border-left border-top border-right" colspan="2"><b>SUB TOTAL</b></td>
