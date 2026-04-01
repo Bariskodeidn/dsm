@@ -290,7 +290,14 @@
         <td class="border-left border-right"></td>
         <td class="p-left" style="font-size: 10px;">TD</td>
         <td style="font-size: 10px;">:</td>
-        <td class="border-right" colspan="4" style="font-size: 10px;"><?= $invoice['td'] ? date('d/m/Y', strtotime($invoice['td'])) : "-" ?></td>
+        <td class="border-right" colspan="4" style="font-size: 10px;">
+          <?php
+          if ($invoice['td'] == '0000-00-00' or $invoice['td'] == null) {
+            echo '-';
+          } else {
+            echo date('d/m/Y', strtotime($invoice['td']));
+          }
+          ?>
         <td class="border-right"></td>
         <td class="border-right"></td>
         <td class="border-right" colspan="2"></td>
