@@ -74,6 +74,7 @@ class Invoice extends CI_Controller
     $td = $this->input->post('td');
     $materai = $this->input->post('materai');
     $ppn = $this->input->post('ppn');
+    $dpp = $this->input->post('tampil_dpp');
     $note = $this->input->post('note');
     $pph = $this->input->post('pph');
     $dp = $this->input->post('dp');
@@ -147,7 +148,8 @@ class Invoice extends CI_Controller
         'jenis' => 1,
         'nominal_pph' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
         'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
-        'id_cabang' => $data_penunjukan['id_cabang']
+        'id_cabang' => $data_penunjukan['id_cabang'],
+        'tampil_dpp' => $dpp
       ];
 
       $this->db->insert('t_invoice', $invoice);
@@ -258,6 +260,7 @@ class Invoice extends CI_Controller
     $td = $this->input->post('td');
     $materai = $this->input->post('materai');
     $ppn = $this->input->post('ppn');
+    $dpp = $this->input->post('tampil_dpp');
     $note = $this->input->post('note');
     $pph = $this->input->post('pph');
     $dp = $this->input->post('dp');
@@ -337,7 +340,8 @@ class Invoice extends CI_Controller
           'materai' => $materai,
           'ppn' => $ppn,
           'nominal_pph' => preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
-          'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp)
+          'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+          'tampil_dpp' => $dpp
         ];
       } else {
         $update = [
@@ -360,7 +364,8 @@ class Invoice extends CI_Controller
           'materai' => $materai,
           'ppn' => $ppn,
           'nominal_pph' => preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
-          'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp)
+          'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+          'tampil_dpp' => $dpp
         ];
       }
 

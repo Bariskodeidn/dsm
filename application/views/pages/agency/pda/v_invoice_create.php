@@ -95,7 +95,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <div class="form-group">
                   <label for="label" class="form-label">Materai</label>
                   <select name="materai" id="materai" class="form-control">
@@ -104,12 +104,21 @@
                   </select>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-2">
                 <div class="form-group">
                   <label for="label" class="form-label">PPN 12%</label>
                   <select name="ppn" id="ppn" class="form-control">
                     <option value="1">YA</option>
                     <option value="0">TIDAK</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="label" class="form-label">Tampilkan DPP</label>
+                  <select name="tampil_dpp" id="tampil_dpp" class="form-control">
+                    <option value="1">YA</option>
+                    <option value="0" selected>TIDAK</option>
                   </select>
                 </div>
               </div>

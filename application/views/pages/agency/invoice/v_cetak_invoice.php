@@ -441,12 +441,17 @@
           </div>
         </td>
       </tr>
-      <?php if ($invoice['ppn'] == 1) { ?>
-        <!-- <tr>
+      <?php if ($invoice['tampil_dpp'] == 1) { ?>
+        <tr>
           <td class="" colspan="7"></td>
-          <td class="text-center border-left border-top border-right" colspan="2"><b>DPP NILAI LAINNYA</b></td>
-          <td class="text-right border-left border-top border-right p-right"><b><?= number_format($invoice['dpp']) ?></b></td>
-        </tr> -->
+          <td class="text-center border-left border-top border-right" colspan="2"><b>DPP NILAI LAIN LAIN</b></td>
+          <td class="text-right border-left border-top border-right p-right" colspan="2">
+            <div class="money total" style="font-weight: bold;">
+              <span class="symbol">Rp.</span>
+              <span class="amount" style="font-weight: bold;"><?= number_format($invoice['dpp']) ?></span>
+            </div>
+          </td>
+        </tr>
       <?php } ?>
       <?php if ($invoice['materai'] == 1) { ?>
         <tr>
