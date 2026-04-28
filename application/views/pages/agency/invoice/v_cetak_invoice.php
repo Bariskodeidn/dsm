@@ -21,11 +21,8 @@
 
     }
 
-    /* * {
-      font-family: "Century Gothic";
-    } */
-
-    tbody {
+    tbody,
+    fs-10 {
       font-size: 10px;
     }
 
@@ -107,6 +104,18 @@
     td .total span:last-child {
       float: right;
     }
+
+    tbody {
+      display: table-row-group;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    tfoot {
+      display: table-footer-group;
+    }
   </style>
 </head>
 
@@ -153,12 +162,12 @@
         <td style="font-size: 10px; vertical-align: top;">:</td>
         <td style="font-size: 10px; vertical-align: top;" colspan="5"><a href="mailto:marketing@dsagency.co.id">marketing@dsagency.co.id</a> - <a href="https://dsmshipping.co.id/dsa/">https://dsmshipping.co.id/dsa/</a></td>
       </tr>
-
       <tr>
         <td colspan="11">
           <hr>
         </td>
       </tr>
+
       <tr>
         <td colspan="10" style="font-size: 11px;">Kepada Yth:</td>
       </tr>
@@ -168,29 +177,30 @@
       <tr>
         <td colspan="10" style="font-size: 11px;"><?= $customer['alamat'] ?> <br><br></td>
       </tr>
+
+      <tr style="background-color: #DCDCDC;">
+        <td class="text-center border-full" colspan="11" style="font-size: 10px;"><b><u><span>INVOICE</span></u></b></td>
+      </tr>
+      <tr>
+        <td class="text-center border-left border-right" colspan="11" style="font-size: 10px;">NO : <?= $invoice['referensi'] ?></td>
+      </tr>
+      <tr>
+        <td class="text-center border-left border-right" colspan="11" style="font-size: 10px;">TANGGAL : <?= tgl_indo(date('Y-m-d', strtotime($invoice['tanggal']))) ?></td>
+      </tr>
+      <tr>
+        <td class="text-center border-left border-right" colspan="11" style="font-size: 10px;">SURAT PENUNJUKAN : <?= $penunjukan['no_surat'] ?></td>
+      </tr>
+      <tr>
+        <td class="border-bottom text-center border-left border-right" colspan="11"></td>
+      </tr>
     </thead>
     <tbody>
-      <tr class="" style=" background-color: #DCDCDC;">
-        <td class="text-center border-full" colspan="11"><b><u><span style="font-size: 20px;">INVOICE</span></u></b></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11">NO : <?= $invoice['referensi'] ?></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11">TANGGAL : <?= tgl_indo(date('Y-m-d', strtotime($invoice['tanggal']))) ?></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11">SURAT PENUNJUKAN : <?= $penunjukan['no_surat'] ?></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11"></td>
-      </tr>
-      <tr>
-        <th class="border-full" width="25px">NO</th>
-        <th class="border-full" colspan="6">URAIAN PEKERJAAN</th>
-        <th class="border-full" width="100px">JUMLAH</th>
-        <th class="border-full" width="80px">SATUAN</th>
-        <th class="border-full" width="150px" colspan="2">TOTAL HARGA</th>
+      <tr class="">
+        <th class="border-full" width="25px" style="font-size: 10px;">NO</th>
+        <th class="border-full" colspan="6" style="font-size: 10px;">URAIAN PEKERJAAN</th>
+        <th class="border-full" width="100px" style="font-size: 10px;">JUMLAH</th>
+        <th class="border-full" width="80px" style="font-size: 10px;">SATUAN</th>
+        <th class="border-full" width="150px" colspan="2" style="font-size: 10px;">TOTAL HARGA</th>
       </tr>
       <tr>
         <td class="border-left border-right"></td>
@@ -298,6 +308,7 @@
             echo date('d/m/Y', strtotime($invoice['td']));
           }
           ?>
+
         <td class="border-right"></td>
         <td class="border-right"></td>
         <td class="border-right" colspan="2"></td>
@@ -310,9 +321,10 @@
         <td class="border-right" colspan="2"></td>
       </tr>
 
-
-
       <?php
+      $max_per_page = 35;
+      $counter = 0;
+
       $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
       $no = 0;
       if ($port_charges) {
@@ -346,7 +358,8 @@
               </div>
             </td>
           </tr>
-      <?php }
+      <?php $counter++;
+        }
       } ?>
       <?php
       $port_expense = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 2])->result_array();
@@ -387,7 +400,8 @@
               </div>
             </td>
           </tr>
-      <?php }
+      <?php $counter++;
+        }
       } ?>
 
       <?php
@@ -411,7 +425,16 @@
         </tr>
         <?php
         $no_mis = 1;
-        foreach ($miscleanneous as $mis) { ?>
+        foreach ($miscleanneous as $mis) {
+        ?>
+          <?php if ($counter % $max_per_page == 0): ?>
+            <tr class="page-break">
+              <td colspan="11" class="border-top">
+                <div style="page-break-after: always;"></div>
+              </td>
+            </tr>
+          <?php endif; ?>
+
           <tr>
             <td class="border-left border-right text-center"></td>
             <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
@@ -429,8 +452,10 @@
               </div>
             </td>
           </tr>
-      <?php }
+      <?php $counter++;
+        }
       } ?>
+
       <tr>
         <td class="border-top" colspan="7"></td>
         <td class="text-center border-left border-top border-right" colspan="2"><b>SUB TOTAL</b></td>
@@ -529,6 +554,25 @@
         <td>:</td>
         <td colspan="4" style="font-size: 11px;"><b><?= $agency['nama_rekening'] ?></b></td>
       </tr>
+      <!-- <tr>
+        <td colspan="10" style="height: 30px;"></td>
+      </tr> -->
+
+      <!-- <tr>
+        <td colspan="2">Rekening Bank</td>
+        <td>:</td>
+        <td colspan="7"><b><?= $agency['bank'] ?></b></td>
+      </tr>
+      <tr>
+        <td colspan="2">Rekening No.</td>
+        <td>:</td>
+        <td colspan="7"><b><?= $agency['no_rekening'] ?></b></td>
+      </tr>
+      <tr>
+        <td colspan="2">Rekening a/n</td>
+        <td>:</td>
+        <td colspan="7"><b><?= $agency['nama_rekening'] ?></b></td>
+      </tr> -->
     </tbody>
   </table>
   <div style="margin-top: 10px; font-size:11px">
