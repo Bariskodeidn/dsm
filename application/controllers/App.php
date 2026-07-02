@@ -61,6 +61,7 @@ class App extends CI_Controller
 
   public function send_memo()
   {
+    $this->load->library('whatsapp');
     $tujuan = $this->input->post('tujuan[]');
     $cc = $this->input->post('cc[]');
     $judul = $this->input->post('judul');
@@ -223,7 +224,7 @@ class App extends CI_Controller
           $is_notif = $this->db->get('utility')->row();
           if ($is_notif->notif_wa == 1) {
             foreach ($phone_user as $pu) {
-              $send_wa = $this->api_whatsapp->wa_notif($msg, $pu);
+              $send_wa = $this->whatsapp->wa_notif($msg, $pu);
               if (!$send_wa) {
                 return;
               }
@@ -277,7 +278,7 @@ class App extends CI_Controller
         $is_notif = $this->db->get('utility')->row();
         if ($is_notif->notif_wa == 1) {
           foreach ($phone_user as $pu) {
-            $send_wa = $this->api_whatsapp->wa_notif($msg, $pu);
+            $send_wa = $this->whatsapp->wa_notif($msg, $pu);
             if (!$send_wa) {
               return;
             }
