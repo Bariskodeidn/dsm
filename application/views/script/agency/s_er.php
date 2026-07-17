@@ -136,7 +136,7 @@
                 html += '<div class="alert alert-info"><strong>I. DESKRIPSI KEGIATAN</strong></div>';
                 html += '<table class="table table-bordered small"><thead class="thead-dark"><tr class="active"><th>Desc</th><th>Remarks</th><th>GRT</th><th>Tarif</th><th>Activity</th><th class="text-right">Amount</th></tr></thead><tbody>';
                 $.each(items.desc, function(i, v) {
-                    total_desc += v.amount_desc.replace(/[^0-9]/g, '') * 1;
+                    total_desc += v.amount_desc.replace(/[\.,]/g, match => match === '.' ? '' : '.') * 1;
                     var itemDetail = allItems.find(item => item.Id == v.id_desc);
                     var desc = itemDetail ? itemDetail.desc : 'Tidak ditemukan';
                     html += '<tr><td>' + desc + '</td><td>' + v.remarks + '</td><td>' + v.grt + '</td><td>' + v.tarif + '</td><td>' + v.activity + '</td><td class="text-right"><b>' + v.amount_desc + '</b></td></tr>';
@@ -151,7 +151,7 @@
                 html += '<div class="alert alert-warning"><strong>II. AGENCY REMUNERATION</strong></div>';
                 html += '<table class="table table-bordered small"><thead class="thead-dark"><tr class="active"><th>Keterangan</th><th class="text-center">Qty</th><th class="text-right">Unit Price</th><th class="text-right">Sub Total</th></tr></thead><tbody>';
                 $.each(items.agency, function(i, v) {
-                    var sub_total_agency = v.qty.replace(/[^0-9]/g, '') * v.amount.replace(/[^0-9]/g, '');
+                    var sub_total_agency = v.qty.replace(/[\.,]/g, match => match === '.' ? '' : '.') * v.amount.replace(/[\.,]/g, match => match === '.' ? '' : '.');
                     total_agency += sub_total_agency;
                     var itemDetail = allItems.find(item => item.Id == v.desc);
                     var desc = itemDetail ? itemDetail.desc : 'Tidak ditemukan';
@@ -166,7 +166,7 @@
                 html += '<div class="alert alert-danger"><strong>III. OTHER EXPENSES</strong></div>';
                 html += '<table class="table table-bordered small"><thead class="thead-dark"><tr class="active"><th>Keterangan</th><th>Qty</th><th class="text-right">Amount</th><th class="text-right">Sub Total</th></tr></thead><tbody>';
                 $.each(items.other, function(i, v) {
-                    var sub_total = v.qty.replace(/[^0-9]/g, '') * v.amount.replace(/[^0-9]/g, '');
+                    var sub_total = v.qty.replace(/[\.,]/g, match => match === '.' ? '' : '.') * v.amount.replace(/[\.,]/g, match => match === '.' ? '' : '.');
                     total_other += sub_total;
                     html += '<tr><td>' + v.desc + '</td><td>' + v.qty + '</td><td class="text-right">' + v.amount + '</td><td class="text-right">' + formatRupiah(sub_total) + '</td></tr>';
                 });
@@ -236,7 +236,7 @@
             html += '<div class="alert alert-info"><strong>I. DESKRIPSI KEGIATAN</strong></div>';
             html += '<table class="table table-bordered small"><thead class="thead-dark"><tr class="active"><th>Desc</th><th>Remarks</th><th>GRT</th><th>Tarif</th><th>Activity</th><th class="text-right">Amount</th></tr></thead><tbody>';
             $.each(items.desc, function(i, v) {
-                total_desc += v.amount_desc.replace(/[^0-9]/g, '') * 1;
+                total_desc += v.amount_desc.replace(/[\.,]/g, match => match === '.' ? '' : '.') * 1;
                 var itemDetail = allItems.find(item => item.Id == v.id_desc);
                 var desc = itemDetail ? itemDetail.desc : 'Tidak ditemukan';
                 html += '<tr><td>' + desc + '</td><td>' + v.remarks + '</td><td>' + v.grt + '</td><td>' + v.tarif + '</td><td>' + v.activity + '</td><td class="text-right"><b>' + v.amount_desc + '</b></td></tr>';
@@ -251,7 +251,7 @@
             html += '<div class="alert alert-warning"><strong>II. AGENCY REMUNERATION</strong></div>';
             html += '<table class="table table-bordered small"><thead class="thead-dark"><tr class="active"><th>Keterangan</th><th class="text-center">Qty</th><th class="text-right">Unit Price</th><th class="text-right">Sub Total</th></tr></thead><tbody>';
             $.each(items.agency, function(i, v) {
-                var sub_total_agency = v.qty.replace(/[^0-9]/g, '') * v.amount.replace(/[^0-9]/g, '');
+                var sub_total_agency = v.qty.replace(/[\.,]/g, match => match === '.' ? '' : '.') * v.amount.replace(/[\.,]/g, match => match === '.' ? '' : '.');
                 total_agency += sub_total_agency;
                 var itemDetail = allItems.find(item => item.Id == v.desc);
                 var desc = itemDetail ? itemDetail.desc : 'Tidak ditemukan';
@@ -266,7 +266,7 @@
             html += '<div class="alert alert-danger"><strong>III. OTHER EXPENSES</strong></div>';
             html += '<table class="table table-bordered small"><thead class="thead-dark"><tr class="active"><th>Keterangan</th><th>Qty</th><th class="text-right">Amount</th><th class="text-right">Sub Total</th></tr></thead><tbody>';
             $.each(items.other, function(i, v) {
-                var sub_total = v.qty.replace(/[^0-9]/g, '') * v.amount.replace(/[^0-9]/g, '');
+                var sub_total = v.qty.replace(/[\.,]/g, match => match === '.' ? '' : '.') * v.amount.replace(/[\.,]/g, match => match === '.' ? '' : '.');
                 total_other += sub_total;
                 html += '<tr><td>' + v.desc + '</td><td>' + v.qty + '</td><td class="text-right">' + v.amount + '</td><td class="text-right">' + formatRupiah(sub_total) + '</td></tr>';
             });
