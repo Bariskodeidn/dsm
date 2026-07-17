@@ -146,8 +146,8 @@ class Invoice extends CI_Controller
         'materai' => $materai,
         'ppn' => $ppn,
         'jenis' => 1,
-        'nominal_pph' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
-        'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+        'nominal_pph' =>  str_replace(['.', ','], ['', '.'], $pph),
+        'down_payment' =>  str_replace(['.', ','], ['', '.'], $dp),
         'id_cabang' => $data_penunjukan['id_cabang'],
         'tampil_dpp' => $dpp
       ];
@@ -158,13 +158,13 @@ class Invoice extends CI_Controller
 
       $sub_total = 0;
       for ($i = 0; $i < count($uraian); $i++) {
-        $total = preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]) * preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]);
+        $total = str_replace(['.', ','], ['', '.'], $harga[$i]) * str_replace(['.', ','], ['', '.'], $satuan[$i]);
         $sub_total += $total;
         $detail = [
           'id_invoice' => $id_invoice,
           'uraian' => $uraian[$i],
-          'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
-          'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
+          'jumlah' => str_replace(['.', ','], ['', '.'], $harga[$i]),
+          'satuan' => str_replace(['.', ','], ['', '.'], $satuan[$i]),
           'total' => $total,
           'kategori' => $kategori[$i]
         ];
@@ -186,7 +186,7 @@ class Invoice extends CI_Controller
         $dpp_lainnya = 0;
       }
 
-      $gt = $sub_total + $nom_ppn + $nom_materai - preg_replace('/[^a-zA-Z0-9\']/', '', $pph) - (preg_replace('/[^a-zA-Z0-9\']/', '', $dp));
+      $gt = $sub_total + $nom_ppn + $nom_materai - str_replace(['.', ','], ['', '.'], $pph) - str_replace(['.', ','], ['', '.'], $dp);
 
       $update_invoice = [
         'sub_total' => $sub_total,
@@ -339,8 +339,8 @@ class Invoice extends CI_Controller
           'status' => 0,
           'materai' => $materai,
           'ppn' => $ppn,
-          'nominal_pph' => preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
-          'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+          'nominal_pph' => str_replace(['.', ','], ['', '.'], $pph),
+          'down_payment' =>  str_replace(['.', ','], ['', '.'], $dp),
           'tampil_dpp' => $dpp
         ];
       } else {
@@ -363,8 +363,8 @@ class Invoice extends CI_Controller
           'status' => 0,
           'materai' => $materai,
           'ppn' => $ppn,
-          'nominal_pph' => preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
-          'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+          'nominal_pph' => str_replace(['.', ','], ['', '.'], $pph),
+          'down_payment' =>  str_replace(['.', ','], ['', '.'], $dp),
           'tampil_dpp' => $dpp
         ];
       }
@@ -379,14 +379,14 @@ class Invoice extends CI_Controller
       // insert detail invoice baru
       $sub_total = 0;
       for ($i = 0; $i < count($uraian); $i++) {
-        $total = preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]) * preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]);
+        $total = str_replace(['.', ','], ['', '.'], $harga[$i]) * str_replace(['.', ','], ['', '.'], $satuan[$i]);
         $sub_total += $total;
         if ($invoice['jenis'] == 1) {
           $detail = [
             'id_invoice' => $id,
             'uraian' => $uraian[$i],
-            'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
-            'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
+            'jumlah' => str_replace(['.', ','], ['', '.'], $harga[$i]),
+            'satuan' => str_replace(['.', ','], ['', '.'], $satuan[$i]),
             'total' => $total,
             'kategori' => $kategori[$i]
           ];
@@ -394,8 +394,8 @@ class Invoice extends CI_Controller
           $detail = [
             'id_invoice' => $id,
             'uraian' => $uraian[$i],
-            'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
-            'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
+            'jumlah' => str_replace(['.', ','], ['', '.'], $harga[$i]),
+            'satuan' => str_replace(['.', ','], ['', '.'], $satuan[$i]),
             'total' => $total,
             'mulai' => $mulai[$i] ? $mulai[$i] : null,
             'selesai' => $selesai[$i] ? $selesai[$i] : null,
@@ -420,7 +420,7 @@ class Invoice extends CI_Controller
         $nom_ppn = 0;
       }
 
-      $gt = $sub_total + $nom_ppn + $nom_materai - (preg_replace('/[^a-zA-Z0-9\']/', '', $pph)) - (preg_replace('/[^a-zA-Z0-9\']/', '', $dp));
+      $gt = $sub_total + $nom_ppn + $nom_materai - str_replace(['.', ','], ['', '.'], $pph) - str_replace(['.', ','], ['', '.'], $dp);
 
       $update_invoice = [
         'sub_total' => $sub_total,

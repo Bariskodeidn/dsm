@@ -1814,9 +1814,9 @@ class Pda extends CI_Controller
       $nominal_html = "<strong>Rp " . number_format($r['subtotal']) . "</strong>";
       if (isset($r['settlement'])) {
         $diff = $r['subtotal'] - $r['settlement']['actual_amount'];
-        $nominal_html .= "<br><small>Nota: Rp " . number_format($r['settlement']['actual_amount']) . "</small>";
-        if ($diff > 0) $nominal_html .= " <span class='text-warning'>(Ref: " . number_format($diff) . ")</span>";
-        if ($diff < 0) $nominal_html .= " <span class='text-danger'>(Kurang: " . number_format(abs($diff)) . ")</span>";
+        $nominal_html .= "<br><small class='text-success'>Nota: Rp " . number_format($r['settlement']['actual_amount']) . "</small>";
+        if ($diff > 0) $nominal_html .= " <span class='text-warning'>(Ref to PLB: " . number_format($diff) . ")</span>";
+        if ($diff < 0) $nominal_html .= " <span class='text-danger'>(Refund to JKT: " . number_format(abs($diff)) . ")</span>";
       }
 
       $user = $this->db->select('nama')->from('users')->where('username', $r['submitted_by'])->get()->row();
@@ -3683,8 +3683,8 @@ class Pda extends CI_Controller
         'materai' => $materai,
         'ppn' => $ppn,
         'jenis' => 2,
-        'nominal_pph' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $pph),
-        'down_payment' =>  preg_replace('/[^a-zA-Z0-9\']/', '', $dp),
+        'nominal_pph' =>  str_replace(['.', ','], ['', '.'], $pph),
+        'down_payment' =>  str_replace(['.', ','], ['', '.'], $dp),
         'id_cabang' => $pda['id_cabang'],
         'tampil_dpp' => $dpp
       ];
@@ -3695,13 +3695,13 @@ class Pda extends CI_Controller
 
       $sub_total = 0;
       for ($i = 0; $i < count($uraian); $i++) {
-        $total = preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]) * preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]);
+        $total = str_replace(['.', ','], ['', '.'], $harga[$i]) * str_replace(['.', ','], ['', '.'], $satuan[$i]);
         $sub_total += $total;
         $detail = [
           'id_invoice' => $id_invoice,
           'uraian' => $uraian[$i],
-          'jumlah' => preg_replace('/[^a-zA-Z0-9\']/', '', $harga[$i]),
-          'satuan' => preg_replace('/[^a-zA-Z0-9\']/', '', $satuan[$i]),
+          'jumlah' => str_replace(['.', ','], ['', '.'], $harga[$i]),
+          'satuan' => str_replace(['.', ','], ['', '.'], $satuan[$i]),
           'mulai' => $mulai[$i] ? $mulai[$i] : null,
           'selesai' => $selesai[$i] ? $selesai[$i] : null,
           'total' => $total,
@@ -3725,7 +3725,7 @@ class Pda extends CI_Controller
         $dpp_lainnya = 0;
       }
 
-      $gt = $sub_total + $nom_ppn + $nom_materai - preg_replace('/[^a-zA-Z0-9\']/', '', $pph) - (preg_replace('/[^a-zA-Z0-9\']/', '', $dp));
+      $gt = $sub_total + $nom_ppn + $nom_materai - str_replace(['.', ','], ['', '.'], $pph) - str_replace(['.', ','], ['', '.'], $dp);
 
       $update_invoice = [
         'sub_total' => $sub_total,

@@ -102,16 +102,16 @@
                         <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span>
                       </td>
                       <td width="90px">
-                        <input type="text" class="form-control amount" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>">
+                        <input type="text" class="form-control amount" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', '.'], $desc->grt[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control amount" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>">
+                        <input type="text" class="form-control amount" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', '.'], $desc->tarif[$key]) ?>">
                       </td>
                       <td width="30px">
-                        <input type="text" class="form-control amount" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>">
+                        <input type="text" class="form-control amount" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', '.'], $desc->activity[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', ''], $desc->amount_desc[$key]) ?>">
+                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', '.'], $desc->amount_desc[$key]) ?>">
                       </td>
                       <td>
                         <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>">
@@ -199,7 +199,7 @@
                             <span style="text-transform: uppercase;"><?= $o ?></span>
                             <!-- <textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control"><?= $o ?></textarea> -->
                           </td>
-                          <td><input type="text" class="form-control amount" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= str_replace([',', '.'], ['', ''], $other->amount[$index]) ?>"></td>
+                          <td><input type="text" class="form-control amount" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= str_replace([',', '.'], ['', '.'], $other->amount[$index]) ?>"></td>
                           <td><input type="text" class="form-control amount" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>"></td>
@@ -259,16 +259,16 @@
                         <span style="text-transform: uppercase;"><?= $item_desc['remarks'] ?></span>
                       </td>
                       <td width="90px">
-                        <input type="text" class="form-control amount" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>">
+                        <input type="text" class="form-control amount" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', '.'], $desc->grt[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control amount" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>">
+                        <input type="text" class="form-control amount" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', '.'], $desc->tarif[$key]) ?>">
                       </td>
                       <td width="30px">
-                        <input type="text" class="form-control amount" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>">
+                        <input type="text" class="form-control amount" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', '.'], $desc->activity[$key]) ?>">
                       </td>
                       <td>
-                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', ''], $desc->amount_desc[$key]) ?>">
+                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', '.'], $desc->amount_desc[$key]) ?>">
                       </td>
                       <td>
                         <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>">
@@ -311,10 +311,10 @@
                         </div>
                       </td>
                       <td>
-                        <input type="text" class="form-control amount" name="amount[]" id="amount" value="<?= str_replace(['.', ','], ['', ''], $agency_remuneration->amount[$k]) ?>">
+                        <input type="text" class="form-control amount" name="amount[]" id="amount" value="<?= str_replace(['.', ','], ['', '.'], $agency_remuneration->amount[$k]) ?>">
                       </td>
                       <td width="70px">
-                        <input type="text" class="form-control amount" name="qty[]" id="qty" value="<?= str_replace(['.', ','], ['', ''], $agency_remuneration->qty[$k]) ?>">
+                        <input type="text" class="form-control amount" name="qty[]" id="qty" value="<?= str_replace(['.', ','], ['', '.'], $agency_remuneration->qty[$k]) ?>">
                       </td>
                       <td>
                         <input type="date" class="form-control" name="mulai[]" id="mulai" value="<?= $agency_remuneration->tanggal_mulai[$k] ?>">
@@ -353,7 +353,7 @@
                             <span style="text-transform: uppercase;"><?= $o ?></span>
                             <!-- <textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control"><?= $o ?></textarea> -->
                           </td>
-                          <td><input type="text" class="form-control amount" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= str_replace([',', '.'], ['', ''], $other->amount[$index]) ?>"></td>
+                          <td><input type="text" class="form-control amount" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= str_replace([',', '.'], ['', '.'], $other->amount[$index]) ?>"></td>
                           <td><input type="text" class="form-control amount" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>"></td>
                           <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>"></td>

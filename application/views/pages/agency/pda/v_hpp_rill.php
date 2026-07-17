@@ -248,20 +248,20 @@
                       <td width="90px">
                         <input type="hidden" name="chk[<?= $val ?>][grt]" value="0">
                         <input type="checkbox" class="chk-grt" name="chk[<?= $val ?>][grt]" value="1" <?= $desc->chk->$val->grt == 1 ? 'checked' : '' ?>>
-                        <input type="text" class="form-control grt hitung" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', ''], $desc->grt[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                        <input type="text" class="form-control grt hitung" name="grt[]" id="grt" value="<?= str_replace(['.', ','], ['', '.'], $desc->grt[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
                         <input type="hidden" name="chk[<?= $val ?>][tarif]" value="0">
                         <input type="checkbox" class="chk-tarif" name="chk[<?= $val ?>][tarif]" value="1" <?= $desc->chk->$val->tarif == 1 ? 'checked' : '' ?>>
-                        <input type="text" class="form-control tarif hitung" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', ''], $desc->tarif[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                        <input type="text" class="form-control tarif hitung" name="tarif[]" id="tarif" value="<?= str_replace(['.', ','], ['', '.'], $desc->tarif[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td width="30px">
                         <input type="hidden" name="chk[<?= $val ?>][activity]" value="0">
                         <input type="checkbox" class="chk-activity" value="1" name="chk[<?= $val ?>][activity]" <?= $desc->chk->$val->activity == 1 ? 'checked' : '' ?>>
-                        <input type="text" class="form-control activity hitung" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', ''], $desc->activity[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                        <input type="text" class="form-control activity hitung" name="activity[]" id="activity" value="<?= str_replace(['.', ','], ['', '.'], $desc->activity[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
-                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', ''], $desc->amount_desc[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                        <input type="text" class="form-control amount" name="amount-desc[]" id="amount-desc" value="<?= str_replace(['.', ','], ['', '.'], $desc->amount_desc[$key]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                       </td>
                       <td>
                         <input type="text" class="form-control" name="remark-desc[]" id="remark-desc" value="<?= $desc->remark_desc[$key] ?>" <?= $is_locked ? 'readonly' : '' ?>>
@@ -307,7 +307,7 @@
                                 <span><?= $item_pda_list['desc'] ?></span> -->
                             <div class="input-select">
                               <?php if ($is_locked) : ?>
-                                <select name="desc[]" id="desc-<?= $k ?>" class="form-control" readonly>
+                                <select name="desc[]" id="desc-<?= $k ?>" class="form-control items" readonly>
                                   <option value="<?= $item_pda_list['Id'] ?>"><?= $item_pda_list['desc'] ?></option>
                                 </select>
                               <?php else : ?>
