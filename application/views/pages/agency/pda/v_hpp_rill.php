@@ -185,7 +185,7 @@
                   <tbody>
                     <tr class="baris-other">
                       <td><textarea name="desc-other[]" id="desc-other" class="form-control"></textarea></td>
-                      <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other" value="0"></td>
+                      <td><input type="text" class="form-control" name="amount-other[]" id="amount-other" value="0"></td>
                       <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other" value="1"></td>
                       <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other"></td>
                       <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other"></td>
@@ -307,7 +307,7 @@
                                 <span><?= $item_pda_list['desc'] ?></span> -->
                             <div class="input-select">
                               <?php if ($is_locked) : ?>
-                                <select name="desc[]" id="desc-<?= $k ?>" class="form-control items" readonly>
+                                <select name="desc[]" id="desc-<?= $k ?>" class="form-control" readonly>
                                   <option value="<?= $item_pda_list['Id'] ?>"><?= $item_pda_list['desc'] ?></option>
                                 </select>
                               <?php else : ?>
@@ -319,7 +319,7 @@
                           </div>
                         </td>
                         <td>
-                          <input type="text" class="form-control uang amount_item" name="amount[]" id="amount-<?= $k ?>" value="<?= str_replace(['.', ','], ['', ''], $agency_remuneration->amount[$k]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
+                          <input type="text" class="form-control amount_item" name="amount[]" id="amount-<?= $k ?>" value="<?= str_replace(['.', ','], ['', '.'], $agency_remuneration->amount[$k]) ?>" <?= $is_locked ? 'readonly' : '' ?>>
                         </td>
                         <td width="70px">
                           <input type="text" class="form-control uang" name="qty[]" id="qty-<?= $k ?>" value="<?= $agency_remuneration->qty[$k] ?>" <?= $is_locked ? 'readonly' : '' ?>>
@@ -377,7 +377,7 @@
                       ?>
                       <tr class="baris-other">
                         <td><textarea name="desc-other[]" id="desc-other-<?= $index ?>" class="form-control" <?= $is_locked ? 'readonly' : '' ?>><?= $o ?></textarea></td>
-                        <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= $other->amount[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
+                        <td><input type="text" class="form-control" name="amount-other[]" id="amount-other-<?= $index ?>" value="<?= $other->amount[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
                         <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other-<?= $index ?>" value="<?= $other->qty[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
                         <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other-<?= $index ?>" value="<?= $other->tanggal_mulai[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
                         <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other-<?= $index ?>" value="<?= $other->tanggal_selesai[$index] ?>" <?= $is_locked ? 'readonly' : '' ?>></td>
@@ -407,7 +407,7 @@
                     <tbody>
                       <tr class="baris-other">
                         <td><textarea name="desc-other[]" id="desc-other" class="form-control"></textarea></td>
-                        <td><input type="text" class="form-control uang" name="amount-other[]" id="amount-other" value="0"></td>
+                        <td><input type="text" class="form-control" name="amount-other[]" id="amount-other" value="0"></td>
                         <td><input type="text" class="form-control uang" name="qty-other[]" id="qty-other" value="1"></td>
                         <td><input type="date" class="form-control" name="mulai-other[]" id="mulai-other"></td>
                         <td><input type="date" class="form-control" name="selesai-other[]" id="selesai-other"></td>
