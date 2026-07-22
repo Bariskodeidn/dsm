@@ -133,8 +133,8 @@
                     $this->db->select('desc');
                     $item_desc = $this->db->get_where('t_item_pda', ['Id' => $val])->row_array();
                     $total_est += $desc_est->amount_desc[$key];
-                    $total_hpp += $desc_hpp->amount_desc[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc_hpp->amount_desc[$key]) : 0;
-                    $total_hargajual += $desc_jual->amount_desc[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc_jual->amount_desc[$key]) : 0;
+                    $total_hpp += $desc_hpp->amount_desc[$key] ? str_replace(['.', ','], ['', '.'], $desc_hpp->amount_desc[$key]) : 0;
+                    $total_hargajual += $desc_jual->amount_desc[$key] ? str_replace(['.', ','], ['', '.'], $desc_jual->amount_desc[$key]) : 0;
                 ?>
                     <tr>
                         <td class="border-full"><?= $item_desc['desc'] ?></td>
@@ -142,8 +142,8 @@
                         <td class="border-full"><?= $desc_est->remark_desc[$key] ?></td>
                         <td class="border-full text-right"><?= number_format($desc_est->amount_desc[$key]) ?></td>
                         <td class="border-full text-right"><?= number_format(($desc_hpp->amount_desc[$key] ? str_replace(['.', ','], ['', '.'], $desc_hpp->amount_desc[$key]) : 0)) ?></td>
-                        <td class="border-full text-right"><?= number_format(($desc_jual->amount_desc[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc_jual->amount_desc[$key]) : 0)) ?></td>
-                        <td class="border-full text-right"><?= number_format(($desc_hpp->amount_desc[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '', $desc_hpp->amount_desc[$key]) : 0) - ($desc_hpp->amount_desc[$key] ? preg_replace('/[^a-zA-Z0-9\']/', '',  $desc_hpp->amount_desc[$key]) : 0)) ?></td>
+                        <td class="border-full text-right"><?= number_format(($desc_jual->amount_desc[$key] ? str_replace(['.', ','], ['', '.'], $desc_jual->amount_desc[$key]) : 0)) ?></td>
+                        <td class="border-full text-right"><?= number_format(($desc_hpp->amount_desc[$key] ? str_replace(['.', ','], ['', '.'], $desc_hpp->amount_desc[$key]) : 0) - ($desc_hpp->amount_desc[$key] ? str_replace(['.', ','], ['', '.'],  $desc_hpp->amount_desc[$key]) : 0)) ?></td>
                     </tr>
                 <?php } ?>
 
@@ -152,9 +152,8 @@
                     $this->db->select('desc');
                     $item_pda = $this->db->get_where('t_item_pda', ['Id' => $value])->row_array();
                     $total_est += $agency_remuneration_est->amount[$k] ?? 0;
-                    // $total_hpp += preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration_hpp->amount[$k]);
                     $total_hpp += str_replace(['.', ','], ['', '.'], $agency_remuneration_hpp->amount[$k]);
-                    $total_hargajual += preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration_jual->amount[$k]);
+                    $total_hargajual += str_replace(['.', ','], ['', '.'], $agency_remuneration_jual->amount[$k]);
                 ?>
                     <tr>
                         <td class="border-full"><?= $item_pda['desc'] ?></td>
@@ -162,8 +161,8 @@
                         <td class="border-full"><?= $agency_remuneration_est->remark[$k] ?? "-" ?></td>
                         <td class="border-full text-right"><?= number_format($agency_remuneration_est->amount[$k] ?? 0) ?></td>
                         <td class="border-full text-right"><?= number_format(str_replace(['.', ','], ['', '.'], $agency_remuneration_hpp->amount[$k])) ?></td>
-                        <td class="border-full text-right"><?= number_format(preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration_jual->amount[$k])) ?></td>
-                        <td class="border-full text-right"><?= number_format(preg_replace('/[^a-zA-Z0-9\']/', '', $agency_remuneration_jual->amount[$k]) - ($agency_remuneration_hpp->amount[$k] ? str_replace(['.', ','], ['', '.'], $agency_remuneration_hpp->amount[$k]) : 0)) ?></td>
+                        <td class="border-full text-right"><?= number_format(str_replace(['.', ','], ['', '.'], $agency_remuneration_jual->amount[$k])) ?></td>
+                        <td class="border-full text-right"><?= number_format(str_replace(['.', ','], ['', '.'], $agency_remuneration_jual->amount[$k]) - ($agency_remuneration_hpp->amount[$k] ? str_replace(['.', ','], ['', '.'], $agency_remuneration_hpp->amount[$k]) : 0)) ?></td>
                     </tr>
                 <?php } ?>
                 <tr style="font-weight: bolder; background-color: #00B0F0;">
