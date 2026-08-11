@@ -26,6 +26,14 @@
       font-size: 10px;
     }
 
+    .page-break {
+      page-break-before: always;
+    }
+
+    .avoid-break {
+      page-break-inside: avoid;
+    }
+
     .header {
       position: fixed;
       top: 0;
@@ -126,74 +134,39 @@
   $detail = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id']])->result_array();
   $detail2 = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => null])->result_array();
   $agency = $this->db->get_where('agent', ['Id' => $penunjukan['agency']])->row_array();
+
+  $items_per_page = 30;
+  $item_no = 0;
+
+  function item_row_class(&$item_no, $items_per_page)
+  {
+    $item_no++;
+    if ($item_no > 1 && ($item_no - 1) % $items_per_page === 0) {
+      return 'page-break avoid-break';
+    }
+    return 'avoid-break';
+  }
+
+  function bottom_last(&$item_no, $items_per_page)
+  {
+    if ($item_no > 1 && ($item_no) % $items_per_page === 0) {
+      return 'border-bottom';
+    }
+  }
+
+  function top_first(&$item_no, $items_per_page)
+  {
+    if ($item_no > 1 && ($item_no - 1) % $items_per_page === 0) {
+      return 'border-top';
+    }
+  }
   ?>
   <table width="100%" page-break-inside: auto>
-    <thead>
-      <tr>
-        <td colspan="2" rowspan="6" width="100px" style="padding: 3px; vertical-align: middle;"><img src="<?= base_url('assets/images/logo-dsa.png') ?>" alt="" width="100%"></td>
-        <td></td>
-        <td colspan="4" style="font-size: 14px; font-weight: bold;">PT. Dharma Solusi Agency</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td colspan="4" style="font-size: 11px; font-weight: bold;">Shipping Agency & Marine Supply</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="font-size: 10px; vertical-align: top;" colspan="" width="60px">Head Office</td>
-        <td style="font-size: 10px; vertical-align: top;" width="3px">:</td>
-        <td style="font-size: 10px; vertical-align: top;" colspan="5">Graha Sucofindo Gedung A Lt 1, Jalan Raya Pasar Minggu Kav 34 RT 004, RW 001, Pancoran, Jakarta Selatan 12780</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="font-size: 10px;vertical-align: top;">Branch Office</td>
-        <td style="font-size: 10px; vertical-align: top;">:</td>
-        <td style="font-size: 10px; vertical-align: top;" colspan="5">Perum Rimera Tin Garden Blok A2 No. 3 RT 006, RW 001, Sukamulya, Sematang Borang, Palembang – Sumatera Selatan</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="font-size: 10px;vertical-align: top;">Phone</td>
-        <td style="font-size: 10px; vertical-align: top;">:</td>
-        <td style="font-size: 10px; vertical-align: top;" colspan="5">021 - 38815205</td>
-      </tr>
-      <tr>
-        <td></td>
-        <td style="font-size: 10px;vertical-align: top;">Email</td>
-        <td style="font-size: 10px; vertical-align: top;">:</td>
-        <td style="font-size: 10px; vertical-align: top;" colspan="5"><a href="mailto:marketing@dsagency.co.id">marketing@dsagency.co.id</a> - <a href="https://dsmshipping.co.id/dsa/">https://dsmshipping.co.id/dsa/</a></td>
-      </tr>
-      <tr>
-        <td colspan="11">
-          <hr>
-        </td>
-      </tr>
-
-      <tr>
-        <td colspan="10" style="font-size: 11px;">Kepada Yth:</td>
-      </tr>
-      <tr>
-        <td colspan="10" style="font-size: 11px;"><?= $customer['nama_customer'] ?><br></td>
-      </tr>
-      <tr>
-        <td colspan="10" style="font-size: 11px;"><?= $customer['alamat'] ?> <br><br></td>
-      </tr>
-
-      <tr style="background-color: #DCDCDC;">
-        <td class="text-center border-full" colspan="11" style="font-size: 10px;"><b><u><span>INVOICE</span></u></b></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11" style="font-size: 10px;">NO : <?= $invoice['referensi'] ?></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11" style="font-size: 10px;">TANGGAL : <?= tgl_indo(date('Y-m-d', strtotime($invoice['tanggal']))) ?></td>
-      </tr>
-      <tr>
-        <td class="text-center border-left border-right" colspan="11" style="font-size: 10px;">SURAT PENUNJUKAN : <?= $penunjukan['no_surat'] ?></td>
-      </tr>
-      <tr>
-        <td class="border-bottom text-center border-left border-right" colspan="11"></td>
-      </tr>
-    </thead>
+    <?php if ($agency['kode'] == 'DSA') : ?>
+      <?php include('header-dsa.php'); ?>
+    <?php elseif ($agency['kode'] == 'KBS') : ?>
+      <?php include('header-kbs.php'); ?>
+    <?php endif; ?>
     <tbody>
       <tr class="">
         <th class="border-full" width="25px" style="font-size: 10px;">NO</th>
@@ -322,15 +295,12 @@
       </tr>
 
       <?php
-      $max_per_page = 35;
-      $counter = 0;
-
       $port_charges = $this->db->get_where('t_detail_invoice', ['id_invoice' => $invoice['Id'], 'kategori' => 1])->result_array();
       $no = 0;
       if ($port_charges) {
         $no = $no + 1;
       ?>
-        <tr>
+        <tr class="avoid-break">
           <td class="border-left border-right text-center" style="font-size: 10px;"><?= $no; ?></td>
           <td class="border-right p-left" colspan="6" style="font-size: 10px;">PORT CHARGES</td>
           <td class="border-right text-center"></td>
@@ -341,7 +311,7 @@
         $no_pc = 1;
         foreach ($port_charges as $pc) {
         ?>
-          <tr>
+          <tr class="<?= item_row_class($item_no, $items_per_page) ?>">
             <td class="border-left border-right text-center"></td>
             <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pc++ ?> <?= $pc['mulai'] && $pc['selesai'] ? $pc['uraian'] . " <b>(" . date('d M y', strtotime($pc['mulai'])) . '-' . date('d M y', strtotime($pc['selesai'])) . ")</b>" : $pc['uraian'] ?></td>
             <td class="border-right text-right p-right">
@@ -358,7 +328,7 @@
               </div>
             </td>
           </tr>
-      <?php $counter++;
+      <?php
         }
       } ?>
       <?php
@@ -383,7 +353,7 @@
         <?php
         $no_pe = 1;
         foreach ($port_expense as $pe) { ?>
-          <tr>
+          <tr class="<?= item_row_class($item_no, $items_per_page) ?>">
             <td class="border-left border-right text-center"></td>
             <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_pe++ ?> <?= $pe['mulai'] && $pe['selesai'] ? $pe['uraian'] . " <b>(" . date('d M y', strtotime($pe['mulai'])) . '-' . date('d M y', strtotime($pe['selesai'])) . ")</b>" : $pe['uraian'] ?></td>
             <td class="border-right text-right p-right">
@@ -400,7 +370,7 @@
               </div>
             </td>
           </tr>
-      <?php $counter++;
+      <?php
         }
       } ?>
 
@@ -409,6 +379,11 @@
       if ($miscleanneous) {
         $no = $no + 1;
       ?>
+        <!-- <tr class="page-break">
+          <td colspan="11" class="border-top">
+            <div style="page-break-after: always;"></div>
+          </td>
+        </tr> -->
         <tr>
           <td class="border-left border-right text-center" style="height: 10px;"></td>
           <td class="border-right p-left" colspan="6"></td>
@@ -427,36 +402,28 @@
         $no_mis = 1;
         foreach ($miscleanneous as $mis) {
         ?>
-          <?php if ($counter % $max_per_page == 0): ?>
-            <tr class="page-break">
-              <td colspan="11" class="border-top">
-                <div style="page-break-after: always;"></div>
-              </td>
-            </tr>
-          <?php endif; ?>
-
-          <tr>
-            <td class="border-left border-right text-center"></td>
-            <td class="border-right p-left" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
-            <td class="border-right text-right p-right">
+          <tr class="<?= item_row_class($item_no, $items_per_page) ?>">
+            <td class="border-left border-right text-center <?= bottom_last($item_no, $items_per_page) ?> <?= top_first($item_no, $items_per_page) ?>"></td>
+            <td class="border-right p-left <?= bottom_last($item_no, $items_per_page) ?> <?= top_first($item_no, $items_per_page) ?>" colspan="6" style="font-size: 10px;"><?= $no . '.' . $no_mis++ ?> <?= $mis['mulai'] && $mis['selesai'] ? $mis['uraian'] . " <b>(" . date('d M y', strtotime($mis['mulai'])) . '-' . date('d M y', strtotime($mis['selesai'])) . ")</b>" : $mis['uraian'] ?></td>
+            <td class="border-right text-right p-right <?= bottom_last($item_no, $items_per_page) ?> <?= top_first($item_no, $items_per_page) ?>">
               <div class="money">
                 <span class="symbol" style="float: left;">Rp.</span>
                 <span class="amount"><?= number_format($mis['jumlah']) ?></span>
               </div>
             </td>
-            <td class="border-right text-center"><?= $mis['satuan'] ?></td>
-            <td class="border-right text-right p-right" colspan="2">
+            <td class="border-right text-center <?= bottom_last($item_no, $items_per_page) ?> <?= top_first($item_no, $items_per_page) ?>"><?= $mis['satuan'] ?></td>
+            <td class="border-right text-right p-right <?= bottom_last($item_no, $items_per_page) ?> <?= top_first($item_no, $items_per_page) ?>" colspan="2">
               <div class="money total">
                 <span class="symbol" style="float: left;">Rp.</span>
                 <span class="amount"><?= number_format($mis['total']) ?></span>
               </div>
             </td>
           </tr>
-      <?php $counter++;
+      <?php
         }
       } ?>
 
-      <tr>
+      <tr class="avoid-break">
         <td class="border-top" colspan="7"></td>
         <td class="text-center border-left border-top border-right" colspan="2"><b>SUB TOTAL</b></td>
         <td class="text-right border-left border-top border-right p-right" colspan="2">
