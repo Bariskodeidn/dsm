@@ -10,7 +10,8 @@
     const autoNumericOptions = {
       digitGroupSeparator: '.',
       decimalCharacter: ',',
-      decimalPlaces: 2, // Ubah jadi 2 jika butuh sen
+      decimalPlaces: 10, // Ubah jadi 2 jika butuh sen
+      allowDecimalPadding: false,
       unformatOnSubmit: true // Sangat penting agar yang dikirim ke PHP tetap angka murni
     };
 
