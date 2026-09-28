@@ -3718,7 +3718,7 @@ class Pda extends CI_Controller
       }
 
       if ($ppn == 1) {
-        $dpp_lainnya = $sub_total * 11 / 12;
+        $dpp_lainnya = floor($sub_total * 11 / 12);
         $nom_ppn = 0.12 * $dpp_lainnya;
       } else {
         $nom_ppn = 0;
